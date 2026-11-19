@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/*
+ * Spice360 tokens, lifted from the Figma file (node 2571:284).
+ * One type family (Google Sans Flex), black canvases, and a glow that
+ * changes colour per page: green for Home, amber for About & Work,
+ * pepper red for People, navy for Spice Digital. Pages set data-theme
+ * on <main>; everything below reads --accent / --eyebrow from it.
+ */
+@theme {
+  --font-sans: var(--font-gsf), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #1a1a1a;
+  --color-mute: #898983;
+  --color-paper: #f5f9f4;
+  --color-leaf: #2b5833;
+  --color-leaf-bright: #69ce7d;
+  --color-lime: #e3fc6a;
+  --color-amber: #eea953;
+  --color-pepper: #bc3431;
+  --color-navy: #212a68;
+  --color-sky: #7bdcfb;
+
+  /* Figma: Display 48/42 -5%, Hero 48/45, Body "Med 18" 18/20 -4% */
+  --text-display: 48px;
+  --text-display--line-height: 42px;
+  --text-display--letter-spacing: -0.05em;
+  --text-body: 18px;
+  --text-body--line-height: 20px;
+  --text-body--letter-spacing: -0.04em;
+  --text-eyebrow: 16px;
+  --text-eyebrow--line-height: 18px;
+  --text-eyebrow--letter-spacing: -0.05em;
+  --text-card: 24px;
+  --text-card--line-height: 28px;
+  --text-card--letter-spacing: -0.05em;
+  --text-ui: 12px;
+  --text-ui--line-height: 22px;
+  --text-ui--letter-spacing: -0.06em;
+
+  /* The site's one curve (quint out), shared with motion's EASE */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+:root {
+  --accent: var(--color-leaf);
+  --accent-ink: #fff;
+  --eyebrow: var(--color-leaf-bright);
+  --gutter: 16px;
+  color-scheme: dark;
+}
+
+[data-theme="home"] {
+  --accent: var(--color-leaf);
+  --eyebrow: var(--color-leaf-bright);
+}
+[data-theme="about"] {
+  --accent: var(--color-amber);
+  --eyebrow: var(--color-amber);
+}
+[data-theme="people"] {
+  --accent: var(--color-pepper);
+  --eyebrow: var(--color-pepper);
+}
+[data-theme="digital"] {
+  --accent: var(--color-navy);
+  --eyebrow: var(--color-sky);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 40px;
+  }
+}
+
+html {
+  background: #000;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* No grey flash on tap; every control below has its own :active instead */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Taps fire immediately (no double-tap-zoom wait) */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Controls are not content: no text selection or callout on long-press */
+button,
+[role="button"],
+nav a {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  background: #000;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  /* Google Sans Flex ships discretionary ligatures the Figma file turns on */
+  font-feature-settings: "dlig" 1;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+/* No orphans: headings even out their lines, body copy never leaves a
+   single word stranded on the last line. Applies to every page. */
+h1,
+h2,
+h3,
+blockquote {
+  text-wrap: balance;
+}
+p,
+li,
+dd,
+figcaption {
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--eyebrow);
+  outline-offset: 3px;
+}
+
+/* Film grain over the glows: kills gradient banding on 8-bit panels.
+   Plain alpha, no blend mode: a blend layer over the drifting glows would
+   force the whole section to re-composite every frame. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Mask a line so words can rise into it */
+.line-mask {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* Team grid spotlight: one face in colour, everyone else steps back.
+   Gated to real hover so a tap on a phone never leaves the grid dimmed. */
+@media (hover: hover) and (pointer: fine) {
+  .team-grid:has(.team-tile:hover) .team-tile:not(:hover) {
+    filter: brightness(0.42) saturate(0.4);
+  }
+}
+.team-grid:has(.team-tile:focus-visible) .team-tile:not(:focus-visible) {
+  filter: brightness(0.42) saturate(0.4);
+}
+
+/* Glows hold their pose while off screen (Glow toggles data-paused) */
+.glow[data-paused] > div {
+  animation-play-state: paused;
+}
+
+/* On-load fades (hero). Plain and short, Terra & Tent style: a beat apart
+   via --d, nothing spinning or blurring. */
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+}
+.fade {
+  animation: fade 900ms cubic-bezier(0.33, 0, 0.2, 1) var(--d, 0ms) both;
+}
+.fade-slow {
+  animation: fade 1600ms cubic-bezier(0.33, 0, 0.2, 1) both;
+}
+.fade-up {
+  animation: fade-up 900ms cubic-bezier(0.33, 0, 0.2, 1) var(--d, 0ms) both;
+}
+/* Each route fades in as it mounts (template.tsx) */
+.route-in {
+  animation: fade 500ms cubic-bezier(0.33, 0, 0.2, 1) both;
+}
+
+/* Marquee rows of the brand wall */
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Glow blobs: each of a glow's three ellipses roams on its own loop
+   (14 / 18 / 23s, sine-eased) so the colours visibly slide past one another
+   and the bright spot wanders across the section and back.
+   The ellipses are wider than any screen, so small moves are invisible: it
+   takes ~15% sideways (~480px), ~9% vertical (~200px) and a 0.85-1.12
+   swell before the eye reads the light as moving. Slow enough to soothe,
+   big enough to see. Nothing reacts to the cursor or the scroll. */
+@keyframes glow-a {
+  0%,
+  100% {
+    transform: translate3d(-12%, 0, 0) scale(0.92, 1);
+  }
+  50% {
+    transform: translate3d(14%, 8%, 0) scale(1.08, 1.1);
+  }
+}
+@keyframes glow-b {
+  0%,
+  100% {
+    transform: translate3d(15%, -4%, 0) scale(1.1, 0.95);
+  }
+  50% {
+    transform: translate3d(-13%, 7%, 0) scale(0.86, 1.08);
+  }
+}
+@keyframes glow-c {
+  0%,
+  100% {
+    transform: translate3d(0, 6%, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(-16%, -5%, 0) scale(1.12, 0.94);
+  }
+  66% {
+    transform: translate3d(14%, 2%, 0) scale(0.88, 1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
