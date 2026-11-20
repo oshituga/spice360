@@ -10,11 +10,11 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  type PanInfo,
 } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { CONTACT_HREF, themeFor } from "@/lib/content";
+import { CONTACT_HREF, EMAIL, themeFor } from "@/lib/content";
+import { STORIES } from "@/lib/kitchen";
 import { MENU, MOBILE_PAGES, groupFor, isCurrent, type MenuItem } from "@/lib/menu";
 import { CASES } from "@/lib/cases";
 import { Button } from "./Button";
@@ -69,21 +69,8 @@ export function Nav() {
       data-theme={theme}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-[max(env(safe-area-inset-top),0px)]"
     >
-      {/* Scrim lives outside the moving bar: a transformed parent would trap position:fixed */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            key="scrim"
-            aria-hidden
-            onClick={() => setOpen(false)}
-            className="pointer-events-auto fixed inset-0 bg-black/45 backdrop-blur-[3px] lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.35, delay: 0.1 } }}
-            transition={{ duration: 0.4 }}
-          />
-        )}
-      </AnimatePresence>
+      {/* Full-screen menu lives outside the moving bar: a transformed parent would trap position:fixed */}
+      <AnimatePresence>{open && <MobileSheet key="sheet" pathname={pathname} close={() => setOpen(false)} />}</AnimatePresence>
       <motion.div
         className="mx-auto mt-[30px] w-[calc(100%-66px)] max-w-[632px] lg:mt-10 lg:max-w-[760px]"
         animate={{ y: hidden ? -140 : 0 }}
@@ -91,9 +78,11 @@ export function Nav() {
       >
         <div
           className={`pointer-events-auto relative flex items-center justify-between rounded-[14px] py-[10px] transition-[background-color,padding,box-shadow,backdrop-filter] duration-500 ease-[var(--ease-soft)] ${
-            light && !open && !openGroup
+            open
+              ? "bg-transparent px-3"
+              : light && !openGroup
               ? "bg-white/80 px-3 shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(0,0,0,0.06)] backdrop-blur-xl"
-              : solid || open || openGroup
+              : solid || openGroup
                 ? "bg-[rgba(10,10,10,0.68)] px-3 shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_0_0_1px_rgba(255,255,255,0.08)] backdrop-blur-xl"
                 : "px-0"
           }`}
@@ -285,21 +274,10 @@ function PanelTile({ item, index, current }: { item: MenuItem; index: number; cu
 }
 
 /*
- * Mobile menu. Figma: "Menu" becomes "Close" and a frosted card hangs below
- * the bar with every page and "Get in touch". What makes it feel native:
- *
- *  - The card grows out of the button it was opened from (origin top-right,
- *    scale + fade on a spring), and shrinks back into it.
- *  - Menu/Close roll vertically in place; the button never jumps width.
- *  - Links arrive one by one, so the eye walks down them.
- *  - Each link carries its page's colour: the site's rooms, previewed
- *    before you enter them. The current page's dot glows and has a label.
- *    The case studies sit below as chips, Privacy by the address, so every
- *    page is one tap away.
- *  - The card is draggable: flick it up and it is dismissed, tracking the
- *    finger 1:1 with rubber-banding the other way. Tap outside or Esc also
- *    close. Page scroll is frozen while it is open (Lenis stop + overflow).
- *  - Focus moves into the card on open and back to the button on close.
+ * Mobile menu: the bar's Menu/Close button (the label rolls in place, the
+ * button never changes width) and the behaviour around it: page scroll
+ * frozen while open (Lenis stop + overflow), Esc closes, any followed link
+ * closes, focus returns to the button. The menu itself is MobileSheet.
  */
 function MobileMenu({
   open,
@@ -310,11 +288,8 @@ function MobileMenu({
   setOpen: (v: boolean) => void;
   pathname: string;
 }) {
-  const id = useId();
-  const reduce = useReducedMotion();
   const lenis = useLenis();
   const button = useRef<HTMLButtonElement>(null);
-  const first = useRef<HTMLAnchorElement>(null);
   const was = useRef(open);
 
   const close = useCallback(() => setOpen(false), [setOpen]);
@@ -330,7 +305,6 @@ function MobileMenu({
     if (open) {
       lenis?.stop();
       document.documentElement.style.overflow = "hidden";
-      requestAnimationFrame(() => first.current?.focus({ preventScroll: true }));
     } else {
       lenis?.start();
       document.documentElement.style.overflow = "";
@@ -351,10 +325,6 @@ function MobileMenu({
     setOpen(!open);
   }
 
-  function onDragEnd(_: unknown, info: PanInfo) {
-    if (info.offset.y < -60 || info.velocity.y < -400) close();
-  }
-
 
   return (
     <div className="lg:hidden">
@@ -362,7 +332,7 @@ function MobileMenu({
         ref={button}
         type="button"
         aria-expanded={open}
-        aria-controls={id}
+        aria-controls="site-menu"
         onClick={toggle}
         className="relative z-10 flex h-[38px] w-[72px] items-center justify-center overflow-hidden rounded-[8px] bg-[var(--accent)] text-[14px] font-medium tracking-[-0.04em] text-white transition-transform duration-150 ease-out active:scale-[0.94]"
       >
@@ -379,131 +349,6 @@ function MobileMenu({
         </span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              key="card"
-              id={id}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Site menu"
-              drag={reduce ? false : "y"}
-              dragConstraints={{ top: 0, bottom: 0 }}
-              dragElastic={{ top: 0.9, bottom: 0.08 }}
-              dragSnapToOrigin
-              onDragEnd={onDragEnd}
-              className="pointer-events-auto absolute inset-x-0 top-[calc(100%+16px)] origin-top-right touch-none overflow-hidden rounded-[24px] bg-[rgba(16,16,16,0.84)] shadow-[0_24px_80px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(255,255,255,0.1)] backdrop-blur-2xl backdrop-saturate-150 overscroll-contain"
-              initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={
-                reduce
-                  ? { opacity: 0 }
-                  : {
-                      opacity: 0,
-                      scale: 0.7,
-                      transition: { duration: 0.42, ease: [0.4, 0, 0.6, 1] },
-                    }
-              }
-              transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.9 }}
-            >
-              {/* Theme light pooling at the top of the glass */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -top-40 left-1/2 h-72 w-[140%] -translate-x-1/2 rounded-[50%] opacity-50 blur-3xl"
-                style={{ background: "var(--accent)" }}
-              />
-              <nav aria-label="Mobile" className="relative px-5 pt-7 pb-5">
-                <ul className="flex flex-col">
-                  {MOBILE_PAGES.map((n, i) => {
-                    const current = isCurrent(n.href, pathname) || (n.href !== "/" && pathname.startsWith(`${n.href}/`));
-                    return (
-                      <motion.li
-                        key={n.href}
-                        initial={{ opacity: 0, y: 14 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6, transition: { duration: 0.16, delay: (MOBILE_PAGES.length - i) * 0.02 } }}
-                        transition={{ duration: 0.55, ease: EASE, delay: 0.1 + i * 0.04 }}
-                      >
-                        <Link
-                          ref={i === 0 ? first : undefined}
-                          href={n.href}
-                          onClick={close}
-                          aria-current={current ? "page" : undefined}
-                          className="group flex h-[50px] items-center justify-between rounded-[12px] px-3 text-[17px] font-medium tracking-[-0.04em] text-white transition-[background-color,scale] duration-150 ease-out active:scale-[0.98] active:bg-white/10"
-                        >
-                          <span className="flex items-center gap-3">
-                            <span
-                              aria-hidden
-                              className="size-2 rounded-full transition-shadow"
-                              style={{
-                                background: n.swatch,
-                                boxShadow: current ? `0 0 0 4px ${n.swatch}33, 0 0 14px ${n.swatch}` : "none",
-                              }}
-                            />
-                            {n.label}
-                          </span>
-                          <span className="text-[12px] font-medium tracking-[-0.02em] text-white/45 tabular-nums">
-                            {current ? "You’re here" : `0${i + 1}`}
-                          </span>
-                        </Link>
-                      </motion.li>
-                    );
-                  })}
-                </ul>
-                <motion.div
-                  className="mt-4 px-3"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                  transition={{ duration: 0.55, ease: EASE, delay: 0.32 }}
-                >
-                  <p className="mb-2 text-[12px] font-medium tracking-[-0.02em] text-white/45">Spice Digital case studies</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {CASES.map((c) => {
-                      const href = `/spice-digital/${c.slug}`;
-                      return (
-                        <Link
-                          key={c.slug}
-                          href={href}
-                          onClick={close}
-                          aria-current={pathname === href ? "page" : undefined}
-                          className="rounded-full bg-white/[0.07] px-3.5 py-2 text-[14px] font-medium tracking-[-0.03em] text-white/85 transition-[background-color,scale] duration-150 ease-out active:scale-[0.96] active:bg-white/15 aria-[current=page]:bg-white aria-[current=page]:text-black"
-                        >
-                          {c.brand}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-                <motion.div
-                  className="mt-5"
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                  transition={{ duration: 0.6, ease: EASE, delay: 0.34 }}
-                >
-                  <a
-                    href={CONTACT_HREF}
-                    className="flex h-[48px] items-center justify-center rounded-[12px] bg-[var(--accent)] text-[15px] font-medium tracking-[-0.04em] text-white transition-[scale,filter] duration-150 ease-out active:scale-[0.98] active:brightness-110"
-                  >
-                    Get in touch
-                  </a>
-                  <p className="mt-4 flex justify-center gap-2 text-center text-[12px] text-white/45">
-                    <span>1 Akanbi Onitiri Street, Surulere</span>
-                    <span aria-hidden>·</span>
-                    <Link href="/privacy" onClick={close} className="underline-offset-2 active:underline">
-                      Privacy
-                    </Link>
-                  </p>
-                </motion.div>
-                {/* Grabber: the card can be flicked up to close */}
-                <div aria-hidden className="mx-auto mt-4 h-1 w-9 rounded-full bg-white/25" />
-              </nav>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
@@ -533,4 +378,98 @@ function useLightUnderBar(pathname: string) {
     };
   }, [pathname]);
   return light;
+}
+
+/*
+ * The mobile menu itself: a plain full-screen black page, not a floating
+ * card. Every main page as a large link in the site's own type (the current
+ * one in the page colour), the case studies and kitchen stories as a quiet
+ * second list, and the way to reach the studio at the bottom. It fades in
+ * and the links rise a beat apart; opacity and transform only, nothing else
+ * moves.
+ */
+function MobileSheet({ pathname, close }: { pathname: string; close: () => void }) {
+  const reduce = useReducedMotion();
+  const first = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => first.current?.focus({ preventScroll: true }));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  const rise = (i: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 22 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease: EASE, delay: 0.06 + i * 0.045 },
+  });
+  const isOn = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`));
+
+  return (
+    <motion.div
+      id="site-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Site menu"
+      className="pointer-events-auto fixed inset-0 overflow-y-auto overscroll-contain bg-black lg:hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.25 } }}
+      transition={{ duration: 0.3 }}
+    >
+      <nav aria-label="Mobile" className="flex min-h-full flex-col justify-between gap-12 px-[33px] pt-[118px] pb-[calc(32px+env(safe-area-inset-bottom))]">
+        <ul className="flex flex-col">
+          {MOBILE_PAGES.map((n, i) => (
+            <motion.li key={n.href} {...rise(i)}>
+              <Link
+                ref={i === 0 ? first : undefined}
+                href={n.href}
+                onClick={close}
+                aria-current={isOn(n.href) ? "page" : undefined}
+                className="block py-1 text-[40px] leading-[1.05] font-semibold tracking-[-0.055em] text-white transition-opacity duration-150 active:opacity-60 aria-[current=page]:text-[var(--eyebrow)]"
+              >
+                {n.label}
+              </Link>
+            </motion.li>
+          ))}
+        </ul>
+
+        <motion.div className="grid grid-cols-2 gap-6" {...rise(MOBILE_PAGES.length)}>
+          <div className="flex flex-col gap-2">
+            <p className="text-[13px] tracking-[-0.02em] text-white/45">Case studies</p>
+            {CASES.map((c) => (
+              <Link key={c.slug} href={`/spice-digital/${c.slug}`} onClick={close} className="text-[16px] leading-[20px] tracking-[-0.04em] text-white/85 active:opacity-60">
+                {c.brand}
+              </Link>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-[13px] tracking-[-0.02em] text-white/45">From the kitchen</p>
+            {STORIES.map((st) => (
+              <Link key={st.slug} href={`/kitchen/${st.slug}`} onClick={close} className="text-[16px] leading-[20px] tracking-[-0.04em] text-white/85 active:opacity-60">
+                {st.short}
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div className="flex flex-col gap-5" {...rise(MOBILE_PAGES.length + 1)}>
+          <a
+            href={CONTACT_HREF}
+            onClick={close}
+            className="flex min-h-12 items-center justify-center rounded-[10px] bg-[var(--accent)] text-[14px] font-semibold tracking-[-0.04em] text-white active:scale-[0.98]"
+          >
+            Get in touch
+          </a>
+          <div className="flex flex-col gap-1 text-[14px] leading-[18px] tracking-[-0.03em] text-white/55">
+            <a href={`mailto:${EMAIL}`} className="text-white/80">
+              {EMAIL}
+            </a>
+            <span>1 Akanbi Onitiri Street, Surulere, Lagos</span>
+            <Link href="/privacy" onClick={close} className="mt-2 self-start">
+              Privacy Policy
+            </Link>
+          </div>
+        </motion.div>
+      </nav>
+    </motion.div>
+  );
 }
