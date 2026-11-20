@@ -162,18 +162,23 @@ img {
   -webkit-user-drag: none;
 }
 
-/* No orphans: headings even out their lines, body copy never leaves a
-   single word stranded on the last line. Applies to every page. */
+/* No orphans, and nothing that looks like one. Headings and every short
+   text (intros, card copy, labels) are balanced: the lines even out, so a
+   last line is never one or two words hanging under a full one; the words
+   pull up and the block reads as a deliberate shape. Long-form reading
+   (.prose-long, the Prose component) uses pretty instead, which keeps a
+   full measure and only guards the last line. Applies to every page. */
 h1,
 h2,
 h3,
-blockquote {
-  text-wrap: balance;
-}
+blockquote,
 p,
 li,
 dd,
 figcaption {
+  text-wrap: balance;
+}
+.prose-long :is(p, li) {
   text-wrap: pretty;
 }
 
