@@ -100,7 +100,7 @@ export default function People() {
 
       {/* Leadership bios, stacking */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead light align="left" eyebrow="Leadership" title="The people behind the heat" width={460} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
@@ -113,7 +113,7 @@ export default function People() {
 
       {/* Team grid */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto max-w-[1440px]">
+        <div className="mx-auto max-w-content">
           <SectionHead
             align="left"
             eyebrow="The minds behind the magic"
@@ -130,7 +130,7 @@ export default function People() {
       {/* Values: a spice rack, one colour band per value, the word set large */}
       <section id="values" className="bg-black">
         <div className="px-[var(--gutter)] pt-[60px] pb-16 md:pt-[100px] md:pb-24">
-          <div className="mx-auto flex max-w-[1440px] flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <div className="mx-auto flex max-w-content flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="Culture and values" title="Five values, all of them working everyday" width={560} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">What the agency believes</FadeIn>
           </div>
@@ -143,7 +143,7 @@ export default function People() {
               className={`px-[var(--gutter)] py-12 md:py-20 ${v.ink}`}
               style={{ background: v.bg }}
             >
-              <FadeIn className="mx-auto grid max-w-[1440px] gap-6 md:grid-cols-[1fr_minmax(300px,460px)] md:items-end md:gap-16">
+              <FadeIn className="mx-auto grid max-w-content gap-6 md:grid-cols-[1fr_minmax(300px,460px)] md:items-end md:gap-16">
                 <h3 className="text-[clamp(56px,6vw+20px,136px)] leading-[0.86] font-semibold tracking-[-0.065em]">{v.title}</h3>
                 <p className="max-w-[460px] text-[18px] leading-[22px] tracking-[-0.04em] opacity-90">{v.body}</p>
               </FadeIn>
@@ -154,7 +154,7 @@ export default function People() {
 
       {/* Culture system: the Flavour Board, and the names themselves */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-16 md:gap-24">
+        <div className="mx-auto flex max-w-content flex-col gap-16 md:gap-24">
           <div className="grid gap-10 md:grid-cols-[1fr_minmax(300px,460px)] md:items-end md:gap-16">
             <SectionHead align="left" eyebrow="The Spice culture system" title="Nobody here goes by their job title alone" width={560} />
             <FadeIn className="max-w-[460px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">

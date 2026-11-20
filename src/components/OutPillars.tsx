@@ -13,7 +13,7 @@ const PILLARS = [
 
 export function OutPillars() {
   return (
-    <ol className="mx-auto w-full max-w-[1440px]">
+    <ol className="mx-auto w-full max-w-content">
       {PILLARS.map((p) => (
         <li
           key={p.word}

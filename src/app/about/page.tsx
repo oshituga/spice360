@@ -123,7 +123,7 @@ export default function About() {
 
       {/* Our story: the head holds still on the left while the chapters scroll past it */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto grid max-w-[1440px] gap-14 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
+        <div className="mx-auto grid max-w-content gap-14 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
           <div className="md:sticky md:top-32 md:self-start">
             <SectionHead align="left" eyebrow="Our Story" title={"From one account\nto the awards table"} width={480} />
           </div>
@@ -141,7 +141,7 @@ export default function About() {
 
       {/* Selected work: only the work that exists */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead light align="left" eyebrow="Selected work" title="Ideas that earn attention and awards" width={560} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
@@ -191,7 +191,7 @@ export default function About() {
 
       {/* Capabilities: plain rows on hairlines, the name and its line */}
       <section id="capabilities" className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="What we offer" title={"Six capabilities,\none standard"} width={560} />
             <FadeIn>
@@ -218,7 +218,7 @@ export default function About() {
       {/* LAIF: the proof moment, said once and loudly */}
       <section id="laif" className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
         <Glow anchor="bottom" ellipses={[{ color: A, y: 356 }, { color: P, y: 665 }, { color: R, y: 914 }]} />
-        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-12 md:gap-16">
+        <div className="relative mx-auto flex max-w-content flex-col gap-12 md:gap-16">
           <SectionHead align="left" eyebrow="Awards & Accolades" title="LAIF 2024, the full record" width={560} />
           <div className="flex flex-col gap-6 border-t border-white/25 pt-10 md:pt-14">
             <SplitReveal as="p" text={"4th in Nigeria.\nOn debut."} className="text-mega font-semibold" />
@@ -245,7 +245,7 @@ export default function About() {
 
       {/* Process */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-24">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-24">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="How we work" title={"From first brief\nto final result"} width={560} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">

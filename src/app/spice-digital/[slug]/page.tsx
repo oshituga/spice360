@@ -45,7 +45,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
           <Image src={c.image} alt="" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/45 to-black/90" />
         </div>
-        <div className="mx-auto flex w-full max-w-[1150px] flex-col gap-5">
+        <div className="mx-auto flex w-full max-w-content flex-col gap-5">
           <p className="fade-up flex flex-wrap items-center gap-2 text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "150ms" }}>
             {c.brand}
             <span aria-hidden className="size-1 rounded-full bg-current" />
@@ -68,7 +68,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
 
       <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
         <FadeIn
-          className="mx-auto mb-16 max-w-[640px] rounded-[12px] border border-white/15 p-5 text-[15px] leading-[20px] tracking-[-0.03em] text-white/70"
+          className="measure mb-16 max-w-[640px] rounded-[12px] border border-white/15 p-5 text-[15px] leading-[20px] tracking-[-0.03em] text-white/70"
         >
           <strong className="font-semibold text-white">About this page.</strong> This is an illustrative case study: it shows how Spice Digital
           would approach a {c.kind.toLowerCase()} brief of this kind. It is not a record of a real engagement, and {c.brand} has not reviewed or
@@ -90,7 +90,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
           </p>
         </Prose>
 
-        <ol className="mx-auto mt-20 grid max-w-[1150px] gap-2 md:grid-cols-3">
+        <ol className="mx-auto mt-20 grid max-w-content gap-2 md:grid-cols-3">
           {c.steps.map((s, i) => (
             <FadeIn
               as="li"
@@ -109,7 +109,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
 
         <Link
           href={`/spice-digital/${next.slug}`}
-          className="group mx-auto mt-24 flex max-w-[640px] flex-col gap-3 border-t border-white/15 pt-10"
+          className="group measure mt-24 flex max-w-[640px] flex-col gap-3 border-t border-white/15 pt-10"
         >
           <span className="text-eyebrow font-semibold text-white/55">Next case</span>
           <span className="flex items-baseline gap-3 text-[28px] leading-[30px] font-semibold tracking-[-0.05em] transition-colors duration-300 group-hover:text-[var(--eyebrow)]">

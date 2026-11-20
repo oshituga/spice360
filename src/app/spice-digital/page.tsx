@@ -67,7 +67,7 @@ export default function SpiceDigital() {
 
       {/* About: one statement, the founder's problem in plain words */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto grid max-w-[1440px] gap-12 md:grid-cols-[1.2fr_1fr] md:items-end md:gap-16">
+        <div className="mx-auto grid max-w-content gap-12 md:grid-cols-[1.2fr_1fr] md:items-end md:gap-16">
           <div className="flex flex-col gap-6">
             <FadeIn as="p" y={10} className="text-eyebrow font-semibold text-[var(--eyebrow)]">
               About Spice Digital
@@ -93,7 +93,7 @@ export default function SpiceDigital() {
 
       {/* Case studies: the proof, straight after the pitch */}
       <section className="bg-black px-[var(--gutter)] pb-[110px] md:pb-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 border-t border-white/20 pt-[110px] md:flex-row md:items-end md:justify-between md:pt-[150px]">
             <SectionHead align="left" eyebrow="What we’ve built" title="Case studies and performance data" width={520} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
@@ -112,7 +112,7 @@ export default function SpiceDigital() {
                   src={c.image}
                   alt=""
                   className="h-[460px] md:h-[597px]"
-                  sizes={i === 0 ? "(min-width: 768px) 1440px, 100vw" : "(min-width: 768px) 720px, 100vw"}
+                  sizes={i === 0 ? "(min-width: 768px) 1240px, 100vw" : "(min-width: 768px) 620px, 100vw"}
                 >
                   <article className="flex flex-col gap-4 p-6 pr-5 md:p-10">
                     <p className="flex items-center gap-2 text-eyebrow font-semibold">
@@ -136,7 +136,7 @@ export default function SpiceDigital() {
       {/* Services: six plain entries on hairlines */}
       <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
         <Glow anchor="bottom" ellipses={[{ color: N, y: 452 }, { color: S, y: 761 }, { color: M, y: 910 }]} />
-        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="relative mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <SectionHead align="left" eyebrow="What we do" title="Six services, all of them connected" width={520} />
           <ul className="grid gap-x-12 md:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map(([title, body], i) => (
@@ -151,7 +151,7 @@ export default function SpiceDigital() {
 
       {/* Who it serves */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto grid max-w-[1440px] gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
+        <div className="mx-auto grid max-w-content gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
           <SectionHead align="left" eyebrow="Who Spice Digital serves" title="We know what funded looks like, and what growing looks like" width={560} />
           <div className="flex max-w-[480px] flex-col gap-6 text-[18px] leading-[22px] tracking-[-0.04em] text-white/80 md:pt-11">
             <FadeIn delay={0.1}>
@@ -171,7 +171,7 @@ export default function SpiceDigital() {
 
       {/* Two doors: a straight side-by-side comparison */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead light align="left" eyebrow="Spice 360 vs Spice Digital" title="Two doors into the same building" width={520} />
             <FadeIn className="max-w-[420px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">

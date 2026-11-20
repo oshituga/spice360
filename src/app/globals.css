@@ -43,6 +43,10 @@
   --text-ui--line-height: 22px;
   --text-ui--letter-spacing: -0.06em;
 
+  /* One content width for every page: hero, sections and footer all line
+     up to the same left and right edges (max-w-content). */
+  --container-content: 1240px;
+
   /* The site's one curve (quint out), shared with motion's EASE */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
@@ -178,6 +182,14 @@ dd,
 figcaption {
   text-wrap: balance;
 }
+/* A narrow block (reading column, form) that starts on the shared content
+   edge instead of floating in the middle: inside a full-width section, its
+   left margin is the space the max-w-content container would leave. */
+.measure {
+  margin-left: max(0px, (100% - var(--container-content)) / 2);
+  margin-right: auto;
+}
+
 .prose-long :is(p, li) {
   text-wrap: pretty;
 }

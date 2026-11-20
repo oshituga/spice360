@@ -41,7 +41,7 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
           <Image src={story.image} alt="" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/90" />
         </div>
-        <div className="mx-auto flex w-full max-w-[1150px] flex-col gap-5">
+        <div className="mx-auto flex w-full max-w-content flex-col gap-5">
           <p className="fade-up text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "150ms" }}>
             {story.kind} · {story.date}
           </p>
@@ -70,7 +70,7 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
             ))}
           </Prose>
           {/* End of the piece: a closing rule with its filing line */}
-          <div className="mx-auto mt-16 flex max-w-[640px] items-center gap-4 text-eyebrow font-semibold text-white/55">
+          <div className="measure mt-16 flex max-w-[640px] items-center gap-4 text-eyebrow font-semibold text-white/55">
             <span aria-hidden className="h-px flex-1 bg-white/15" />
             <span>
               {story.kind} · {story.date}
@@ -81,7 +81,7 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
 
       {next.slug !== story.slug && (
         <section aria-labelledby="next-story" className="bg-black px-[var(--gutter)] pt-24 pb-[100px] md:pt-32 md:pb-[120px]">
-          <div className="mx-auto flex max-w-[1150px] flex-col gap-8">
+          <div className="mx-auto flex max-w-content flex-col gap-8">
             <FadeIn className="flex flex-wrap items-end justify-between gap-6">
               <h2 id="next-story" className="text-eyebrow font-semibold text-[var(--eyebrow)]">
                 Next from the kitchen

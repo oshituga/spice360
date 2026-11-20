@@ -110,7 +110,7 @@ export function Footer({
       {/* Logo and line on the left, four aligned columns on the right, a
           quiet base row. A soft shadow under the type keeps white legible
           on the palest glows without dimming the light itself. */}
-      <div className="relative mx-auto w-full max-w-[1240px] px-[var(--gutter)] [text-shadow:0_1px_14px_rgba(0,0,0,0.28)]">
+      <div className="relative mx-auto w-full max-w-[calc(var(--container-content)+2*var(--gutter))] px-[var(--gutter)] [text-shadow:0_1px_14px_rgba(0,0,0,0.28)]">
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-[1.3fr_repeat(4,1fr)]">
           <FadeIn className="flex flex-col gap-4">
             <Logo className="h-[29px] self-start text-white" />

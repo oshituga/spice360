@@ -46,7 +46,7 @@ export function TeamGrid({ people }: { people: Person[] }) {
   const toggle = useCallback((i: number) => setFlipped((f) => (f === i ? null : i)), []);
 
   return (
-    <div className="mx-auto w-full max-w-[1240px]">
+    <div className="mx-auto w-full max-w-content">
       <ul
         className="team-grid grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-10 lg:gap-3"
         onPointerLeave={() => store.set(null)}

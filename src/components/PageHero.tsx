@@ -49,7 +49,7 @@ export function PageHero({
      long sentence from becoming a wall. (~0.5em per character at this
      tracking.) */
   const tier = longest <= 24 ? { min: 48, max: 164 } : longest <= 40 ? { min: 40, max: 108 } : { min: 36, max: 76 };
-  const fit = `calc((min(100vw, 1440px + 2 * var(--gutter)) - 2 * var(--gutter)) / ${(longest * 0.52).toFixed(2)})`;
+  const fit = `calc((min(100vw, 1240px + 2 * var(--gutter)) - 2 * var(--gutter)) / ${(longest * 0.52).toFixed(2)})`;
   const fontSize = `clamp(${tier.min}px, ${fit}, ${tier.max}px)`;
   const size = longest <= 24 ? "leading-[0.86] tracking-[-0.065em]" : longest <= 40 ? "leading-[0.9] tracking-[-0.06em]" : "leading-[0.94] tracking-[-0.055em]";
 
@@ -67,7 +67,7 @@ export function PageHero({
         </div>
       )}
 
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-10 md:gap-14">
+      <div className="mx-auto flex w-full max-w-content flex-col gap-10 md:gap-14">
         <div className="flex flex-col gap-5">
           {eyebrow && (
             <div className="fade-up text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "120ms" }}>

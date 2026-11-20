@@ -68,7 +68,7 @@ export default function Home() {
       {/* Proof first: the scoreboard, left-aligned, figures as the headline */}
       <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
         <Glow anchor="bottom" ellipses={[{ color: G, y: 377 }, { color: L, y: 626 }, { color: O, y: 685 }]} />
-        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-16 md:gap-24">
+        <div className="relative mx-auto flex max-w-content flex-col gap-16 md:gap-24">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="Awards & Accolades" title={"The scoreboard"} width={520} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
@@ -82,7 +82,7 @@ export default function Home() {
       {/* How we work: Out + think / create / pace */}
       <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[120px] md:pt-[150px] md:pb-[170px]">
         <Glow anchor="bottom" seed={1} ellipses={[{ color: G, y: 520 }, { color: L, y: 780 }, { color: O, y: 840 }]} />
-        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="relative mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <SectionHead align="left" eyebrow="Our three pillars" title="How we work" width={420} />
           <OutPillars />
         </div>
@@ -92,7 +92,7 @@ export default function Home() {
 
       {/* What we do: three tiles that each open the capabilities */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead light align="left" eyebrow="What we do" title="The recipe for campaigns that work" width={560} />
             <FadeIn>
@@ -121,7 +121,7 @@ export default function Home() {
       {/* Leadership: a teaser, the bios live on People */}
       <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
         <Glow anchor="bottom" ellipses={[{ color: G, y: 404 }, { color: L, y: 653 }, { color: O, y: 712 }]} />
-        <div className="relative mx-auto grid max-w-[1440px] items-end gap-12 md:grid-cols-[1fr_1.15fr] md:gap-16">
+        <div className="relative mx-auto grid max-w-content items-end gap-12 md:grid-cols-[1fr_1.15fr] md:gap-16">
           <div className="flex flex-col gap-8">
             <SectionHead align="left" eyebrow="Leadership" title={"Two hires.\nOne direction"} width={460} />
             <FadeIn className="max-w-[420px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/85">

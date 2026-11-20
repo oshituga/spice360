@@ -21,7 +21,7 @@ export function KitchenIndex() {
   ];
 
   return (
-    <div className="mx-auto flex w-full max-w-[1150px] flex-col">
+    <div className="mx-auto flex w-full max-w-content flex-col">
       <Link href={`/kitchen/${feature.slug}`} className="group block">
         <MediaCard
           src={feature.image}

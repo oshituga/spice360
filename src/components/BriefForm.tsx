@@ -116,7 +116,7 @@ export function BriefForm({ initialTopic = 0 }: { initialTopic?: number }) {
   }
 
   return (
-    <form onSubmit={submit} className="mx-auto flex w-full max-w-[720px] flex-col gap-12">
+    <form onSubmit={submit} className="measure flex w-full max-w-[720px] flex-col gap-12">
       <fieldset>
         <legend className={labelCls}>Who is the brief for?</legend>
         <div className="grid gap-2 sm:grid-cols-2">

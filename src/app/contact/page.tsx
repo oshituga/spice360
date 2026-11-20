@@ -25,7 +25,7 @@ export default async function Contact({ searchParams }: PageProps<"/contact">) {
       />
       <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
         <BriefForm initialTopic={topic === "digital" ? 1 : 0} />
-        <FadeIn className="mx-auto mt-20 grid max-w-[720px] gap-8 border-t border-white/15 pt-10 text-body md:grid-cols-2">
+        <FadeIn className="measure mt-20 grid max-w-[720px] gap-8 border-t border-white/15 pt-10 text-body md:grid-cols-2">
           <div>
             <p className="mb-2 text-eyebrow font-semibold text-white/55">Email</p>
             <a href={`mailto:${EMAIL}`} className="underline-offset-4 hover:underline">

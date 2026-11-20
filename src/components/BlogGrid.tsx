@@ -6,7 +6,7 @@ import { MediaCard } from "./MediaCard";
    it; a card without one yet sits as a still. */
 export function BlogGrid() {
   return (
-    <div className="mx-auto grid max-w-[1150px] gap-2 md:grid-cols-2">
+    <div className="mx-auto grid max-w-content gap-2 md:grid-cols-2">
       {BLOG.map((b, i) => {
         const card = (
           <MediaCard

@@ -16,7 +16,7 @@ const STEPS = [
 
 export function ProcessList() {
   return (
-    <ol className="relative mx-auto w-full max-w-[1440px]">
+    <ol className="relative mx-auto w-full max-w-content">
       {/* the rail */}
       <span aria-hidden className="absolute top-3 bottom-3 left-[5px] w-px bg-white/20" />
       {STEPS.map(([title, body], i) => (
