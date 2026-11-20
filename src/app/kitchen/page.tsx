@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
-import { BlogGrid } from "@/components/BlogGrid";
+import { KitchenIndex } from "@/components/KitchenIndex";
 import { StandardFooter } from "@/components/Footer";
 import { PALETTES } from "@/lib/glows";
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: { title: "Behind the kitchen | Spice360", description: "Case studies and agency stories from Spice 360." },
 };
 
-/* Blog index: the Home section's hero line and the same cards, given room. */
+/* Blog index: the Home section's hero line, then a cover story and a contents list. */
 export default function Kitchen() {
   return (
     <main data-theme="kitchen">
@@ -22,7 +22,7 @@ export default function Kitchen() {
         glow={PALETTES.kitchen.hero}
       />
       <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
-        <BlogGrid />
+        <KitchenIndex />
       </section>
       <StandardFooter palette="kitchen" />
     </main>
