@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { Prose } from "@/components/Prose";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/Button";
-import { Glow } from "@/components/Glow";
 import { FadeIn } from "@/components/motion";
 import { CASES, caseBySlug } from "@/lib/cases";
 import { PALETTES } from "@/lib/glows";
@@ -28,7 +27,8 @@ export async function generateMetadata({ params }: PageProps<"/spice-digital/[sl
 
 /*
  * Case study page. Each one lives in its own palette (lib/glows): the
- * card's photo as a full-bleed cover with that light pouring over it, a
+ * card's photo as a clean full-bleed cover (colour lives in the accent
+ * and the footer), a
  * plain "illustrative" notice before anything else, the story at a 640px
  * measure, three steps on glass-free tiles, then the next case.
  */
@@ -44,7 +44,6 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
         <div className="fade absolute inset-0 -z-10">
           <Image src={c.image} alt="" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/45 to-black/90" />
-          <Glow ellipses={p.hero} anchor="top" className="opacity-75" />
         </div>
         <div className="mx-auto flex w-full max-w-[1150px] flex-col gap-5">
           <p className="fade-up flex flex-wrap items-center gap-2 text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "150ms" }}>

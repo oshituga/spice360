@@ -13,14 +13,13 @@ export const metadata: Metadata = {
   openGraph: { title: "Careers | Spice360", description: "Spice 360 hires people who are curious, specific, and allergic to lukewarm work." },
 };
 
-/* Careers, in its own Lagoon teal over the team photo. All copy is the agency's own, from the
+/* Careers, in its own Lagoon teal: glow hero, accent and footer. All copy is the agency's own, from the
    People page and its hiring call; there is no open-roles feed, so the page
    invites applications year-round rather than listing invented roles. */
 export default function Careers() {
   return (
     <main data-theme="careers">
       <PageHero
-        image="/group/team-full-applause.jpg"
         glow={PALETTES.careers.hero}
         title={"There is probably a spice name\nwith your character written into it."}
         titleWidth={900}

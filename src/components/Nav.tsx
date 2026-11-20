@@ -14,17 +14,20 @@ import {
 } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { CONTACT_HREF, NAV, themeFor } from "@/lib/content";
+import { CONTACT_HREF, themeFor } from "@/lib/content";
+import { MENU, MOBILE_PAGES, groupFor, isCurrent, type MenuItem } from "@/lib/menu";
+import { CASES } from "@/lib/cases";
 import { Button } from "./Button";
 import { EASE } from "./motion";
 
 /*
  * Figma: a 632px bar centred 40px from the top (mobile: full width, 30px
- * down, 33px in). Logo left, links + accent "Get in touch" right.
+ * down, 33px in). Logo left, links + accent "Get in touch" right. Desktop
+ * widens it to 760px to carry three menu groups that reach every page.
  *
  * Desktop adds two things the static frame cannot show:
- *  - a highlight pill that rests on the current page and glides to whichever
- *    link the cursor is over (one shared layoutId, so it travels, not fades)
+ *  - a highlight pill that rests on the current page's group and glides to
+ *    whichever group is open (one shared layoutId, so it travels, not fades)
  *  - the bar hides on scroll down, returns on scroll up, and turns to tinted
  *    glass once it leaves the hero so it stays legible over white sections.
  */
@@ -36,13 +39,21 @@ export function Nav() {
   const [hidden, setHidden] = useState(false);
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const last = useRef(0);
+
+  // A followed link closes the desktop panel
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
+    setOpenGroup(null);
+  }
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const dy = y - last.current;
     last.current = y;
     setSolid(y > 60);
-    if (open) return;
+    if (open || openGroup) return;
     if (y < 120) setHidden(false);
     else if (dy > 6) setHidden(true);
     else if (dy < -6) setHidden(false);
@@ -69,13 +80,13 @@ export function Nav() {
         )}
       </AnimatePresence>
       <motion.div
-        className="mx-auto mt-[30px] w-[calc(100%-66px)] max-w-[632px] lg:mt-10"
+        className="mx-auto mt-[30px] w-[calc(100%-66px)] max-w-[632px] lg:mt-10 lg:max-w-[760px]"
         animate={{ y: hidden ? -140 : 0 }}
         transition={{ duration: 0.6, ease: EASE }}
       >
         <div
           className={`pointer-events-auto relative flex items-center justify-between rounded-[14px] py-[10px] transition-[background-color,padding,box-shadow,backdrop-filter] duration-500 ease-[var(--ease-soft)] ${
-            solid || open
+            solid || open || openGroup
               ? "bg-black/45 px-3 shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_0_0_1px_rgba(255,255,255,0.08)] backdrop-blur-xl backdrop-saturate-150"
               : "px-0"
           }`}
@@ -84,7 +95,7 @@ export function Nav() {
             <Image src="/logo/spice360-color.png" alt="Spice360" width={107} height={29} priority className="h-[29px] w-auto" />
           </Link>
 
-          <DesktopLinks pathname={pathname} />
+          <DesktopLinks pathname={pathname} openGroup={openGroup} setOpenGroup={setOpenGroup} />
           <MobileMenu open={open} setOpen={setOpen} pathname={pathname} />
         </div>
       </motion.div>
@@ -92,36 +103,129 @@ export function Nav() {
   );
 }
 
-function DesktopLinks({ pathname }: { pathname: string }) {
-  const [hover, setHover] = useState<string | null>(null);
-  const active = NAV.find((n) => (n.href === "/" ? pathname === "/" : pathname.startsWith(n.href)))?.href;
-  const target = hover ?? active;
+/*
+ * Desktop: three groups (Agency, Spice Digital, Kitchen) that between them
+ * reach every page. Hovering a group opens one panel under the bar with
+ * that group's pages as photo tiles; moving to the next group slides the
+ * pill across and cross-fades the panel's content in the direction of
+ * travel, so it reads as one surface changing, not three menus. The panel
+ * waits 160ms before closing so a diagonal move toward it never drops it.
+ * Opacity and transform only. Click, Enter and Esc work the same way.
+ */
+function DesktopLinks({
+  pathname,
+  openGroup,
+  setOpenGroup,
+}: {
+  pathname: string;
+  openGroup: string | null;
+  setOpenGroup: (g: string | null) => void;
+}) {
+  const panelId = useId();
+  const current = groupFor(pathname);
+  const target = openGroup ?? current;
+  const [dir, setDir] = useState(0);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const show = (id: string | null) => {
+    clearTimeout(timer.current);
+    const from = MENU.findIndex((g) => g.id === openGroup);
+    const to = MENU.findIndex((g) => g.id === id);
+    setDir(from < 0 || to < 0 ? 0 : Math.sign(to - from));
+    setOpenGroup(id);
+  };
+  const hideSoon = () => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => show(null), 160);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const group = MENU.find((g) => g.id === openGroup);
 
   return (
-    <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
+    <nav
+      aria-label="Main"
+      className="hidden items-center gap-6 lg:flex"
+      onPointerEnter={() => clearTimeout(timer.current)}
+      onPointerLeave={hideSoon}
+      onKeyDown={(e) => e.key === "Escape" && show(null)}
+      onBlur={(e) => !e.currentTarget.contains(e.relatedTarget as Node) && show(null)}
+    >
       <LayoutGroup id="desk-nav">
-        <ul className="flex items-center gap-2" onPointerLeave={() => setHover(null)}>
-          {NAV.map((n) => (
-            <li key={n.href} className="relative">
-              <Link
-                href={n.href}
-                aria-current={active === n.href ? "page" : undefined}
-                onPointerEnter={() => setHover(n.href)}
-                className="relative block px-3 text-ui font-medium text-white/80 transition-colors duration-200 hover:text-white aria-[current=page]:text-white"
-              >
-                {target === n.href && (
-                  <motion.span
-                    layoutId="pill"
-                    className="absolute inset-x-0 -inset-y-0.5 -z-0 rounded-full bg-white/12"
-                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                  />
-                )}
-                <span className="relative">{n.label}</span>
-              </Link>
-            </li>
-          ))}
+        <ul className="flex items-center gap-1">
+          {MENU.map((g) => {
+            const open = openGroup === g.id;
+            return (
+              <li key={g.id} className="relative">
+                <button
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={panelId}
+                  onPointerEnter={(e) => e.pointerType === "mouse" && show(g.id)}
+                  onClick={() => show(open ? null : g.id)}
+                  className="relative flex items-center gap-1.5 px-3 text-ui font-medium text-white/80 transition-colors duration-200 hover:text-white aria-expanded:text-white"
+                >
+                  {target === g.id && (
+                    <motion.span
+                      layoutId="pill"
+                      className="absolute inset-x-0 -inset-y-0.5 rounded-full bg-white/12"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">{g.label}</span>
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 10 6"
+                    className={`relative w-2 transition-transform duration-300 ease-[var(--ease-soft)] ${open ? "rotate-180" : ""}`}
+                  >
+                    <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </LayoutGroup>
+
+      {/* The panel hangs from the bar; its top padding bridges the gap so the pointer can cross it */}
+      <AnimatePresence>
+        {group && (
+          <motion.div
+            key="panel"
+            id={panelId}
+            className="absolute inset-x-0 top-full pt-3"
+            initial={{ opacity: 0, y: -8, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.99, transition: { duration: 0.2, ease: [0.4, 0, 1, 1] } }}
+            transition={{ duration: 0.45, ease: EASE }}
+            style={{ transformOrigin: "50% 0%" }}
+          >
+            <div className="relative overflow-hidden rounded-[18px] bg-[rgba(14,14,14,0.94)] p-2 shadow-[0_24px_64px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.09)]">
+              <AnimatePresence mode="popLayout" initial={false} custom={dir}>
+                <motion.ul
+                  key={group.id}
+                  custom={dir}
+                  className="grid auto-cols-fr grid-flow-col gap-1"
+                  variants={{
+                    enter: (d: number) => ({ opacity: 0, x: d * 28 }),
+                    center: { opacity: 1, x: 0 },
+                    leave: (d: number) => ({ opacity: 0, x: d * -28 }),
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="leave"
+                  transition={{ duration: 0.4, ease: EASE }}
+                >
+                  {group.items.map((item, i) => (
+                    <PanelTile key={item.href} item={item} index={i} current={isCurrent(item.href, pathname)} />
+                  ))}
+                </motion.ul>
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Button href={CONTACT_HREF} size="sm" className="font-medium">
         Get in touch
       </Button>
@@ -129,17 +233,60 @@ function DesktopLinks({ pathname }: { pathname: string }) {
   );
 }
 
+/* One page in the panel: its photo (or its light) on top, name and a line
+   below. Hover eases the photo in and tints the name with the page colour. */
+function PanelTile({ item, index, current }: { item: MenuItem; index: number; current: boolean }) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: EASE, delay: 0.04 + index * 0.035 }}
+    >
+      <Link
+        href={item.href}
+        aria-current={current ? "page" : undefined}
+        className="group/tile flex h-full flex-col gap-3 rounded-[12px] p-2 transition-colors duration-200 hover:bg-white/[0.06] focus-visible:bg-white/[0.06]"
+        style={{ ["--sw" as string]: item.swatch }}
+      >
+        <span className="relative block h-[96px] overflow-hidden rounded-[8px]" style={{ background: item.tint }}>
+          {item.image && (
+            <Image
+              src={item.image}
+              alt=""
+              fill
+              sizes="200px"
+              className="object-cover transition-transform duration-700 ease-[var(--ease-soft)] group-hover/tile:scale-[1.06]"
+            />
+          )}
+          {current && (
+            <span className="absolute top-2 left-2 rounded-full bg-black/55 px-2 py-0.5 text-[10px] font-semibold tracking-[-0.02em] text-white backdrop-blur-md">
+              You’re here
+            </span>
+          )}
+        </span>
+        <span className="flex flex-col gap-1 px-0.5 pb-1">
+          <span className="line-clamp-2 text-[14px] leading-[16px] font-semibold tracking-[-0.04em] text-white transition-colors duration-200 group-hover/tile:text-[var(--sw)]">
+            {item.label}
+          </span>
+          <span className="line-clamp-2 text-[12px] leading-[14px] tracking-[-0.02em] text-white/55">{item.note}</span>
+        </span>
+      </Link>
+    </motion.li>
+  );
+}
+
 /*
  * Mobile menu. Figma: "Menu" becomes "Close" and a frosted card hangs below
- * the bar with the four pages and "Get in touch". What makes it feel native:
+ * the bar with every page and "Get in touch". What makes it feel native:
  *
  *  - The card grows out of the button it was opened from (origin top-right,
- *    clip + scale on a spring), and shrinks back into it.
+ *    scale + fade on a spring), and shrinks back into it.
  *  - Menu/Close roll vertically in place; the button never jumps width.
- *  - Links arrive one by one with a little blur, so the eye walks down them.
- *  - Each link carries its page's colour (green, amber, pepper, sky): the
- *    site's four rooms, previewed before you enter them. The current page's
- *    dot glows and has a label.
+ *  - Links arrive one by one, so the eye walks down them.
+ *  - Each link carries its page's colour: the site's rooms, previewed
+ *    before you enter them. The current page's dot glows and has a label.
+ *    The case studies sit below as chips, Privacy by the address, so every
+ *    page is one tap away.
  *  - The card is draggable: flick it up and it is dismissed, tracking the
  *    finger 1:1 with rubber-banding the other way. Tap outside or Esc also
  *    close. Page scroll is frozen while it is open (Lenis stop + overflow).
@@ -199,7 +346,6 @@ function MobileMenu({
     if (info.offset.y < -60 || info.velocity.y < -400) close();
   }
 
-  const active = NAV.find((n) => (n.href === "/" ? pathname === "/" : pathname.startsWith(n.href)))?.href;
 
   return (
     <div className="lg:hidden">
@@ -238,16 +384,15 @@ function MobileMenu({
               dragElastic={{ top: 0.9, bottom: 0.08 }}
               dragSnapToOrigin
               onDragEnd={onDragEnd}
-              className="pointer-events-auto absolute inset-x-0 top-[calc(100%+16px)] origin-top-right touch-none overflow-hidden rounded-[24px] bg-[rgba(18,18,18,0.62)] shadow-[0_24px_80px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(255,255,255,0.1)] backdrop-blur-2xl backdrop-saturate-150 overscroll-contain"
-              initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.4, clipPath: "inset(0% 0% 92% 70% round 24px)" }}
-              animate={{ opacity: 1, scale: 1, clipPath: "inset(0% 0% 0% 0% round 24px)" }}
+              className="pointer-events-auto absolute inset-x-0 top-[calc(100%+16px)] origin-top-right touch-none overflow-hidden rounded-[24px] bg-[rgba(16,16,16,0.84)] shadow-[0_24px_80px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(255,255,255,0.1)] backdrop-blur-2xl backdrop-saturate-150 overscroll-contain"
+              initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={
                 reduce
                   ? { opacity: 0 }
                   : {
                       opacity: 0,
-                      scale: 0.5,
-                      clipPath: "inset(0% 0% 92% 70% round 24px)",
+                      scale: 0.7,
                       transition: { duration: 0.42, ease: [0.4, 0, 0.6, 1] },
                     }
               }
@@ -261,22 +406,22 @@ function MobileMenu({
               />
               <nav aria-label="Mobile" className="relative px-5 pt-7 pb-5">
                 <ul className="flex flex-col">
-                  {NAV.map((n, i) => {
-                    const current = active === n.href;
+                  {MOBILE_PAGES.map((n, i) => {
+                    const current = isCurrent(n.href, pathname) || (n.href !== "/" && pathname.startsWith(`${n.href}/`));
                     return (
                       <motion.li
                         key={n.href}
-                        initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, y: -8, filter: "blur(4px)", transition: { duration: 0.18, delay: (NAV.length - i) * 0.025 } }}
-                        transition={{ duration: 0.6, ease: EASE, delay: 0.12 + i * 0.05 }}
+                        initial={{ opacity: 0, y: 14 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6, transition: { duration: 0.16, delay: (MOBILE_PAGES.length - i) * 0.02 } }}
+                        transition={{ duration: 0.55, ease: EASE, delay: 0.1 + i * 0.04 }}
                       >
                         <Link
                           ref={i === 0 ? first : undefined}
                           href={n.href}
                           onClick={close}
                           aria-current={current ? "page" : undefined}
-                          className="group flex h-[54px] items-center justify-between rounded-[12px] px-3 text-[17px] font-medium tracking-[-0.04em] text-white transition-[background-color,scale] duration-150 ease-out active:scale-[0.98] active:bg-white/10"
+                          className="group flex h-[50px] items-center justify-between rounded-[12px] px-3 text-[17px] font-medium tracking-[-0.04em] text-white transition-[background-color,scale] duration-150 ease-out active:scale-[0.98] active:bg-white/10"
                         >
                           <span className="flex items-center gap-3">
                             <span
@@ -298,6 +443,31 @@ function MobileMenu({
                   })}
                 </ul>
                 <motion.div
+                  className="mt-4 px-3"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                  transition={{ duration: 0.55, ease: EASE, delay: 0.32 }}
+                >
+                  <p className="mb-2 text-[12px] font-medium tracking-[-0.02em] text-white/45">Spice Digital case studies</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {CASES.map((c) => {
+                      const href = `/spice-digital/${c.slug}`;
+                      return (
+                        <Link
+                          key={c.slug}
+                          href={href}
+                          onClick={close}
+                          aria-current={pathname === href ? "page" : undefined}
+                          className="rounded-full bg-white/[0.07] px-3.5 py-2 text-[14px] font-medium tracking-[-0.03em] text-white/85 transition-[background-color,scale] duration-150 ease-out active:scale-[0.96] active:bg-white/15 aria-[current=page]:bg-white aria-[current=page]:text-black"
+                        >
+                          {c.brand}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+                <motion.div
                   className="mt-5"
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -310,7 +480,13 @@ function MobileMenu({
                   >
                     Get in touch
                   </a>
-                  <p className="mt-4 text-center text-[12px] text-white/45">1 Akanbi Onitiri Street, Surulere, Lagos</p>
+                  <p className="mt-4 flex justify-center gap-2 text-center text-[12px] text-white/45">
+                    <span>1 Akanbi Onitiri Street, Surulere</span>
+                    <span aria-hidden>·</span>
+                    <Link href="/privacy" onClick={close} className="underline-offset-2 active:underline">
+                      Privacy
+                    </Link>
+                  </p>
                 </motion.div>
                 {/* Grabber: the card can be flicked up to close */}
                 <div aria-hidden className="mx-auto mt-4 h-1 w-9 rounded-full bg-white/25" />
