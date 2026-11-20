@@ -8,6 +8,8 @@ export type Story = {
   kind: string;
   date: string;
   title: string;
+  /** Short name for footer links */
+  short: string;
   dek: string;
   image: string;
   sections: { heading: string; body: string[] }[];
@@ -16,6 +18,7 @@ export type Story = {
 export const STORIES: Story[] = [
   {
     slug: "mothers-love",
+    short: "Mother’s Love",
     kind: "Case Study",
     date: "15th of January 2026",
     title: "How we partnered with Indomie to build one of Nigeria’s most loved brands.",
@@ -51,6 +54,7 @@ export const STORIES: Story[] = [
   },
   {
     slug: "laif-2024",
+    short: "LAIF 2024",
     kind: "Agency Story",
     date: "15th of January 2026",
     title: "Fourth on debut: the full record from LAIF 2024.",

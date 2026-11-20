@@ -3,7 +3,10 @@ import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { PALETTES, type PaletteName } from "@/lib/glows";
 import type { ReactNode } from "react";
-import { CONTACT_HREF } from "@/lib/content";
+import { CONTACT_HREF, EMAIL } from "@/lib/content";
+import { CASES } from "@/lib/cases";
+import { STORIES } from "@/lib/kitchen";
+import { BackToTop } from "./BackToTop";
 import { Glow, type GlowEllipse } from "./Glow";
 import { FadeIn, SplitReveal } from "./motion";
 
@@ -14,27 +17,42 @@ import { FadeIn, SplitReveal } from "./motion";
  * address anchored to the bottom, so the page ends on light, not a stub.
  */
 
-const COLS = [
+/* Every page, grouped like the nav (lib/menu), plus the studio's door */
+const COLS: { title: string; links: { label: string; href: string; note?: string }[] }[] = [
   {
-    title: null,
+    title: "Agency",
     links: [
       { label: "Home", href: "/" },
       { label: "About & Work", href: "/about" },
       { label: "Awards", href: "/about#laif" },
-      { label: "Blog", href: "/kitchen" },
+      { label: "People", href: "/people" },
+      { label: "Careers", href: "/careers" },
     ],
   },
   {
-    title: "Company",
+    title: "Spice Digital",
     links: [
-      { label: "People", href: "/people" },
-      { label: "Careers", href: "/careers" },
-      { label: "Spice Digital", href: "/spice-digital" },
-      { label: "Get in touch", href: CONTACT_HREF },
+      { label: "Overview", href: "/spice-digital" },
+      ...CASES.map((c) => ({ label: c.brand, href: `/spice-digital/${c.slug}`, note: "Sample" })),
     ],
   },
-  { title: "Legal & Info", links: [{ label: "Privacy Policy", href: "/privacy" }] },
+  {
+    title: "Kitchen",
+    links: [
+      { label: "All stories", href: "/kitchen" },
+      ...STORIES.map((s) => ({ label: s.short, href: `/kitchen/${s.slug}` })),
+    ],
+  },
+  {
+    title: "Studio",
+    links: [
+      { label: "Get in touch", href: CONTACT_HREF },
+      { label: "Email us", href: `mailto:${EMAIL}` },
+      { label: "Privacy Policy", href: "/privacy" },
+    ],
+  },
 ];
+
 
 export function Footer({
   eyebrow,
@@ -61,7 +79,7 @@ export function Footer({
 }) {
   return (
     <footer className="grain relative isolate flex min-h-svh flex-col justify-between gap-24 overflow-clip bg-black pt-[120px] pb-[calc(48px+env(safe-area-inset-bottom))] md:pt-[160px] md:pb-[108px]">
-      <Glow ellipses={glow} anchor="bottom" seed={2} />
+      <Glow ellipses={glow} anchor="bottom" seed={2} feel="lively" />
 
       <div className="relative flex flex-col items-center gap-6 px-[var(--gutter)] text-center">
         {eyebrow && (
@@ -84,36 +102,49 @@ export function Footer({
         </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1440px] px-[var(--gutter)] md:px-[145px]">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 md:gap-x-[175px]">
-          {COLS.map((col, i) => (
-            <FadeIn key={i} delay={i * 0.08} className={`flex flex-col gap-6 ${i === 0 ? "col-span-2 md:col-span-1" : ""}`}>
-              {col.title ? (
-                <p className="text-eyebrow font-semibold">{col.title}</p>
-              ) : (
-                <Logo className="h-[29px] self-start text-white" />
-              )}
-              <ul className="flex flex-col gap-2">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <FooterLink href={l.href}>{l.label}</FooterLink>
-                  </li>
-                ))}
-              </ul>
-            </FadeIn>
-          ))}
+      {/* Logo and line on the left, four aligned columns on the right, a
+          quiet base row. A soft shadow under the type keeps white legible
+          on the palest glows without dimming the light itself. */}
+      <div className="relative mx-auto w-full max-w-[1240px] px-[var(--gutter)] [text-shadow:0_1px_14px_rgba(0,0,0,0.28)]">
+        <div className="grid gap-x-8 gap-y-12 md:grid-cols-[1.3fr_repeat(4,1fr)]">
+          <FadeIn className="flex flex-col gap-4">
+            <Logo className="h-[29px] self-start text-white" />
+            <p className="max-w-[240px] text-[16px] leading-[19px] tracking-[-0.05em] text-white/85">
+              We make brands impossible to ignore.
+            </p>
+          </FadeIn>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:contents">
+            {COLS.map((col, i) => (
+              <FadeIn key={col.title} delay={0.06 + i * 0.06} className="flex flex-col gap-4">
+                <p className="text-[13px] leading-[16px] font-semibold tracking-[-0.02em] text-white/60 uppercase">{col.title}</p>
+                <ul className="flex flex-col gap-2.5">
+                  {col.links.map((l) => (
+                    <li key={l.label}>
+                      <FooterLink href={l.href}>
+                        {l.label}
+                        {l.note && <span className="ml-1.5 text-[12px] text-white/55">{l.note}</span>}
+                      </FooterLink>
+                    </li>
+                  ))}
+                </ul>
+              </FadeIn>
+            ))}
+          </div>
         </div>
 
         <FadeIn
           delay={0.2}
-          className={`mt-20 flex flex-wrap gap-x-2 gap-y-1 text-[16px] leading-[18px] tracking-[-0.06em] md:mt-[160px] md:justify-end ${metaClass}`}
+          className={`mt-16 flex flex-col gap-4 border-t border-white/20 pt-6 md:mt-[110px] md:flex-row md:items-center md:justify-between ${metaClass}`}
           style={metaColor ? { color: metaColor } : undefined}
         >
-          <span>© 2026 Spice 360</span>
-          <span className="text-mute">·</span>
-          <span>AAAN Member</span>
-          <span className="text-mute">·</span>
-          <span>1 Akanbi Onitiri Street, Surulere, Lagos</span>
+          <p className="flex flex-wrap gap-x-2 gap-y-1 text-[15px] leading-[18px] tracking-[-0.05em] [text-shadow:none]">
+            <span>© 2026 Spice 360</span>
+            <span className="opacity-50">·</span>
+            <span>AAAN Member</span>
+            <span className="opacity-50">·</span>
+            <span>1 Akanbi Onitiri Street, Surulere, Lagos</span>
+          </p>
+          <BackToTop />
         </FadeIn>
       </div>
     </footer>
@@ -123,7 +154,7 @@ export function Footer({
 /* Underline draws in from the left on hover, retracts to the right on leave. */
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   const cls =
-    "group relative inline-block text-[16px] leading-[18px] tracking-[-0.06em] text-white/90 transition-colors hover:text-white";
+    "group relative inline-block text-[16px] leading-[19px] tracking-[-0.05em] text-white transition-opacity duration-200 hover:opacity-100";
   const line = (
     <span
       aria-hidden

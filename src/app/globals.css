@@ -318,6 +318,162 @@ figcaption {
   animation: rise-in 380ms var(--ease-soft) both;
 }
 
+/* Glow motion (Glow.tsx). Each blob travels a slow closed path (orbit-a
+   clockwise, orbit-b counter-clockwise, orbit-c a lazy figure eight) and
+   breathes on a different period, so the bands of colour keep sliding
+   through each other and never repeat in step. translate and scale are
+   separate properties, so the two loops compose without fighting, and
+   both stay on the compositor. --rx/--ry set the reach, --bs the breath,
+   --k the upscale (blobs are drawn at a quarter size; a gradient that soft
+   scales up invisibly and the GPU holds a sixteenth of the pixels). */
+@keyframes orbit-a {
+  0.0% {
+    translate: calc(var(--rx) * 1.000) calc(var(--ry) * 0.000);
+  }
+  8.33% {
+    translate: calc(var(--rx) * 0.866) calc(var(--ry) * 0.500);
+  }
+  16.67% {
+    translate: calc(var(--rx) * 0.500) calc(var(--ry) * 0.866);
+  }
+  25.0% {
+    translate: calc(var(--rx) * 0.000) calc(var(--ry) * 1.000);
+  }
+  33.33% {
+    translate: calc(var(--rx) * -0.500) calc(var(--ry) * 0.866);
+  }
+  41.67% {
+    translate: calc(var(--rx) * -0.866) calc(var(--ry) * 0.500);
+  }
+  50.0% {
+    translate: calc(var(--rx) * -1.000) calc(var(--ry) * 0.000);
+  }
+  58.33% {
+    translate: calc(var(--rx) * -0.866) calc(var(--ry) * -0.500);
+  }
+  66.67% {
+    translate: calc(var(--rx) * -0.500) calc(var(--ry) * -0.866);
+  }
+  75.0% {
+    translate: calc(var(--rx) * -0.000) calc(var(--ry) * -1.000);
+  }
+  83.33% {
+    translate: calc(var(--rx) * 0.500) calc(var(--ry) * -0.866);
+  }
+  91.67% {
+    translate: calc(var(--rx) * 0.866) calc(var(--ry) * -0.500);
+  }
+  100.0% {
+    translate: calc(var(--rx) * 1.000) calc(var(--ry) * -0.000);
+  }
+}
+@keyframes orbit-b {
+  0.0% {
+    translate: calc(var(--rx) * 0.000) calc(var(--ry) * 1.000);
+  }
+  8.33% {
+    translate: calc(var(--rx) * 0.500) calc(var(--ry) * 0.866);
+  }
+  16.67% {
+    translate: calc(var(--rx) * 0.866) calc(var(--ry) * 0.500);
+  }
+  25.0% {
+    translate: calc(var(--rx) * 1.000) calc(var(--ry) * 0.000);
+  }
+  33.33% {
+    translate: calc(var(--rx) * 0.866) calc(var(--ry) * -0.500);
+  }
+  41.67% {
+    translate: calc(var(--rx) * 0.500) calc(var(--ry) * -0.866);
+  }
+  50.0% {
+    translate: calc(var(--rx) * 0.000) calc(var(--ry) * -1.000);
+  }
+  58.33% {
+    translate: calc(var(--rx) * -0.500) calc(var(--ry) * -0.866);
+  }
+  66.67% {
+    translate: calc(var(--rx) * -0.866) calc(var(--ry) * -0.500);
+  }
+  75.0% {
+    translate: calc(var(--rx) * -1.000) calc(var(--ry) * -0.000);
+  }
+  83.33% {
+    translate: calc(var(--rx) * -0.866) calc(var(--ry) * 0.500);
+  }
+  91.67% {
+    translate: calc(var(--rx) * -0.500) calc(var(--ry) * 0.866);
+  }
+  100.0% {
+    translate: calc(var(--rx) * -0.000) calc(var(--ry) * 1.000);
+  }
+}
+@keyframes orbit-c {
+  0.0% {
+    translate: calc(var(--rx) * 0.000) calc(var(--ry) * 0.000);
+  }
+  8.33% {
+    translate: calc(var(--rx) * 0.500) calc(var(--ry) * 0.520);
+  }
+  16.67% {
+    translate: calc(var(--rx) * 0.866) calc(var(--ry) * 0.520);
+  }
+  25.0% {
+    translate: calc(var(--rx) * 1.000) calc(var(--ry) * 0.000);
+  }
+  33.33% {
+    translate: calc(var(--rx) * 0.866) calc(var(--ry) * -0.520);
+  }
+  41.67% {
+    translate: calc(var(--rx) * 0.500) calc(var(--ry) * -0.520);
+  }
+  50.0% {
+    translate: calc(var(--rx) * 0.000) calc(var(--ry) * -0.000);
+  }
+  58.33% {
+    translate: calc(var(--rx) * -0.500) calc(var(--ry) * 0.520);
+  }
+  66.67% {
+    translate: calc(var(--rx) * -0.866) calc(var(--ry) * 0.520);
+  }
+  75.0% {
+    translate: calc(var(--rx) * -1.000) calc(var(--ry) * 0.000);
+  }
+  83.33% {
+    translate: calc(var(--rx) * -0.866) calc(var(--ry) * -0.520);
+  }
+  91.67% {
+    translate: calc(var(--rx) * -0.500) calc(var(--ry) * -0.520);
+  }
+  100.0% {
+    translate: calc(var(--rx) * -0.000) calc(var(--ry) * -0.000);
+  }
+}
+@keyframes breathe {
+  from {
+    scale: var(--k);
+    opacity: 0.82;
+  }
+  to {
+    scale: calc(var(--k) * var(--bs));
+    opacity: 1;
+  }
+}
+
+/* Card pool (GlowCard): rises, drifts sideways, settles. Transform only. */
+@keyframes card-light {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+  }
+  33% {
+    transform: translate3d(5%, -4%, 0) scale(1.04, 1.12);
+  }
+  66% {
+    transform: translate3d(-5%, 2%, 0) scale(1.02, 0.94);
+  }
+}
+
 /* Glows hold their pose while off screen (Glow toggles data-paused) */
 .glow[data-paused] > div,
 .card-light[data-paused] {

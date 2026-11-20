@@ -23,12 +23,20 @@ export type GlowEllipse = { color: string; y: number };
 
 const W = 3224;
 const H = 2297;
+/* Drawn at 1/K size and scaled up by K (see breathe in globals.css) */
+const K = 4;
 // Orbit periods (constant speed) and breathing periods (eased, alternating)
 const MOTION = [
   { orbit: "orbit-a", dur: 19, breathe: 7 },
   { orbit: "orbit-b", dur: 24, breathe: 9 },
   { orbit: "orbit-c", dur: 31, breathe: 11 },
 ];
+/* How far the light travels. "lively" is for the footer, where the glow is
+   the whole show: twice the reach, a deeper breath, a quicker tempo. */
+const FEEL = {
+  calm: { rx: 160, ry: 110, bs: 1.08, tempo: 1 },
+  lively: { rx: 340, ry: 230, bs: 1.18, tempo: 0.7 },
+};
 
 function falloff(hex: string) {
   const stops: [number, number][] = [
@@ -52,6 +60,7 @@ export function Glow({
   anchor = "bottom",
   clip = true,
   seed = 0,
+  feel = "calm",
   className = "",
   style,
 }: {
@@ -63,6 +72,8 @@ export function Glow({
   clip?: boolean;
   /** Phase offset so adjacent glows drift out of step */
   seed?: number;
+  /** calm (default) or lively (footer) */
+  feel?: keyof typeof FEEL;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -91,17 +102,27 @@ export function Glow({
     >
       {ellipses.map((e, i) => {
         const m = MOTION[i % MOTION.length];
+        const f = FEEL[feel];
+        const dur = m.dur * f.tempo;
+        const br = m.breathe * f.tempo;
+        const w = W / K;
+        const h = H / K;
         return (
           <div
             key={i}
-            className="absolute left-1/2"
+            className="absolute left-1/2 will-change-transform"
             style={{
-              width: W,
-              height: H,
-              marginLeft: -W / 2,
+              width: w,
+              height: h,
+              marginLeft: -w / 2,
+              scale: K,
               background: falloff(e.color),
-              animation: `${m.orbit} ${m.dur}s linear ${-((seed * 7.3 + i * 5.1) % m.dur)}s infinite, breathe ${m.breathe}s cubic-bezier(0.45, 0, 0.55, 1) ${-((seed * 3.1 + i * 2.7) % m.breathe)}s infinite alternate`,
-              ...(anchor === "top" ? { top: e.y, marginTop: -H / 2 } : { bottom: -e.y, marginBottom: -H / 2 }),
+              ["--k" as string]: K,
+              ["--rx" as string]: `${f.rx}px`,
+              ["--ry" as string]: `${f.ry}px`,
+              ["--bs" as string]: f.bs,
+              animation: `${m.orbit} ${dur}s linear ${-((seed * 7.3 + i * 5.1) % dur)}s infinite, breathe ${br}s cubic-bezier(0.45, 0, 0.55, 1) ${-((seed * 3.1 + i * 2.7) % br)}s infinite alternate`,
+              ...(anchor === "top" ? { top: e.y, marginTop: -h / 2 } : { bottom: -e.y, marginBottom: -h / 2 }),
             }}
           />
         );
