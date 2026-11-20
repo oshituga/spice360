@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/Button";
-import { GlowCard, GlowGrid, Badge } from "@/components/GlowCard";
 import { SectionHead } from "@/components/SectionHead";
 import { StackCards, type Bio } from "@/components/StackCards";
 import { TeamGrid } from "@/components/TeamGrid";
 import { Footer } from "@/components/Footer";
+import { FadeIn } from "@/components/motion";
 import { APPLY_HREF, TEAM } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -52,31 +52,40 @@ const BIOS: Bio[] = [
 
 const VALUES = [
   {
-    icon: "heat",
+    bg: "#bc3431",
+    ink: "text-white",
     title: "Heat",
     body: "Every brief is an opportunity to make something that creates a real reaction. Not warm, not pleasant, but genuinely felt. If a campaign does not move someone, it has not done its job. The agency is uncomfortable with lukewarm.",
   },
   {
-    icon: "root",
+    bg: "#2b5833",
+    ink: "text-white",
     title: "Root",
     body: "We understand Nigerian consumers from the inside, because we live here. We eat what they eat, hear what they hear, feel what the market feels. That rootedness is the source of every creatively specific thing this agency has ever made.",
   },
   {
-    icon: "precision",
+    bg: "#eea953",
+    ink: "text-ink",
     title: "Precision",
     body: "Paid social, search, and programmatic campaigns. Weekly reporting. Continuous optimisation. No set-and-forget.",
   },
   {
-    icon: "full-circle",
+    bg: "#f5f9f4",
+    ink: "text-ink",
+    light: true,
     title: "Full Circle",
     body: "The 360 in the name is a promise. We think across every stage of the consumer journey, every channel where the brand lives, every moment where communication can build or erode trust. Single-channel thinking is somebody else’s business model.",
   },
   {
-    icon: "intelligence",
+    bg: "#1a1a1a",
+    ink: "text-white",
     title: "Intelligence",
     body: "The best creative work is also the best-researched work. We study our clients’ consumers with a level of attention that less curious agencies direct elsewhere. Then we make something human from what we find.",
   },
 ];
+
+/* Everyone with a spice name, in the order the team grid shows them */
+const ROSTER = TEAM.filter((t) => t.spice);
 
 export default function People() {
   return (
@@ -90,91 +99,110 @@ export default function People() {
       />
 
       {/* Leadership bios, stacking */}
-      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
-        <SectionHead light title="The people behind the heat" width={356} />
-        <p className="mt-6 text-center text-eyebrow font-semibold text-mute">Each one named after a spice, each name earned.</p>
-        <div className="mt-16">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHead light align="left" eyebrow="Leadership" title="The people behind the heat" width={460} />
+            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
+              Each one named after a spice, each name earned.
+            </FadeIn>
+          </div>
           <StackCards bios={BIOS} />
         </div>
       </section>
 
       {/* Team grid */}
-      <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
-        <SectionHead
-          eyebrow="The minds behind the magic"
-          title="Our team"
-          body="Each person carries a real name and a spice name. The naming convention is not a gimmick, it is how the agency’s identity extends into the people who carry it. Each name describes who the person is, not who they want to be."
-          bodyWidth={590}
-        />
+      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto max-w-[1440px]">
+          <SectionHead
+            align="left"
+            eyebrow="The minds behind the magic"
+            title="Our team"
+            body="Each person carries a real name and a spice name. The naming convention is not a gimmick, it is how the agency’s identity extends into the people who carry it. Each name describes who the person is, not who they want to be."
+            bodyWidth={590}
+          />
+        </div>
         <div className="mt-16 md:mt-[90px]">
           <TeamGrid people={TEAM} />
         </div>
       </section>
 
-      {/* Values */}
-      <section className="bg-black px-[var(--gutter)] pt-[60px] pb-[130px] md:pt-[100px]">
-        <SectionHead
-          eyebrow="Culture and values"
-          title="Five values, all of them working everyday"
-          width={464}
-          body="What the agency believes"
-        />
-        <GlowGrid className="mx-auto mt-16 grid max-w-[1240px] gap-4 md:mt-[89px] md:grid-cols-6">
-          {VALUES.map((v, i) => (
-            <GlowCard
-              seed={i}
+      {/* Values: a spice rack, one colour band per value, the word set large */}
+      <section id="values" className="bg-black">
+        <div className="px-[var(--gutter)] pt-[60px] pb-16 md:pt-[100px] md:pb-24">
+          <div className="mx-auto flex max-w-[1440px] flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHead align="left" eyebrow="Culture and values" title="Five values, all of them working everyday" width={560} />
+            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">What the agency believes</FadeIn>
+          </div>
+        </div>
+        <ul>
+          {VALUES.map((v) => (
+            <li
               key={v.title}
-              className={`min-h-[420px] md:h-[503px] ${i < 3 ? "md:col-span-2" : "md:col-span-3"}`}
-              glow={[
-                { color: GR, y: 713 },
-                { color: RD, y: 546 },
-                { color: AM, y: 774 },
-              ]}
+              {...(v.light ? { "data-nav": "light" } : {})}
+              className={`px-[var(--gutter)] py-12 md:py-20 ${v.ink}`}
+              style={{ background: v.bg }}
             >
-              <div className="flex h-full flex-col justify-between gap-10 p-6">
-                <div className="flex flex-col items-start gap-4">
-                  <Badge>
-                    <span
-                      aria-hidden
-                      className="m-1 block size-9 bg-white"
-                      style={{
-                        maskImage: `url(/icons/${v.icon}.svg)`,
-                        WebkitMaskImage: `url(/icons/${v.icon}.svg)`,
-                        maskSize: "contain",
-                        WebkitMaskSize: "contain",
-                      }}
-                    />
-                  </Badge>
-                  <h3 className="text-[24px] leading-[32px] font-semibold tracking-[-0.05em]">{v.title}</h3>
-                </div>
-                <p className="max-w-[560px] text-body">{v.body}</p>
-              </div>
-            </GlowCard>
+              <FadeIn className="mx-auto grid max-w-[1440px] gap-6 md:grid-cols-[1fr_minmax(300px,460px)] md:items-end md:gap-16">
+                <h3 className="text-[clamp(56px,6vw+20px,136px)] leading-[0.86] font-semibold tracking-[-0.065em]">{v.title}</h3>
+                <p className="max-w-[460px] text-[18px] leading-[22px] tracking-[-0.04em] opacity-90">{v.body}</p>
+              </FadeIn>
+            </li>
           ))}
-        </GlowGrid>
+        </ul>
       </section>
 
-      {/* Culture system */}
-      <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
-        <SectionHead
-          eyebrow="The Spice culture system"
-          title="Nobody here goes by their job title alone"
-          width={441}
-          bodyWidth={538}
-          body={
-            <div className="mt-9 flex flex-col items-center gap-6">
-              <p>
-                Each name is chosen to describe who the person is. The names are used in informal communications, on event badges, and in any
-                context where warmth and personality belong. They are never used in contracts.
-              </p>
-              <p className="max-w-[425px]">
-                Leadership at Spice 360 is called the Flavour Board. Not the management team. Not the C-suite. The Flavour Board. New team
-                members propose their own spice names, which the Flavour Board confirms. The name should describe who you are, not who you are
-                trying to become.
-              </p>
-            </div>
-          }
-        />
+      {/* Culture system: the Flavour Board, and the names themselves */}
+      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-16 md:gap-24">
+          <div className="grid gap-10 md:grid-cols-[1fr_minmax(300px,460px)] md:items-end md:gap-16">
+            <SectionHead align="left" eyebrow="The Spice culture system" title="Nobody here goes by their job title alone" width={560} />
+            <FadeIn className="max-w-[460px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+              Each name is chosen to describe who the person is. The names are used in informal communications, on event badges, and in any
+              context where warmth and personality belong. They are never used in contracts.
+            </FadeIn>
+          </div>
+
+          <div className="border-t border-white/20 pt-10 md:pt-14">
+            <FadeIn as="p" className="text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+              Leadership at Spice 360 is called the Flavour Board.
+            </FadeIn>
+            <p className="mt-6 text-[clamp(44px,4.4vw+16px,96px)] leading-[0.92] font-semibold tracking-[-0.06em]">
+              <FadeIn as="span" className="block text-white/35">
+                Not the management team.
+              </FadeIn>
+              <FadeIn as="span" delay={0.08} className="block text-white/35">
+                Not the C-suite.
+              </FadeIn>
+              <FadeIn as="span" delay={0.16} className="block">
+                The Flavour Board.
+              </FadeIn>
+            </p>
+            <FadeIn className="mt-8 max-w-[460px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+              New team members propose their own spice names, which the Flavour Board confirms. The name should describe who you are, not who you
+              are trying to become.
+            </FadeIn>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-[minmax(200px,1fr)_3fr] md:gap-16">
+            <FadeIn as="p" className="text-eyebrow font-semibold text-[var(--eyebrow)]">
+              The names, as they stand
+            </FadeIn>
+            <FadeIn>
+              <ul className="columns-2 gap-x-4 sm:gap-x-12 lg:columns-3" aria-label="Team members and their spice names">
+                {ROSTER.map((t) => (
+                  <li
+                    key={t.name}
+                    className="flex break-inside-avoid flex-col-reverse gap-1 border-t border-white/15 py-3 text-[14px] leading-[17px] tracking-[-0.03em] sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:text-[15px] sm:leading-[18px]"
+                  >
+                    <span className="text-white/55">{t.name}</span>
+                    <span className="font-semibold sm:text-right">{t.spice}</span>
+                  </li>
+                ))}
+              </ul>
+            </FadeIn>
+          </div>
+        </div>
       </section>
 
       <Footer

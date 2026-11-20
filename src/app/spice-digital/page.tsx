@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/Button";
 import { Glow } from "@/components/Glow";
-import { GlowCard, GlowGrid } from "@/components/GlowCard";
 import { SectionHead } from "@/components/SectionHead";
-import { BentoRow, BentoTile } from "@/components/Bento";
 import { MediaCard } from "@/components/MediaCard";
 import { Footer } from "@/components/Footer";
-import { FadeIn } from "@/components/motion";
+import { FadeIn, SplitReveal } from "@/components/motion";
 import { CONTACT_HREF } from "@/lib/content";
 import { CASES } from "@/lib/cases";
 import Link from "next/link";
@@ -34,6 +32,18 @@ const SERVICES = [
   ["Digital Maintenance", "Ongoing management across all digital touchpoints: website updates, social scheduling, ad optimisation, and monthly brand audit reports."],
 ];
 
+const DOORS = [
+  { name: "Spice 360", color: "#2b5833" },
+  { name: "Spice Digital", color: "#212a68" },
+];
+
+/* The two lists from the old bento, paired line for line */
+const COMPARE: [string, string, string][] = [
+  ["Who it serves", "Large corporates and established brands", "Tech startups and digital-first brands"],
+  ["Depth", "FMCG and consumer goods", "Brand, growth marketing, and digital infra"],
+  ["How it works", "Multi-channel integrated campaigns", "Digital-first, performance-driven"],
+  ["Pace", "Long engagement cycles", "Sprint-based, startup commercial model"],
+];
 
 export default function SpiceDigital() {
   return (
@@ -55,167 +65,155 @@ export default function SpiceDigital() {
         }
       />
 
-      {/* About Spice Digital */}
-      <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
-        <SectionHead
-          eyebrow="About Spice Digital"
-          title="Built for founders, not brand managers"
-          width={430}
-          bodyWidth={560}
-          body={
-            <div className="mt-9 flex flex-col gap-6">
-              <p>
-                The marketing needs of a seed-stage fintech in Lagos and the marketing needs of an established FMCG brand have almost nothing in
-                common. Different budgets, different timelines, different definitions of a result. Different pressures entirely.
-              </p>
-              <p>
-                Spice Digital was built for the founder. The same creative standards as Spice 360. The same cultural intelligence about Nigerian
-                and West African consumers. A commercial model and delivery pace that match a startup’s reality, not a corporate agency’s
-                engagement cycle.
-              </p>
-              <p>
-                We work with founders and CMOs at seed to Series A: companies that have grown fast enough that informal marketing is no longer
-                working, but do not yet need the infrastructure of a full integrated agency. If your current marketing strategy lives in a
-                WhatsApp thread, you are exactly who Spice Digital was built for.
-              </p>
-            </div>
-          }
-        />
+      {/* About: one statement, the founder's problem in plain words */}
+      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto grid max-w-[1440px] gap-12 md:grid-cols-[1.2fr_1fr] md:items-end md:gap-16">
+          <div className="flex flex-col gap-6">
+            <FadeIn as="p" y={10} className="text-eyebrow font-semibold text-[var(--eyebrow)]">
+              About Spice Digital
+            </FadeIn>
+            <SplitReveal
+              text={"Built for founders,\nnot brand managers"}
+              className="text-[clamp(44px,4.4vw+16px,96px)] leading-[0.9] font-semibold tracking-[-0.06em]"
+            />
+          </div>
+          <div className="flex max-w-[480px] flex-col gap-6 text-[18px] leading-[22px] tracking-[-0.04em]">
+            <FadeIn delay={0.1} className="text-white/80">
+              A seed-stage fintech in Lagos and an established FMCG brand have almost nothing in common: different budgets, timelines and
+              definitions of a result. Spice Digital brings Spice 360’s creative standards and cultural intelligence about Nigerian and West
+              African consumers, on a commercial model and delivery pace that match a startup’s reality, not a corporate agency’s engagement
+              cycle.
+            </FadeIn>
+            <FadeIn delay={0.2} className="border-t border-white/20 pt-6 text-[22px] leading-[26px] font-semibold tracking-[-0.05em]">
+              If your current marketing strategy lives in a WhatsApp thread, you are exactly who Spice Digital was built for.
+            </FadeIn>
+          </div>
+        </div>
       </section>
 
-      {/* Services */}
-      <section className="bg-black px-[var(--gutter)] pt-[60px] pb-[120px] md:pt-[100px]">
-        <SectionHead eyebrow="What do we do" title="Six services, all of them connected" width={420} />
-        <GlowGrid className="mx-auto mt-16 grid max-w-[1360px] gap-4 md:mt-[89px] md:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map(([title, body], si) => (
-            <GlowCard
-              seed={si}
-              key={title}
-              className="min-h-[380px] md:h-[503px]"
-              glow={[
-                { color: N, y: 476 },
-                { color: S, y: 870 },
-                { color: M, y: 1288 },
-              ]}
-            >
-              <div className="flex h-full flex-col justify-between gap-10 p-6">
-                <h3 className="text-[24px] leading-[32px] font-semibold tracking-[-0.05em]">{title}</h3>
-                <p className="max-w-[422px] text-body">{body}</p>
-              </div>
-            </GlowCard>
-          ))}
-        </GlowGrid>
+      {/* Case studies: the proof, straight after the pitch */}
+      <section className="bg-black px-[var(--gutter)] pb-[110px] md:pb-[150px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+          <div className="flex flex-col gap-8 border-t border-white/20 pt-[110px] md:flex-row md:items-end md:justify-between md:pt-[150px]">
+            <SectionHead align="left" eyebrow="What we’ve built" title="Case studies and performance data" width={520} />
+            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+              Campaign outcomes, brand launches, acquisition results, and client proof points. The stories below are illustrative.
+            </FadeIn>
+          </div>
+          <div className="grid gap-2 md:grid-cols-2">
+            {CASES.map((c, i) => (
+              <Link
+                key={c.brand}
+                href={`/spice-digital/${c.slug}`}
+                aria-label={`${c.brand}, ${c.kind}: read the illustrative case study`}
+                className={`block ${i === 0 ? "md:col-span-2" : ""}`}
+              >
+                <MediaCard
+                  src={c.image}
+                  alt=""
+                  className="h-[460px] md:h-[597px]"
+                  sizes={i === 0 ? "(min-width: 768px) 1440px, 100vw" : "(min-width: 768px) 720px, 100vw"}
+                >
+                  <article className="flex flex-col gap-4 p-6 pr-5 md:p-10">
+                    <p className="flex items-center gap-2 text-eyebrow font-semibold">
+                      {c.stage}
+                      <span aria-hidden className="size-1 rounded-full bg-white" />
+                      {c.kind}
+                    </p>
+                    <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em] md:text-[32px] md:leading-[32px]">{c.brand}</h3>
+                    <p className="max-w-[426px] text-[16px] leading-[18px] tracking-[-0.06em]">{c.result}</p>
+                    <p className="mt-2 text-ui font-semibold text-white/80">
+                      Read the case <span className="text-white/45">· Illustrative</span>
+                    </p>
+                  </article>
+                </MediaCard>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services: six plain entries on hairlines */}
+      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
+        <Glow anchor="bottom" ellipses={[{ color: N, y: 452 }, { color: S, y: 761 }, { color: M, y: 910 }]} />
+        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+          <SectionHead align="left" eyebrow="What we do" title="Six services, all of them connected" width={520} />
+          <ul className="grid gap-x-12 md:grid-cols-2 lg:grid-cols-3">
+            {SERVICES.map(([title, body], i) => (
+              <FadeIn as="li" key={title} delay={(i % 3) * 0.08} className="flex flex-col gap-4 border-t border-white/20 pt-6 pb-12 md:pb-16">
+                <h3 className="text-[28px] leading-[28px] font-semibold tracking-[-0.055em] md:text-[32px] md:leading-[32px]">{title}</h3>
+                <p className="max-w-[400px] text-[17px] leading-[21px] tracking-[-0.04em] text-white/75">{body}</p>
+              </FadeIn>
+            ))}
+          </ul>
+        </div>
       </section>
 
       {/* Who it serves */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] py-[110px] md:min-h-[632px]">
-        <Glow anchor="bottom" ellipses={[{ color: N, y: 452 }, { color: S, y: 761 }, { color: M, y: 910 }]} />
-        <div className="relative">
-          <SectionHead
-            eyebrow="Who Spice Digital serves"
-            title="We know what funded looks like, and what growing looks like"
-            width={476}
-            bodyWidth={546}
-            body={
-              <div className="mt-9 flex flex-col gap-6">
-                <p>
-                  Spice Digital works with seed to Series A technology companies across fintech, edtech, healthtech, logistics, and e-commerce.
-                  Operating in Nigeria or building for Nigerian and West African consumers.
-                </p>
-                <p className="mt-9">
-                  Founders or CMOs who understand the value of brand but have not had the time or budget to build it properly. Companies growing
-                  fast enough that informal marketing is no longer sufficient. Backed by investors who will notice, and value, a credible brand
-                  presence.
-                </p>
-                <p>You do not need to be at scale to work with us. You need to be growing.</p>
-              </div>
-            }
-          />
+      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto grid max-w-[1440px] gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
+          <SectionHead align="left" eyebrow="Who Spice Digital serves" title="We know what funded looks like, and what growing looks like" width={560} />
+          <div className="flex max-w-[480px] flex-col gap-6 text-[18px] leading-[22px] tracking-[-0.04em] text-white/80 md:pt-11">
+            <FadeIn delay={0.1}>
+              Seed to Series A technology companies across fintech, edtech, healthtech, logistics, and e-commerce, operating in Nigeria or
+              building for Nigerian and West African consumers.
+            </FadeIn>
+            <FadeIn delay={0.15}>
+              Founders or CMOs who understand the value of brand but have not had the time or budget to build it properly. Companies growing fast
+              enough that informal marketing is no longer sufficient. Backed by investors who will notice, and value, a credible brand presence.
+            </FadeIn>
+            <FadeIn delay={0.2} className="border-t border-white/20 pt-6 text-[22px] leading-[26px] font-semibold tracking-[-0.05em] text-white">
+              You do not need to be at scale to work with us. You need to be growing.
+            </FadeIn>
+          </div>
         </div>
       </section>
 
-      {/* Two doors */}
-      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
-        <SectionHead
-          light
-          eyebrow="S360 VS SD"
-          title="Two doors into the same building"
-          width={463}
-          body="Spice 360 serves established brands with integrated, multi-channel campaigns. Large FMCG accounts, corporate clients, long engagement cycles."
-          bodyWidth={460}
-        />
-        <div className="mx-auto mt-16 max-w-[678px]">
-          <BentoRow>
-            <BentoTile color="#2b5833" title="Spice 360">
-              <Bullets
-                items={[
-                  "Large corporates and established brands",
-                  "FMCG and consumer goods depth",
-                  "Multi-channel integrated campaigns",
-                  "Long engagement cycles",
-                ]}
-              />
-            </BentoTile>
-            <BentoTile color="#212a68" title="Spice Digital" delay={0.12}>
-              <Bullets
-                items={[
-                  "Tech startups and digital-first brands",
-                  "Brand, growth marketing, and digital infra",
-                  "Digital-first, performance-driven",
-                  "Sprint-based, startup commercial model",
-                ]}
-              />
-            </BentoTile>
-          </BentoRow>
-        </div>
-        <FadeIn className="mx-auto mt-16 max-w-[508px] text-center text-body text-mute">
-          Both brands share infrastructure, creative values, and the Flavour Board. They do not compete for the same clients. When a Spice Digital
-          client grows to the point of needing above-the-line campaign work, the transition to a Spice 360 engagement is natural, not a pitch.
-        </FadeIn>
-      </section>
-
-      {/* Case studies */}
-      <section className="bg-black px-[var(--gutter)] pt-[120px] pb-[100px] md:pt-[182px] md:pb-[130px]">
-        <SectionHead
-          eyebrow="What we’ve built"
-          title="Case studies and performance data"
-          width={421}
-          body="Campaign outcomes, brand launches, acquisition results, and client proof points."
-          bodyWidth={392}
-        />
-        <div className="mx-auto mt-16 grid max-w-[1150px] gap-2 md:mt-[90px] md:grid-cols-2">
-          {CASES.map((c, i) => (
-            <Link
-              key={c.brand}
-              href={`/spice-digital/${c.slug}`}
-              aria-label={`${c.brand}, ${c.kind}: read the illustrative case study`}
-              className={`block ${i === 0 ? "md:col-span-2" : ""}`}
-            >
-              <MediaCard
-                src={c.image}
-                alt=""
-                className="h-[460px] md:h-[597px]"
-                sizes={i === 0 ? "(min-width: 768px) 1150px, 100vw" : "(min-width: 768px) 575px, 100vw"}
-              >
-                <article className="flex flex-col gap-4 p-6 pr-5 md:p-10">
-                  <p className="flex items-center gap-2 text-eyebrow font-semibold">
-                    {c.stage}
-                    <span aria-hidden className="size-1 rounded-full bg-white" />
-                    {c.kind}
-                  </p>
-                  <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em]">{c.brand}</h3>
-                  <p className="max-w-[426px] text-[16px] leading-[18px] tracking-[-0.06em]">{c.result}</p>
-                  <p className="mt-2 flex items-center gap-2 text-ui font-semibold text-white/80">
-                    Read the case
-                    <span aria-hidden className="transition-transform duration-500 ease-[var(--ease-soft)] group-hover:translate-x-1">
-                      →
-                    </span>
-                    <span className="text-white/45">· Illustrative</span>
-                  </p>
-                </article>
-              </MediaCard>
-            </Link>
-          ))}
+      {/* Two doors: a straight side-by-side comparison */}
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHead light align="left" eyebrow="Spice 360 vs Spice Digital" title="Two doors into the same building" width={520} />
+            <FadeIn className="max-w-[420px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
+              Spice 360 serves established brands with integrated, multi-channel campaigns. Large FMCG accounts, corporate clients, long engagement cycles.
+            </FadeIn>
+          </div>
+          <FadeIn>
+            <table className="w-full table-fixed max-md:block border-collapse text-left text-[16px] leading-[20px] tracking-[-0.04em] md:text-[20px] md:leading-[24px]">
+              <caption className="sr-only">Spice 360 compared with Spice Digital</caption>
+              <colgroup>
+                <col className="hidden md:table-column md:w-[22%]" />
+                <col />
+                <col />
+              </colgroup>
+              <thead className="max-md:block">
+                <tr className="max-md:grid max-md:grid-cols-2">
+                  <td className="hidden md:table-cell" />
+                  {DOORS.map((d) => (
+                    <th key={d.name} scope="col" className="pr-4 pb-6 align-bottom md:pr-10">
+                      <span aria-hidden className="mb-5 block h-2 w-full" style={{ background: d.color }} />
+                      <span className="block text-[26px] leading-[26px] font-semibold tracking-[-0.055em] md:text-[40px] md:leading-[38px]">{d.name}</span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="max-md:block">
+                {COMPARE.map(([label, a, b]) => (
+                  <tr key={label} className="border-t border-ink/15 max-md:grid max-md:grid-cols-2">
+                    <th scope="row" className="py-5 pr-4 align-top text-eyebrow font-semibold text-mute max-md:col-span-2 max-md:pb-0 md:py-7">
+                      {label}
+                    </th>
+                    <td className="py-5 pr-4 align-top md:py-7 md:pr-10">{a}</td>
+                    <td className="py-5 pr-4 align-top md:py-7 md:pr-10">{b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </FadeIn>
+          <FadeIn className="max-w-[640px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
+            Both brands share infrastructure, creative values, and the Flavour Board. They do not compete for the same clients. When a Spice Digital
+            client grows to the point of needing above-the-line campaign work, the transition to a Spice 360 engagement is natural, not a pitch.
+          </FadeIn>
         </div>
       </section>
 
@@ -245,12 +243,3 @@ export default function SpiceDigital() {
   );
 }
 
-function Bullets({ items }: { items: string[] }) {
-  return (
-    <ul className="list-disc pl-[27px]">
-      {items.map((t) => (
-        <li key={t}>{t}</li>
-      ))}
-    </ul>
-  );
-}
