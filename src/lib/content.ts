@@ -5,10 +5,10 @@
  * Layout and type come from Figma.
  */
 
-/* Same inbox the live site uses. mailto rather than a Gmail web link so it
-   opens the phone's mail app instead of a browser tab. */
-export const CONTACT_HREF =
-  "mailto:tech.spice360@gmail.com?subject=Hello%20Spice360&body=Hello%20Spice360%2C%20I%20am%20";
+/* Same inbox the live site uses. Every "Get in touch" goes to the brief
+   page, which composes a mail to it (mailto opens the phone's mail app). */
+export const EMAIL = "tech.spice360@gmail.com";
+export const CONTACT_HREF = "/contact";
 
 export const APPLY_HREF =
   "mailto:tech.spice360@gmail.com?subject=Application%20for%20Spice360&body=Hello%20Spice360%2C%20I%27d%20like%20to%20apply.%20Here%27s%20a%20bit%20about%20me%20and%20a%20link%20to%20my%20portfolio%3A%20";
@@ -111,24 +111,30 @@ function p(name: string, spice: string | undefined, role: string, file: string):
   };
 }
 
+/* "Behind the kitchen" cards. Two have full stories written only from facts
+   already published on the live site; the Cannes story has no copy yet, so
+   its card shows without a link until the agency supplies it. */
 export const BLOG = [
   {
     date: "15th of January 2026",
     title: "How we partnered with Indomie to build one of Nigeria’s most loved brands.",
     kind: "Case Study",
     image: "/blog/indomie-feature.jpg",
+    href: "/kitchen/mothers-love",
   },
   {
     date: "15th of January 2026",
     title: "The year we took our young lions to Cannes.",
     kind: "Agency Story",
     image: "/group/team-mixed-hifive-devices.jpg",
+    href: null,
   },
   {
     date: "15th of January 2026",
-    title: "How we partnered with Indomie to build one of Nigeria’s most loved brands.",
-    kind: "Case Study",
-    image: "/blog/indomie-noodles.jpg",
+    title: "Fourth on debut: the full record from LAIF 2024.",
+    kind: "Agency Story",
+    image: "/group/team-full-applause.jpg",
+    href: "/kitchen/laif-2024",
   },
 ] as const;
 

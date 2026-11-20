@@ -52,7 +52,7 @@ export default function SpiceDigital() {
           { color: M, y: -780 },
         ]}
         actions={
-          <Button href={CONTACT_HREF} size="sm" className="text-paper">
+          <Button href={`${CONTACT_HREF}?topic=digital`} size="sm" className="text-paper">
             Brief Spice Digital
           </Button>
         }
@@ -222,7 +222,7 @@ export default function SpiceDigital() {
         metaClass="text-navy"
         actions={
           <>
-            <Button href={CONTACT_HREF} tone="light" className="bg-[#e8eeff] px-6 !text-[#0f2a8a]">
+            <Button href={`${CONTACT_HREF}?topic=digital`} tone="light" className="bg-[#e8eeff] px-6 !text-[#0f2a8a]">
               Brief Spice Digital
             </Button>
             <Button href="/" className="px-6">

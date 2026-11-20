@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/Button";
 import { Glow } from "@/components/Glow";
@@ -119,7 +120,9 @@ export default function About() {
               important audience.
             </p>
           </div>
-          <PlayCard src="/blog/indomie-noodles.jpg" label="Case Study / Indomie / 2022" />
+          <Link href="/kitchen/mothers-love" className="flex flex-1" aria-label="Read the Mother’s Love case study">
+            <PlayCard src="/blog/indomie-noodles.jpg" label="Case Study / Indomie / 2022" />
+          </Link>
         </FadeIn>
       </section>
 

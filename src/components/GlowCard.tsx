@@ -2,14 +2,15 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
-import { Glow, type GlowEllipse } from "./Glow";
+import { type GlowEllipse } from "./Glow";
 import { EASE, stagger } from "./motion";
 
 /*
  * The dark card Figma uses for pillars, capabilities, values and services:
- * black at the top, the page colour pooling up from the bottom edge, its
- * blobs drifting slowly. Cards rise into place one after another on scroll;
- * no hover tricks.
+ * black at the top, the page colour pooling up from the bottom edge.
+ * The pool is a single soft layer per card that slowly rises, falls and
+ * drifts (card-light in globals.css), each card out of step with the next.
+ * Cards rise into place one after another on scroll; no hover tricks.
  */
 export function GlowGrid({
   children,
@@ -55,7 +56,7 @@ export function GlowCard({
         className="absolute inset-0"
         variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 1.6, delay: 0.25 } } }}
       >
-        <Glow ellipses={glow} clip={false} seed={seed} />
+        <CardLight glow={glow} seed={seed} />
       </motion.div>
       <div className="relative h-full">{children}</div>
     </motion.article>
@@ -70,5 +71,29 @@ export function Badge({ children, className = "" }: { children: ReactNode; class
     >
       {children}
     </span>
+  );
+}
+
+/*
+ * The card's three Figma ellipses sit 550-1300px below a 500px card, so all
+ * that shows is their top edges: a band of colour rising from the bottom.
+ * Drawn here as one radial pool per colour stacked in a single element,
+ * strongest colour last, which reads the same at a fraction of the cost.
+ */
+function CardLight({ glow, seed }: { glow: GlowEllipse[]; seed: number }) {
+  const [a, b, c] = glow.map((g) => g.color);
+  const pools = [
+    `radial-gradient(70% 55% at 50% 100%, ${c}cc 0%, ${c}00 100%)`,
+    `radial-gradient(90% 70% at 50% 100%, ${b}cc 0%, ${b}00 100%)`,
+    `radial-gradient(120% 95% at 50% 100%, ${a} 0%, ${a}00 100%)`,
+  ];
+  return (
+    <div
+      className="card-light absolute -inset-x-[15%] -bottom-[10%] top-0 origin-bottom"
+      style={{
+        backgroundImage: pools.join(", "),
+        animation: `card-light ${13 + (seed % 3) * 2}s cubic-bezier(0.45, 0, 0.55, 1) ${-seed * 3.3}s infinite`,
+      }}
+    />
   );
 }

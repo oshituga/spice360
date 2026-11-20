@@ -159,19 +159,72 @@ figcaption {
   margin-bottom: -0.08em;
 }
 
-/* Team grid spotlight: one face in colour, everyone else steps back.
-   Gated to real hover so a tap on a phone never leaves the grid dimmed. */
+/* Team grid. Everything here is opacity and transform, so hovering from
+   face to face only touches the compositor. Spotlight is gated to real
+   hover so a tap on a phone never leaves the grid dimmed. */
+.team-tile {
+  transition:
+    opacity 450ms var(--ease-soft),
+    scale 450ms var(--ease-soft),
+    box-shadow 300ms var(--ease-soft);
+}
+.team-alt,
+.team-meta {
+  opacity: 0;
+  transition: opacity 450ms var(--ease-soft);
+}
 @media (hover: hover) and (pointer: fine) {
   .team-grid:has(.team-tile:hover) .team-tile:not(:hover) {
-    filter: brightness(0.42) saturate(0.4);
+    opacity: 0.35;
+  }
+  .team-tile:hover {
+    z-index: 10;
+    scale: 1.06;
+    box-shadow: 0 0 0 2px var(--color-pepper), 0 16px 36px rgba(0, 0, 0, 0.55);
+  }
+  .team-tile:hover .team-alt {
+    opacity: 1;
   }
 }
 .team-grid:has(.team-tile:focus-visible) .team-tile:not(:focus-visible) {
-  filter: brightness(0.42) saturate(0.4);
+  opacity: 0.35;
+}
+.team-tile:focus-visible {
+  z-index: 10;
+  scale: 1.06;
+  box-shadow: 0 0 0 2px var(--color-pepper);
+}
+.team-tile:focus-visible .team-alt,
+.team-tile[data-on] .team-alt,
+.team-tile[data-on] .team-meta {
+  opacity: 1;
+}
+.team-tile[data-on] {
+  box-shadow: 0 0 0 2px var(--color-pepper);
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+.team-in {
+  animation: rise-in 800ms var(--ease-soft) var(--d, 0ms) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 60%;
+}
+@supports not (animation-timeline: view()) {
+  .team-in {
+    animation: none;
+  }
+}
+.panel-in {
+  animation: rise-in 380ms var(--ease-soft) both;
 }
 
 /* Glows hold their pose while off screen (Glow toggles data-paused) */
-.glow[data-paused] > div {
+.glow[data-paused] > div,
+.card-light[data-paused] {
   animation-play-state: paused;
 }
 
@@ -212,43 +265,6 @@ figcaption {
   }
 }
 
-/* Glow blobs: each of a glow's three ellipses roams on its own loop
-   (14 / 18 / 23s, sine-eased) so the colours visibly slide past one another
-   and the bright spot wanders across the section and back.
-   The ellipses are wider than any screen, so small moves are invisible: it
-   takes ~15% sideways (~480px), ~9% vertical (~200px) and a 0.85-1.12
-   swell before the eye reads the light as moving. Slow enough to soothe,
-   big enough to see. Nothing reacts to the cursor or the scroll. */
-@keyframes glow-a {
-  0%,
-  100% {
-    transform: translate3d(-12%, 0, 0) scale(0.92, 1);
-  }
-  50% {
-    transform: translate3d(14%, 8%, 0) scale(1.08, 1.1);
-  }
-}
-@keyframes glow-b {
-  0%,
-  100% {
-    transform: translate3d(15%, -4%, 0) scale(1.1, 0.95);
-  }
-  50% {
-    transform: translate3d(-13%, 7%, 0) scale(0.86, 1.08);
-  }
-}
-@keyframes glow-c {
-  0%,
-  100% {
-    transform: translate3d(0, 6%, 0) scale(1);
-  }
-  33% {
-    transform: translate3d(-16%, -5%, 0) scale(1.12, 0.94);
-  }
-  66% {
-    transform: translate3d(14%, 2%, 0) scale(0.88, 1.06);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,

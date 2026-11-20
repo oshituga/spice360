@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { Button } from "./Button";
+import { HOME_FOOTER } from "@/lib/glows";
 import type { ReactNode } from "react";
-import { APPLY_HREF, CONTACT_HREF } from "@/lib/content";
+import { CONTACT_HREF } from "@/lib/content";
 import { Glow, type GlowEllipse } from "./Glow";
 import { FadeIn, SplitReveal } from "./motion";
 
@@ -19,19 +21,19 @@ const COLS = [
       { label: "Home", href: "/" },
       { label: "About & Work", href: "/about" },
       { label: "Awards", href: "/about#laif" },
-      { label: "Blog", href: "/#blog" },
+      { label: "Blog", href: "/kitchen" },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "People", href: "/people" },
-      { label: "Careers", href: APPLY_HREF },
+      { label: "Careers", href: "/careers" },
       { label: "Spice Digital", href: "/spice-digital" },
       { label: "Get in touch", href: CONTACT_HREF },
     ],
   },
-  { title: "Legal & Info", links: [{ label: "Privacy Policy", href: "/" }] },
+  { title: "Legal & Info", links: [{ label: "Privacy Policy", href: "/privacy" }] },
 ];
 
 export function Footer({
@@ -134,5 +136,25 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
       {children}
       {line}
     </Link>
+  );
+}
+
+/* Footer for the supporting pages (Kitchen, Careers, Contact, Privacy, 404):
+   the home palette and the plain "start a conversation" close. */
+export function StandardFooter() {
+  return (
+    <Footer
+      title="Start a conversation"
+      titleWidth={288}
+      body="Tell us what your brand is trying to do and leave the rest to us"
+      bodyWidth={274}
+      glow={HOME_FOOTER}
+      metaClass="text-leaf"
+      actions={
+        <Button href={CONTACT_HREF} tone="light" className="bg-white/90 px-6">
+          Brief us
+        </Button>
+      }
+    />
   );
 }

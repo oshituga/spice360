@@ -9,8 +9,8 @@ import { useEffect, useRef, type CSSProperties } from "react";
  * ellipse is redrawn as a radial gradient whose stops follow the blurred
  * edge's falloff (erf curve, sigma 225 on ry 698). Same picture, composited.
  *
- * Each blob roams on its own loop (see glow-a/b/c in globals.css). Pure CSS
- * transforms, no reaction to cursor or scroll. Off screen the loops pause
+ * Each blob orbits on its own period and breathes on another (see orbit-a/b/c
+ * and breathe in globals.css). Pure CSS, no reaction to cursor or scroll. Off screen the loops pause
  * (data-paused) so a page with a dozen glows only spends frames on the ones
  * you can see. `seed` offsets the phase so neighbouring glows drift apart.
  *
@@ -23,12 +23,12 @@ export type GlowEllipse = { color: string; y: number };
 
 const W = 3224;
 const H = 2297;
+// Orbit periods (constant speed) and breathing periods (eased, alternating)
 const MOTION = [
-  { name: "glow-a", dur: 14 },
-  { name: "glow-b", dur: 18 },
-  { name: "glow-c", dur: 23 },
+  { orbit: "orbit-a", dur: 19, breathe: 7 },
+  { orbit: "orbit-b", dur: 24, breathe: 9 },
+  { orbit: "orbit-c", dur: 31, breathe: 11 },
 ];
-const EASE = "cubic-bezier(0.45, 0, 0.55, 1)"; // sine in-out: no edges to the motion
 
 function falloff(hex: string) {
   const stops: [number, number][] = [
@@ -100,7 +100,7 @@ export function Glow({
               height: H,
               marginLeft: -W / 2,
               background: falloff(e.color),
-              animation: `${m.name} ${m.dur}s ${EASE} ${-((seed * 7.3 + i * 5.1) % m.dur)}s infinite`,
+              animation: `${m.orbit} ${m.dur}s linear ${-((seed * 7.3 + i * 5.1) % m.dur)}s infinite, breathe ${m.breathe}s cubic-bezier(0.45, 0, 0.55, 1) ${-((seed * 3.1 + i * 2.7) % m.breathe)}s infinite alternate`,
               ...(anchor === "top" ? { top: e.y, marginTop: -H / 2 } : { bottom: -e.y, marginBottom: -H / 2 }),
             }}
           />

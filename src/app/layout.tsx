@@ -4,7 +4,6 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
-import { Cursor } from "@/components/Cursor";
 
 /* The Figma file is set entirely in Google Sans Flex. */
 const gsf = Google_Sans_Flex({
@@ -67,7 +66,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <SmoothScroll />
         <Nav />
-        <Cursor />
         {children}
       </body>
     </html>
