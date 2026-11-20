@@ -38,6 +38,13 @@ const FEEL = {
   lively: { rx: 340, ry: 230, bs: 1.18, tempo: 0.7 },
 };
 
+/* The element beside a section on the page, climbing out of wrappers */
+function neighbour(el: Element, dir: "previousElementSibling" | "nextElementSibling") {
+  let n: Element | null = el;
+  while (n && n.tagName !== "BODY" && !n[dir]) n = n.parentElement;
+  return n && n.tagName !== "BODY" ? n[dir] : null;
+}
+
 /* Black to clear on an ease-in-out curve (no perceptible start or end).
    With a tint, the fade passes through that colour on its way to black:
    the overlay is the tint where it is light and only turns black right at
@@ -80,7 +87,6 @@ export function Glow({
   clip = true,
   seed = 0,
   feel = "calm",
-  blend = true,
   tint,
   className = "",
   style,
@@ -95,8 +101,6 @@ export function Glow({
   seed?: number;
   /** calm (default) or lively (footer) */
   feel?: keyof typeof FEEL;
-  /** Fade the anchor edge into black too (off for heroes, which start the page) */
-  blend?: boolean;
   /** Fade through this colour (the palette's deep) instead of straight to black */
   tint?: string;
   className?: string;
@@ -115,6 +119,15 @@ export function Glow({
       { rootMargin: "200px 0px" },
     );
     io.observe(el);
+
+    // Fade an edge only when the section on that side is black
+    const host = el.closest("section, footer");
+    for (const edge of ["top", "bottom"] as const) {
+      const fade = el.querySelector<HTMLElement>(`:scope > [data-edge="${edge}"]`);
+      if (!fade || !host) continue;
+      const next = neighbour(host, edge === "top" ? "previousElementSibling" : "nextElementSibling");
+      fade.style.display = next && getComputedStyle(next).backgroundColor === "rgb(0, 0, 0)" ? "" : "none";
+    }
     return () => io.disconnect();
   }, []);
 
@@ -152,28 +165,28 @@ export function Glow({
           />
         );
       })}
-      {/* The light must never end in a line. Each edge that meets another
-          section gets a long fade to black on an eased curve (the classic
-          "easing gradient" stops), so the falloff has no visible start or
-          kink; a short linear ramp read as a muddy band. Static alpha over
-          the moving layers, so it costs nothing per frame. The far edge
-          always fades; mid-page glows also fade the edge they rise from, so
-          the light pools inside the section. Heroes (blend={false}) keep
-          their top, the lively footer keeps its bottom. */}
-      <div
-        className="absolute inset-x-0"
-        style={{
-          [anchor === "top" ? "bottom" : "top"]: 0,
-          height: feel === "lively" ? "46%" : "34%",
-          backgroundImage: eased(anchor === "top" ? "to top" : "to bottom", tint),
-        }}
-      />
-      {blend && feel !== "lively" && (
-        <div
-          className="absolute inset-x-0"
-          style={{ [anchor === "top" ? "top" : "bottom"]: 0, height: "30%", backgroundImage: eased(anchor === "top" ? "to bottom" : "to top", tint) }}
-        />
-      )}
+      {/* The light must never end in a line where it meets a black section,
+          so each edge can fade to black on an eased curve (the classic
+          "easing gradient" stops: no visible start or kink). Static alpha
+          over the moving layers, so it costs nothing per frame. Whether an
+          edge fades is decided by its neighbour (see the effect above): only
+          when the section on that side is black. Next to a photo, a white
+          section or the end of the page, the light runs to the edge. */}
+      {(["top", "bottom"] as const).map((edge) => {
+        const far = (edge === "top") === (anchor === "bottom");
+        return (
+          <div
+            key={edge}
+            data-edge={edge}
+            className="absolute inset-x-0"
+            style={{
+              [edge]: 0,
+              height: far ? (feel === "lively" ? "46%" : "34%") : "30%",
+              backgroundImage: eased(edge === "top" ? "to bottom" : "to top", tint),
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

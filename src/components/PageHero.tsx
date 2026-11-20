@@ -63,7 +63,7 @@ export function PageHero({
         </div>
       ) : (
         <div className="fade-slow absolute inset-0 -z-10">
-          <Glow ellipses={glow ?? []} anchor="top" blend={false} />
+          <Glow ellipses={glow ?? []} anchor="top" />
         </div>
       )}
 
