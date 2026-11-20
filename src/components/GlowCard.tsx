@@ -58,7 +58,9 @@ export function GlowCard({
       >
         <CardLight glow={glow} seed={seed} />
       </motion.div>
-      <div className="relative h-full">{children}</div>
+      {/* A soft shadow under the type keeps white legible where the pool
+          is palest (lime, sky, butter); static, so it costs nothing */}
+      <div className="relative h-full [text-shadow:0_1px_16px_rgba(0,0,0,0.32)]">{children}</div>
     </motion.article>
   );
 }

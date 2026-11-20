@@ -43,7 +43,8 @@ export default function Home() {
   return (
     <main data-theme="home">
       <PageHero
-        title={"We make brands\nimpossible to ignore."}
+        variant="statement"
+        title={"We make brands\nimpossible\nto ignore."}
         titleWidth={1094}
         body="We build integrated 360 campaigns rooted in cultural truth. We find what moves consumers and build campaigns that go all the way from strategy to execution."
         bodyWidth={518}
@@ -103,7 +104,7 @@ export default function Home() {
       </section>
 
       {/* What we do */}
-      <section className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
         <SectionHead light eyebrow="What we do" title="The recipe for campaigns that work" width={625}>
           <Button href="/about#capabilities" tone="dark" size="sm">
             Everything we offer
@@ -116,7 +117,7 @@ export default function Home() {
             </BentoTile>
           </BentoRow>
           <BentoRow>
-            <BentoTile color="#eea953" title="Digital Content" delay={0.12}>
+            <BentoTile color="#eea953" title="Digital Content" delay={0.12} ink="text-ink">
               Always-on creative for Africa’s most engaged online market. Built for Nigerian audiences from line one.
             </BentoTile>
             <BentoTile color="#bc3431" title="Integrated Campaigns" delay={0.22}>
@@ -161,7 +162,7 @@ export default function Home() {
       </section>
 
       {/* Brands */}
-      <section className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[120px]">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[120px]">
         <SectionHead light eyebrow="Awards & Accolades" title="The brands Nigerians know. We make them." width={508} />
         <div className="mt-16 flex justify-center md:mt-20">
           <BrandWall />
@@ -170,7 +171,7 @@ export default function Home() {
       </section>
 
       {/* Team */}
-      <section className="bg-white py-[100px] text-ink md:py-[120px]">
+      <section data-nav="light" className="bg-white py-[100px] text-ink md:py-[120px]">
         <div className="px-[var(--gutter)]">
           <SectionHead light eyebrow="Our Team" title="We are more than colleagues" width={508} />
         </div>

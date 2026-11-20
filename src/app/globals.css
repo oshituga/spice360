@@ -22,6 +22,11 @@
   --color-sky: #7bdcfb;
 
   /* Figma: Display 48/42 -5%, Hero 48/45, Body "Med 18" 18/20 -4% */
+  /* Mega: the flagship statement size (Home, About heroes). Scale contrast
+     is the point: one huge line against small, quiet labels. */
+  --text-mega: clamp(52px, 7.6vw + 14px, 164px);
+  --text-mega--line-height: 0.86;
+  --text-mega--letter-spacing: -0.065em;
   --text-display: 48px;
   --text-display--line-height: 42px;
   --text-display--letter-spacing: -0.05em;
@@ -502,6 +507,16 @@ figcaption {
 .fade-up {
   animation: fade-up 900ms cubic-bezier(0.33, 0, 0.2, 1) var(--d, 0ms) both;
 }
+/* Statement hero lines rise out of a mask, one after another (transform only) */
+@keyframes line-up {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+}
+.line-up {
+  animation: line-up 1100ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both;
+}
+
 /* Each route fades in as it mounts (template.tsx) */
 .route-in {
   animation: fade 500ms cubic-bezier(0.33, 0, 0.2, 1) both;

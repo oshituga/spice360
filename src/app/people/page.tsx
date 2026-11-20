@@ -90,7 +90,7 @@ export default function People() {
       />
 
       {/* Leadership bios, stacking */}
-      <section className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
         <SectionHead light title="The people behind the heat" width={356} />
         <p className="mt-6 text-center text-eyebrow font-semibold text-mute">Each one named after a spice, each name earned.</p>
         <div className="mt-16">

@@ -98,7 +98,7 @@ export function Footer({
           <FadeIn delay={0.1} className="text-[20px] leading-[23px] tracking-[-0.045em] text-white/90" style={{ maxWidth: `min(${Math.round(bodyWidth * 1.15)}px, 100%)` }}>
             {body}
           </FadeIn>
-          <FadeIn delay={0.2} className="flex flex-wrap justify-center gap-2 [&_a]:min-h-[48px] [&_a]:px-7 [&_a]:text-[14px]">
+          <FadeIn delay={0.2} className="flex flex-wrap justify-center gap-2">
             {actions}
           </FadeIn>
           <FadeIn delay={0.28}>

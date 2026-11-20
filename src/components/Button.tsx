@@ -29,12 +29,15 @@ export function Button({
   href: string;
   children: ReactNode;
   tone?: Tone;
-  size?: "sm" | "md";
+  /** Every button is the footer CTA's size; "nav" is the compact bar button.
+      sm/md are kept so old call sites still compile, and both mean the same. */
+  size?: "sm" | "md" | "nav";
   className?: string;
   external?: boolean;
 }) {
-  const pad = size === "sm" ? "px-4 py-2" : "px-5 py-3";
-  const cls = `group/btn relative inline-flex items-center justify-center overflow-hidden rounded-[8px] text-ui font-semibold whitespace-nowrap select-none transition-[filter,scale] duration-200 ease-out active:scale-[0.97] ${pad} ${tones[tone]} ${className}`;
+  // Size is fixed (important) so a caller's old px-* can only change colour
+  const pad = size === "nav" ? "px-4 py-2 text-ui" : "min-h-12 px-7! py-0! text-[14px]! tracking-[-0.04em]";
+  const cls = `group/btn relative inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-[10px] font-semibold whitespace-nowrap select-none transition-[filter,scale] duration-200 ease-out active:scale-[0.97] ${pad} ${tones[tone]} ${className}`;
 
   const label = (
     <span className="relative block overflow-hidden">

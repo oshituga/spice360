@@ -135,7 +135,7 @@ export default function SpiceDigital() {
       </section>
 
       {/* Two doors */}
-      <section className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
         <SectionHead
           light
           eyebrow="S360 VS SD"

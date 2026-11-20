@@ -62,7 +62,8 @@ export default function About() {
   return (
     <main data-theme="about">
       <PageHero
-        title="About & Work"
+        variant="statement"
+        title={"About\n& Work"}
         titleWidth={1094}
         body="The agency grew out of the Tolaram Group, one of West Africa’s largest consumer goods conglomerates and the company behind Indomie, Power Oil, Dano Milk, Colgate Nigeria, and twelve other brands that are part of Nigerian daily life. Working that account, year after year, built something most agencies spend careers trying to acquire: a genuine, granular understanding of what moves Nigerian people."
         bodyWidth={584}
@@ -99,7 +100,7 @@ export default function About() {
       </section>
 
       {/* Selected work */}
-      <section className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
         <SectionHead
           light
           eyebrow="Selected work"
@@ -184,7 +185,7 @@ export default function About() {
       </section>
 
       {/* Brands */}
-      <section className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[120px]">
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[120px]">
         <SectionHead light eyebrow="Who we work for" title="12 brands, one home base" width={400} />
         <div className="mt-16 flex justify-center md:mt-20">
           <BrandWall />

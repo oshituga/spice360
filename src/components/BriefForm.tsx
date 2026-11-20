@@ -76,7 +76,7 @@ export function BriefForm({ initialTopic = 0 }: { initialTopic?: number }) {
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          className="rounded-[8px] bg-[var(--accent)] px-6 py-3 text-[14px] font-semibold tracking-[-0.04em] text-white transition-[scale,filter] duration-150 active:scale-[0.97]"
+          className="min-h-12 rounded-[10px] bg-[var(--accent)] px-7 text-[14px] font-semibold tracking-[-0.04em] text-white transition-[scale,filter] duration-150 active:scale-[0.97]"
         >
           Send brief
         </button>

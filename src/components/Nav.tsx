@@ -29,7 +29,11 @@ import { EASE } from "./motion";
  *  - a highlight pill that rests on the current page's group and glides to
  *    whichever group is open (one shared layoutId, so it travels, not fades)
  *  - the bar hides on scroll down, returns on scroll up, and turns to tinted
- *    glass once it leaves the hero so it stays legible over white sections.
+ *    glass once it leaves the hero. Over a light section (data-nav="light")
+ *    it switches to light frosted glass with ink type, so it never smears
+ *    a dark blob over white; over glows the dark glass is dense enough that
+ *    colour can't bleed through. One IntersectionObserver watches a thin
+ *    band where the bar sits; colours cross-fade, nothing re-blurs.
  */
 
 export function Nav() {
@@ -41,6 +45,7 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const last = useRef(0);
+  const light = useLightUnderBar(pathname);
 
   // A followed link closes the desktop panel
   const [lastPath, setLastPath] = useState(pathname);
@@ -86,16 +91,18 @@ export function Nav() {
       >
         <div
           className={`pointer-events-auto relative flex items-center justify-between rounded-[14px] py-[10px] transition-[background-color,padding,box-shadow,backdrop-filter] duration-500 ease-[var(--ease-soft)] ${
-            solid || open || openGroup
-              ? "bg-black/45 px-3 shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_0_0_1px_rgba(255,255,255,0.08)] backdrop-blur-xl backdrop-saturate-150"
-              : "px-0"
+            light && !open && !openGroup
+              ? "bg-white/80 px-3 shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_0_0_1px_rgba(0,0,0,0.06)] backdrop-blur-xl"
+              : solid || open || openGroup
+                ? "bg-[rgba(10,10,10,0.68)] px-3 shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_0_0_1px_rgba(255,255,255,0.08)] backdrop-blur-xl"
+                : "px-0"
           }`}
         >
           <Link href="/" aria-label="Spice360, home" className="relative z-10 block shrink-0 active:scale-[0.97] transition-transform duration-150">
             <Image src="/logo/spice360-color.png" alt="Spice360" width={107} height={29} priority className="h-[29px] w-auto" />
           </Link>
 
-          <DesktopLinks pathname={pathname} openGroup={openGroup} setOpenGroup={setOpenGroup} />
+          <DesktopLinks pathname={pathname} openGroup={openGroup} setOpenGroup={setOpenGroup} light={light && !openGroup} />
           <MobileMenu open={open} setOpen={setOpen} pathname={pathname} />
         </div>
       </motion.div>
@@ -116,10 +123,12 @@ function DesktopLinks({
   pathname,
   openGroup,
   setOpenGroup,
+  light,
 }: {
   pathname: string;
   openGroup: string | null;
   setOpenGroup: (g: string | null) => void;
+  light: boolean;
 }) {
   const panelId = useId();
   const current = groupFor(pathname);
@@ -163,12 +172,12 @@ function DesktopLinks({
                   aria-controls={panelId}
                   onPointerEnter={(e) => e.pointerType === "mouse" && show(g.id)}
                   onClick={() => show(open ? null : g.id)}
-                  className="relative flex items-center gap-1.5 px-3 text-ui font-medium text-white/80 transition-colors duration-200 hover:text-white aria-expanded:text-white"
+                  className={`relative flex items-center gap-1.5 px-3 text-ui font-medium transition-colors duration-300 ${light ? "text-ink/70 hover:text-ink" : "text-white/80 hover:text-white aria-expanded:text-white"}`}
                 >
                   {target === g.id && (
                     <motion.span
                       layoutId="pill"
-                      className="absolute inset-x-0 -inset-y-0.5 rounded-full bg-white/12"
+                      className={`absolute inset-x-0 -inset-y-0.5 rounded-full transition-colors duration-300 ${light ? "bg-black/[0.07]" : "bg-white/12"}`}
                       transition={{ type: "spring", stiffness: 420, damping: 34 }}
                     />
                   )}
@@ -226,7 +235,7 @@ function DesktopLinks({
         )}
       </AnimatePresence>
 
-      <Button href={CONTACT_HREF} size="sm" className="font-medium">
+      <Button href={CONTACT_HREF} size="nav" className="font-medium">
         Get in touch
       </Button>
     </nav>
@@ -497,4 +506,31 @@ function MobileMenu({
       </AnimatePresence>
     </div>
   );
+}
+
+/* True while a light section sits under the bar. Watches only a thin band
+   (from 40px to ~110px down the viewport), re-wired on each route. */
+function useLightUnderBar(pathname: string) {
+  const [light, setLight] = useState(false);
+  useEffect(() => {
+    const on = new Set<Element>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) on.add(e.target);
+          else on.delete(e.target);
+        }
+        setLight(on.size > 0);
+      },
+      { rootMargin: "-40px 0px -88% 0px" },
+    );
+    // After the route's sections mount
+    const id = requestAnimationFrame(() => document.querySelectorAll('[data-nav="light"]').forEach((el) => io.observe(el)));
+    return () => {
+      cancelAnimationFrame(id);
+      io.disconnect();
+      setLight(false);
+    };
+  }, [pathname]);
+  return light;
 }
