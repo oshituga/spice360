@@ -26,7 +26,7 @@ export function PageHero({
   bodyWidth: number;
   actions?: ReactNode;
   glow?: GlowEllipse[];
-  /** Full-bleed team photo under a scrim; a glow, if given, sits over it */
+  /** Full-bleed photo under a scrim instead of a glow (photo heroes never get a glow) */
   image?: string;
 }) {
   return (
@@ -36,8 +36,6 @@ export function PageHero({
           <Image src={image} alt="The Spice 360 team" fill priority sizes="100vw" className="object-cover object-[50%_35%]" />
           <div aria-hidden className="absolute inset-0 bg-black/45" />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-b from-transparent to-black/50" />
-          {/* Careers: the page's light pours over the photo, plain alpha */}
-          {glow && <Glow ellipses={glow} anchor="top" className="opacity-70" />}
         </div>
       ) : (
         <div className="fade-slow absolute inset-0 -z-10">

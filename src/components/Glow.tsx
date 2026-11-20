@@ -127,6 +127,14 @@ export function Glow({
           />
         );
       })}
+      {/* Now that the light travels, it can reach the section's far edge and
+          be cut off in a hard line. A static black fade on that edge melts it
+          into the black next door (plain alpha over the moving layers, so it
+          costs nothing per frame). Deeper on the lively footer. */}
+      <div
+        className={`absolute inset-x-0 ${anchor === "top" ? "bottom-0 bg-gradient-to-t" : "top-0 bg-gradient-to-b"} from-black from-10% via-black/60 via-45% to-transparent`}
+        style={{ height: feel === "lively" ? "42%" : "28%" }}
+      />
     </div>
   );
 }

@@ -7,12 +7,14 @@ import { CONTACT_HREF, EMAIL } from "@/lib/content";
 import { CASES } from "@/lib/cases";
 import { STORIES } from "@/lib/kitchen";
 import { BackToTop } from "./BackToTop";
+import { CopyEmail } from "./CopyEmail";
 import { Glow, type GlowEllipse } from "./Glow";
 import { FadeIn, SplitReveal } from "./motion";
 
 /*
- * Figma "Hero" frame that closes every page: a CTA, then three link columns
- * and the address line, all sitting in a glow that wells up from the bottom
+ * Figma "Hero" frame that closes every page: a CTA set large (72px, the
+ * page's last word should be its loudest), the email with a Copy pill as a
+ * second door, then the link columns and the address line, all sitting in a glow that wells up from the bottom
  * edge. A full screen tall, like Terra & Tent's: CTA up top, links and
  * address anchored to the bottom, so the page ends on light, not a stub.
  */
@@ -89,15 +91,18 @@ export function Footer({
         )}
         <SplitReveal
           text={title}
-          className="font-semibold text-[clamp(34px,2vw+22px,48px)] leading-[0.875] tracking-[-0.05em]"
-          style={{ maxWidth: `min(${titleWidth}px, 100%)` }}
+          className="font-semibold text-[clamp(40px,3.4vw+18px,72px)] leading-[0.9] tracking-[-0.055em] [text-shadow:0_2px_24px_rgba(0,0,0,0.18)]"
+          style={{ maxWidth: `min(${Math.round(titleWidth * 1.5)}px, 100%)` }}
         />
-        <div className="flex flex-col items-center gap-[15px]">
-          <FadeIn delay={0.1} className="text-body" style={{ maxWidth: `min(${bodyWidth}px, 100%)` }}>
+        <div className="flex flex-col items-center gap-6">
+          <FadeIn delay={0.1} className="text-[20px] leading-[23px] tracking-[-0.045em] text-white/90" style={{ maxWidth: `min(${Math.round(bodyWidth * 1.15)}px, 100%)` }}>
             {body}
           </FadeIn>
-          <FadeIn delay={0.2} className="flex flex-wrap justify-center gap-2">
+          <FadeIn delay={0.2} className="flex flex-wrap justify-center gap-2 [&_a]:min-h-[48px] [&_a]:px-7 [&_a]:text-[14px]">
             {actions}
+          </FadeIn>
+          <FadeIn delay={0.28}>
+            <CopyEmail />
           </FadeIn>
         </div>
       </div>
@@ -187,8 +192,8 @@ export function StandardFooter({ palette }: { palette: PaletteName }) {
       glow={p.footer}
       metaColor={p.ink}
       actions={
-        <Button href={CONTACT_HREF} tone="light" className="bg-white/90 px-6">
-          Brief us
+        <Button href={CONTACT_HREF} tone="light" className="bg-white px-6">
+          Brief us <span aria-hidden>→</span>
         </Button>
       }
     />

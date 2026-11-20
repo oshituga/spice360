@@ -4,8 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Prose } from "@/components/Prose";
 import { StandardFooter } from "@/components/Footer";
-import { Glow } from "@/components/Glow";
-import { PALETTES } from "@/lib/glows";
 import { STORIES, storyBySlug } from "@/lib/kitchen";
 
 export function generateStaticParams() {
@@ -38,7 +36,6 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
         <div className="fade absolute inset-0 -z-10">
           <Image src={story.image} alt="" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/90" />
-          <Glow ellipses={PALETTES.story.hero} anchor="top" className="opacity-60" />
         </div>
         <div className="mx-auto flex w-full max-w-[1150px] flex-col gap-5">
           <p className="fade-up text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "150ms" }}>
