@@ -38,11 +38,26 @@ const FEEL = {
   lively: { rx: 340, ry: 230, bs: 1.18, tempo: 0.7 },
 };
 
-/* The element beside a section on the page, climbing out of wrappers */
-function neighbour(el: Element, dir: "previousElementSibling" | "nextElementSibling") {
-  let n: Element | null = el;
-  while (n && n.tagName !== "BODY" && !n[dir]) n = n.parentElement;
-  return n && n.tagName !== "BODY" ? n[dir] : null;
+/* The page section before (-1) or after (+1) this one: only top-level
+   sections and the footer count, so the nav above the hero and the end of
+   the page are "nothing", not black. */
+function neighbour(el: Element, step: -1 | 1) {
+  const all = [...document.querySelectorAll("main section, main footer")].filter((n) => !n.parentElement?.closest("section, footer"));
+  const i = all.indexOf(el);
+  return i < 0 ? null : (all[i + step] ?? null);
+}
+
+/* Is this section black? Its own black background, or no background at all
+   (the page is black) unless a photo covers it, like the Motto. */
+function isBlack(el: Element) {
+  const bg = getComputedStyle(el).backgroundColor;
+  if (bg === "rgb(0, 0, 0)") return true;
+  if (bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") return false;
+  const box = el.getBoundingClientRect();
+  return ![...el.querySelectorAll("img, video")].some((m) => {
+    const r = m.getBoundingClientRect();
+    return r.width >= box.width * 0.9 && r.height >= box.height * 0.6;
+  });
 }
 
 /* Black to clear on an ease-in-out curve (no perceptible start or end).
@@ -125,8 +140,8 @@ export function Glow({
     for (const edge of ["top", "bottom"] as const) {
       const fade = el.querySelector<HTMLElement>(`:scope > [data-edge="${edge}"]`);
       if (!fade || !host) continue;
-      const next = neighbour(host, edge === "top" ? "previousElementSibling" : "nextElementSibling");
-      fade.style.display = next && getComputedStyle(next).backgroundColor === "rgb(0, 0, 0)" ? "" : "none";
+      const next = neighbour(host, edge === "top" ? -1 : 1);
+      fade.style.display = next && isBlack(next) ? "" : "none";
     }
     return () => io.disconnect();
   }, []);
@@ -180,9 +195,13 @@ export function Glow({
             data-edge={edge}
             className="absolute inset-x-0"
             style={{
+              // Off until the effect has looked at the neighbours, so nothing flickers
+              display: "none",
               [edge]: 0,
               height: far ? (feel === "lively" ? "46%" : "34%") : "30%",
-              backgroundImage: eased(edge === "top" ? "to bottom" : "to top", tint),
+              // The tint only belongs where the light is bright (the edge it rises
+              // from); on the dark far edge a tinted fade paints a haze instead
+              backgroundImage: eased(edge === "top" ? "to bottom" : "to top", far ? undefined : tint),
             }}
           />
         );
