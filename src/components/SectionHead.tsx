@@ -13,6 +13,7 @@ export function SectionHead({
   body,
   bodyWidth,
   light = false,
+  align = "center",
   children,
   className = "",
 }: {
@@ -22,11 +23,13 @@ export function SectionHead({
   body?: ReactNode;
   bodyWidth?: number;
   light?: boolean;
+  /** left breaks the run of centred sections (editorial layouts) */
+  align?: "center" | "left";
   children?: ReactNode;
   className?: string;
 }) {
   return (
-    <div className={`flex flex-col items-center gap-6 text-center ${className}`}>
+    <div className={`flex flex-col gap-6 ${align === "left" ? "items-start text-left" : "items-center text-center"} ${className}`}>
       {eyebrow && (
         <FadeIn
           as="p"

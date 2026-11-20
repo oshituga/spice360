@@ -3,43 +3,60 @@ import type { ReactNode } from "react";
 import { Glow, type GlowEllipse } from "./Glow";
 
 /*
- * Figma hero: black, glow pouring down from above, a 48px headline about a
- * third of the way down and the intro + buttons near the bottom.
+ * The one hero every page uses, so the site reads as one system:
  *
- * Exactly one screen tall (svh, so the mobile URL bar never crops it; 640px
- * floor for short laptops), like Terra & Tent's. Arrival is plain CSS:
- * the light fades up, then headline, intro and buttons fade in a beat apart.
- * After that the only motion is the glow's own drift.
+ *  - Exactly one screen tall (svh; 680px floor for short laptops).
+ *  - Left-aligned poster headline at the bottom of the frame, each line
+ *    rising out of its own mask a beat apart (transform only).
+ *  - A thin rule, then the intro on the left and the buttons on the right
+ *    (stacked on phones).
+ *  - Behind it, the page's own glow, or a photo under a plain scrim. Photo
+ *    heroes never get a glow.
+ *
+ * What changes from page to page is the light (or photo) and the headline
+ * size, which steps down with the length of the longest line so a long
+ * title never turns into a wall: mega for short statements, large for a
+ * sentence, medium for a story headline.
  */
 export function PageHero({
   title,
-  titleWidth,
   body,
-  bodyWidth,
+  bodyWidth = 560,
   actions,
   glow,
   image,
-  variant = "centered",
+  eyebrow,
+  imagePosition = "50% 35%",
 }: {
   title: string;
-  titleWidth: number;
-  body: ReactNode;
-  bodyWidth: number;
+  /** @deprecated the headline now spans the frame; kept so call sites compile */
+  titleWidth?: number;
+  body?: ReactNode;
+  bodyWidth?: number;
   actions?: ReactNode;
   glow?: GlowEllipse[];
-  /** Full-bleed photo under a scrim instead of a glow (photo heroes never get a glow) */
+  /** Full-bleed photo under a scrim instead of a glow */
   image?: string;
-  /** centered: utility pages. statement: flagship pages (Home, About). */
-  variant?: "centered" | "statement";
+  /** Small line above the headline (kind, date, badges) */
+  eyebrow?: ReactNode;
+  imagePosition?: string;
 }) {
-  if (variant === "statement") return <StatementHero title={title} body={body} bodyWidth={bodyWidth} actions={actions} glow={glow} />;
+  const lines = title.split("\n");
+  const longest = Math.max(...lines.map((l) => l.length));
+  const size =
+    longest <= 18
+      ? "text-mega"
+      : longest <= 40
+        ? "text-[clamp(44px,4.6vw+12px,108px)] leading-[0.9] tracking-[-0.06em]"
+        : "text-[clamp(38px,3vw+14px,76px)] leading-[0.94] tracking-[-0.055em]";
+
   return (
-    <section className="grain relative isolate flex h-svh min-h-[640px] flex-col items-center overflow-clip bg-black px-[var(--gutter)] pb-20 text-center">
+    <section className="grain relative isolate flex h-svh min-h-[680px] flex-col justify-end overflow-clip bg-black px-[var(--gutter)] pt-[140px] pb-[calc(40px+env(safe-area-inset-bottom))] md:pb-14">
       {image ? (
         <div className="fade absolute inset-0 -z-10" style={{ ["--d" as string]: "0ms" }}>
-          <Image src={image} alt="The Spice 360 team" fill priority sizes="100vw" className="object-cover object-[50%_35%]" />
-          <div aria-hidden className="absolute inset-0 bg-black/45" />
-          <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-b from-transparent to-black/50" />
+          <Image src={image} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: imagePosition }} />
+          <div aria-hidden className="absolute inset-0 bg-black/40" />
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-b from-transparent to-black/80" />
         </div>
       ) : (
         <div className="fade-slow absolute inset-0 -z-10">
@@ -47,74 +64,40 @@ export function PageHero({
         </div>
       )}
 
-      <div className="flex flex-1 items-center pt-[110px] md:pt-[140px]">
-        <h1
-          className="fade-up font-semibold text-[clamp(36px,2.4vw+20px,48px)] leading-[0.94] tracking-[-0.05em] whitespace-pre-line"
-          style={{ maxWidth: `min(${titleWidth}px, 100%)`, ["--d" as string]: "250ms" }}
-        >
-          {title}
-        </h1>
-      </div>
-      <div className="flex flex-col items-center gap-6">
-        <p className="fade-up text-body" style={{ maxWidth: `min(${bodyWidth}px, 100%)`, ["--d" as string]: "450ms" }}>
-          {body}
-        </p>
-        {actions && (
-          <div className="fade-up flex flex-wrap justify-center gap-2" style={{ ["--d" as string]: "600ms" }}>
-            {actions}
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-/*
- * Statement hero, for the flagship pages. Left-aligned, the headline set in
- * the mega size across the full width so it reads as a poster, not a page
- * title. Each line rises out of its own mask a beat apart; the intro and
- * buttons share one bottom row (intro left, buttons right on desktop).
- * Still one screen tall, still the page's glow and nothing else moving.
- */
-function StatementHero({
-  title,
-  body,
-  bodyWidth,
-  actions,
-  glow,
-}: {
-  title: string;
-  body: ReactNode;
-  bodyWidth: number;
-  actions?: ReactNode;
-  glow?: GlowEllipse[];
-}) {
-  const lines = title.split("\n");
-  return (
-    <section className="grain relative isolate flex h-svh min-h-[680px] flex-col justify-end overflow-clip bg-black px-[var(--gutter)] pt-[140px] pb-[calc(40px+env(safe-area-inset-bottom))] md:pb-14">
-      <div className="fade-slow absolute inset-0 -z-10">
-        <Glow ellipses={glow ?? []} anchor="top" />
-      </div>
       <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-10 md:gap-14">
-        <h1 className="text-mega font-semibold [text-wrap:balance]">
-          {lines.map((l, i) => (
-            <span key={i} className="line-mask" style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}>
-              <span className="line-up block" style={{ ["--d" as string]: `${200 + i * 110}ms` }}>
-                {l}
-              </span>
-            </span>
-          ))}
-        </h1>
-        <div className="flex flex-col gap-6 border-t border-white/20 pt-6 md:flex-row md:items-end md:justify-between md:gap-16">
-          <p className="fade-up text-[18px] leading-[22px] tracking-[-0.04em] text-white/85" style={{ maxWidth: `min(${bodyWidth}px, 100%)`, ["--d" as string]: "550ms" }}>
-            {body}
-          </p>
-          {actions && (
-            <div className="fade-up flex shrink-0 flex-wrap gap-2" style={{ ["--d" as string]: "680ms" }}>
-              {actions}
+        <div className="flex flex-col gap-5">
+          {eyebrow && (
+            <div className="fade-up text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "120ms" }}>
+              {eyebrow}
             </div>
           )}
+          <h1 className={`max-w-[1300px] font-semibold ${size}`}>
+            {lines.map((l, i) => (
+              <span key={i} className="line-mask" style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}>
+                <span className="line-up block" style={{ ["--d" as string]: `${200 + i * 110}ms` }}>
+                  {l}
+                </span>
+              </span>
+            ))}
+          </h1>
         </div>
+        {(body || actions) && (
+          <div className="flex flex-col gap-6 border-t border-white/20 pt-6 md:flex-row md:items-end md:justify-between md:gap-16">
+            {body && (
+              <p
+                className="fade-up text-[18px] leading-[22px] tracking-[-0.04em] text-white/85"
+                style={{ maxWidth: `min(${bodyWidth}px, 100%)`, ["--d" as string]: "550ms" }}
+              >
+                {body}
+              </p>
+            )}
+            {actions && (
+              <div className="fade-up flex shrink-0 flex-wrap gap-2" style={{ ["--d" as string]: "680ms" }}>
+                {actions}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

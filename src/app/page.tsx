@@ -1,11 +1,9 @@
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/Button";
 import { Glow } from "@/components/Glow";
-import { GlowCard, GlowGrid, Badge } from "@/components/GlowCard";
 import { SectionHead } from "@/components/SectionHead";
 import { Motto } from "@/components/Motto";
 import { Scoreboard } from "@/components/Scoreboard";
-import { BentoRow, BentoTile } from "@/components/Bento";
 import { MediaCard } from "@/components/MediaCard";
 import { BrandWall } from "@/components/BrandWall";
 import { PhotoStrip } from "@/components/PhotoStrip";
@@ -13,17 +11,20 @@ import { Footer } from "@/components/Footer";
 import { FadeIn } from "@/components/motion";
 import { BRANDS_LINE, CONTACT_HREF, TEAM } from "@/lib/content";
 import { BlogGrid } from "@/components/BlogGrid";
+import { OutPillars } from "@/components/OutPillars";
+import Link from "next/link";
 
 /* Home glow palette (Figma ellipses 2571:290-292) */
 const G = "#2B5833";
 const L = "#E3FC6A";
 const O = "#EEA953";
 
-const PILLARS = [
-  { n: "01", title: "Outthink", body: "We interrogate every brief before we answer it." },
-  { n: "02", title: "Outcreate", body: "We pursue the kind of work no other agency is brave enough to make." },
-  { n: "03", title: "Outpace", body: "We move faster, adapt sharper, and stay ahead of the market." },
+const SERVICES = [
+  { title: "Brand Strategy", color: "#2b5833", ink: "text-white", body: "The conviction before the campaign. We work out what a brand actually believes before we make anything." },
+  { title: "Digital Content", color: "#eea953", ink: "text-ink", body: "Always-on creative for Africa’s most engaged online market. Built for Nigerian audiences from line one." },
+  { title: "Integrated Campaigns", color: "#bc3431", ink: "text-white", body: "Every channel, one idea behind all of it. The 360 in our name is a commitment, not a category claim." },
 ];
+
 
 const STRIP = [
   "team-mixed-huddle-devices-2",
@@ -43,7 +44,6 @@ export default function Home() {
   return (
     <main data-theme="home">
       <PageHero
-        variant="statement"
         title={"We make brands\nimpossible\nto ignore."}
         titleWidth={1094}
         body="We build integrated 360 campaigns rooted in cultural truth. We find what moves consumers and build campaigns that go all the way from strategy to execution."
@@ -65,95 +65,88 @@ export default function Home() {
         }
       />
 
-      {/* How we work */}
-      <section className="relative bg-black px-[var(--gutter)] pt-[120px] pb-[100px] md:pt-[188px] md:pb-[120px]">
-        <SectionHead eyebrow="Our three pillars" title="How we work" width={319} />
-        <GlowGrid className="mx-auto mt-16 grid max-w-[1150px] gap-6 md:mt-[90px] md:grid-cols-3 md:gap-9">
-          {PILLARS.map((p, si) => (
-            <GlowCard
-              seed={si}
-              key={p.n}
-              className="h-[390px] md:h-[400px]"
-              glow={[
-                { color: O, y: 801 },
-                { color: G, y: 643 },
-                { color: L, y: 885 },
-              ]}
-            >
-              <div className="flex h-full flex-col justify-end gap-6 p-6 pr-[62px]">
-                <Badge className="self-start">{p.n}</Badge>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-card font-semibold">{p.title}</h3>
-                  <p className="text-body">{p.body}</p>
-                </div>
-              </div>
-            </GlowCard>
-          ))}
-        </GlowGrid>
-      </section>
-
-      <Motto quote="“We exist to make brands impossible to ignore.”" label="Our Motto" src="/group/motto-mixed.jpg" />
-
-      {/* Scoreboard */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[100px] pb-[130px] md:min-h-[751px]">
+      {/* Proof first: the scoreboard, left-aligned, figures as the headline */}
+      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
         <Glow anchor="bottom" ellipses={[{ color: G, y: 377 }, { color: L, y: 626 }, { color: O, y: 685 }]} />
-        <div className="relative flex flex-col items-center gap-16 md:gap-[89px]">
-          <SectionHead eyebrow="Awards & Accolades" title="The scoreboard" width={367} />
+        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-16 md:gap-24">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHead align="left" eyebrow="Awards & Accolades" title={"The scoreboard"} width={520} />
+            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+              LAIF 2024, our first time at the table: the most creative agency in Nigeria.
+            </FadeIn>
+          </div>
           <Scoreboard />
         </div>
       </section>
 
-      {/* What we do */}
-      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[100px] md:py-[111px]">
-        <SectionHead light eyebrow="What we do" title="The recipe for campaigns that work" width={625}>
-          <Button href="/about#capabilities" tone="dark" size="sm">
-            Everything we offer
-          </Button>
-        </SectionHead>
-        <div className="mx-auto mt-16 max-w-[754px]">
-          <BentoRow>
-            <BentoTile color="#2b5833" title="Brand Strategy">
-              The conviction before the campaign. We work out what a brand actually believes before we make anything.
-            </BentoTile>
-          </BentoRow>
-          <BentoRow>
-            <BentoTile color="#eea953" title="Digital Content" delay={0.12} ink="text-ink">
-              Always-on creative for Africa’s most engaged online market. Built for Nigerian audiences from line one.
-            </BentoTile>
-            <BentoTile color="#bc3431" title="Integrated Campaigns" delay={0.22}>
-              Every channel, one idea behind all of it. The 360 in our name is a commitment, not a category claim.
-            </BentoTile>
-          </BentoRow>
+      {/* How we work: Out + think / create / pace */}
+      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[120px] md:pt-[150px] md:pb-[170px]">
+        <Glow anchor="bottom" seed={1} ellipses={[{ color: G, y: 520 }, { color: L, y: 780 }, { color: O, y: 840 }]} />
+        <div className="relative mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+          <SectionHead align="left" eyebrow="Our three pillars" title="How we work" width={420} />
+          <OutPillars />
         </div>
       </section>
 
-      {/* Leadership */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[100px] pb-[130px]">
+      <Motto quote="“We exist to make brands impossible to ignore.”" label="Our Motto" src="/group/motto-mixed.jpg" />
+
+      {/* What we do: three tiles that each open the capabilities */}
+      <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-14 md:gap-20">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHead light align="left" eyebrow="What we do" title="The recipe for campaigns that work" width={560} />
+            <FadeIn>
+              <Button href="/about#capabilities" tone="dark">
+                Everything we offer
+              </Button>
+            </FadeIn>
+          </div>
+          <div className="grid md:grid-cols-3">
+            {SERVICES.map((sv, i) => (
+              <FadeIn key={sv.title} delay={i * 0.1}>
+                <Link
+                  href="/about#capabilities"
+                  className={`service-tile flex h-[340px] flex-col justify-between p-7 md:h-[420px] md:p-9 ${sv.ink}`}
+                  style={{ background: sv.color }}
+                >
+                  <h3 className="text-[30px] leading-[30px] font-semibold tracking-[-0.055em]">{sv.title}</h3>
+                  <p className="text-[17px] leading-[21px] tracking-[-0.04em] opacity-90">{sv.body}</p>
+                </Link>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership: a teaser, the bios live on People */}
+      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
         <Glow anchor="bottom" ellipses={[{ color: G, y: 404 }, { color: L, y: 653 }, { color: O, y: 712 }]} />
-        <div className="relative">
-          <SectionHead eyebrow="Leadership" title={"Two hires.\nOne direction"} width={400}>
-            <Button href="/people" size="sm">
-              See full team
-            </Button>
-          </SectionHead>
-          <div className="mx-auto mt-16 grid max-w-[952px] gap-2 md:mt-20 md:grid-cols-2">
-            {[md, cd].map((p, i) => (
+        <div className="relative mx-auto grid max-w-[1440px] items-end gap-12 md:grid-cols-[1fr_1.15fr] md:gap-16">
+          <div className="flex flex-col gap-8">
+            <SectionHead align="left" eyebrow="Leadership" title={"Two hires.\nOne direction"} width={460} />
+            <FadeIn className="max-w-[420px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/85">
+              {md.name} leads the agency’s strategy and its expansion across Sub-Saharan Africa. {cd.name} is the creative direction behind five
+              gold medals on our first time at the table.
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <Button href="/people">Meet the whole kitchen</Button>
+            </FadeIn>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {[md, cd].map((p) => (
               <MediaCard
                 key={p.name}
                 src={p.photo}
                 hoverSrc={p.alt}
                 alt={`${p.name}, ${p.role}`}
-                className="h-[440px] md:h-[473px]"
+                className="aspect-[4/5] sm:aspect-[3/4]"
                 position="center 20%"
+                sizes="(min-width: 768px) 30vw, (min-width: 640px) 50vw, 100vw"
               >
-                <div className="flex flex-col gap-4 pt-[298px] pr-5 pb-5 pl-6 md:pl-10">
-                  <p className="text-eyebrow font-semibold">{p.role}</p>
-                  <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em]">{p.name}</h3>
-                  <p className="text-body">
-                    {i === 0
-                      ? "Former COO at SO&U, AAAN board member, campaigns for Guinness Nigeria, GTBank, and Unilever. She leads the agency’s strategy and its expansion across Sub-Saharan Africa."
-                      : "Over a decade at Livespot, BOGO Beverages, and the Ark Group. The creative direction behind five gold medals on our first time at the table."}
-                  </p>
+                <div className="flex flex-col gap-1.5 p-4 md:p-6">
+                  <p className="text-[13px] leading-[15px] font-semibold tracking-[-0.03em] text-[var(--eyebrow)]">{p.spice}</p>
+                  <h3 className="text-[20px] leading-[21px] font-semibold tracking-[-0.055em] md:text-[24px] md:leading-[25px]">{p.name}</h3>
+                  <p className="text-[14px] leading-[16px] tracking-[-0.03em] text-white/80">{p.role}</p>
                 </div>
               </MediaCard>
             ))}
