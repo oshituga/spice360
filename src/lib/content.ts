@@ -13,7 +13,9 @@ export const CONTACT_HREF = "/contact";
 export const APPLY_HREF =
   "mailto:tech.spice360@gmail.com?subject=Application%20for%20Spice360&body=Hello%20Spice360%2C%20I%27d%20like%20to%20apply.%20Here%27s%20a%20bit%20about%20me%20and%20a%20link%20to%20my%20portfolio%3A%20";
 
-export type Theme ="home" | "about" | "people" | "digital";
+import type { PaletteName } from "./glows";
+
+export type Theme = "home" | "about" | "people" | "digital" | PaletteName;
 
 export const NAV = [
   { href: "/", label: "Home", theme: "home", swatch: "#69ce7d" },
@@ -22,7 +24,24 @@ export const NAV = [
   { href: "/spice-digital", label: "Spice Digital", theme: "digital", swatch: "#7bdcfb" },
 ] as const satisfies readonly { href: string; label: string; theme: Theme; swatch: string }[];
 
+/* Pages outside the nav, each in its own palette (lib/glows) */
+const EXTRA: [RegExp, Theme][] = [
+  [/^\/kitchen\/[^/]+\/?$/, "story"],
+  [/^\/kitchen\/?$/, "kitchen"],
+  [/^\/contact\/?$/, "contact"],
+  [/^\/careers\/?$/, "careers"],
+  [/^\/privacy\/?$/, "privacy"],
+];
+const KNOWN = /^\/(about|people|spice-digital)?\/?$/;
+
+/* Nav colour for a path. Case studies take their own brand's palette, and
+   anything unknown is the 404, which has its own too. */
 export function themeFor(pathname: string): Theme {
+  const study = pathname.match(/^\/spice-digital\/(kelloggs|heinz|nestle)\/?$/);
+  if (study) return study[1] as Theme;
+  const hit = EXTRA.find(([re]) => re.test(pathname));
+  if (hit) return hit[1];
+  if (!KNOWN.test(pathname)) return "lost";
   return NAV.find((n) => n.href !== "/" && pathname.startsWith(n.href))?.theme ?? "home";
 }
 

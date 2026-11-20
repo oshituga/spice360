@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { Button } from "./Button";
-import { HOME_FOOTER } from "@/lib/glows";
+import { PALETTES, type PaletteName } from "@/lib/glows";
 import type { ReactNode } from "react";
 import { CONTACT_HREF } from "@/lib/content";
 import { Glow, type GlowEllipse } from "./Glow";
@@ -45,6 +45,7 @@ export function Footer({
   actions,
   glow,
   metaClass = "text-white",
+  metaColor,
 }: {
   eyebrow?: string;
   title: string;
@@ -55,6 +56,8 @@ export function Footer({
   glow: GlowEllipse[];
   /** Figma tints the address line with the page colour on light glows */
   metaClass?: string;
+  /** Same, as a colour (the palettes in lib/glows) */
+  metaColor?: string;
 }) {
   return (
     <footer className="grain relative isolate flex min-h-svh flex-col justify-between gap-24 overflow-clip bg-black pt-[120px] pb-[calc(48px+env(safe-area-inset-bottom))] md:pt-[160px] md:pb-[108px]">
@@ -104,6 +107,7 @@ export function Footer({
         <FadeIn
           delay={0.2}
           className={`mt-20 flex flex-wrap gap-x-2 gap-y-1 text-[16px] leading-[18px] tracking-[-0.06em] md:mt-[160px] md:justify-end ${metaClass}`}
+          style={metaColor ? { color: metaColor } : undefined}
         >
           <span>© 2026 Spice 360</span>
           <span className="text-mute">·</span>
@@ -139,17 +143,18 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-/* Footer for the supporting pages (Kitchen, Careers, Contact, Privacy, 404):
-   the home palette and the plain "start a conversation" close. */
-export function StandardFooter() {
+/* Footer for the supporting pages (Kitchen, Careers, Contact, Privacy):
+   the plain "start a conversation" close, in the page's own palette. */
+export function StandardFooter({ palette }: { palette: PaletteName }) {
+  const p = PALETTES[palette];
   return (
     <Footer
       title="Start a conversation"
       titleWidth={288}
       body="Tell us what your brand is trying to do and leave the rest to us"
       bodyWidth={274}
-      glow={HOME_FOOTER}
-      metaClass="text-leaf"
+      glow={p.footer}
+      metaColor={p.ink}
       actions={
         <Button href={CONTACT_HREF} tone="light" className="bg-white/90 px-6">
           Brief us

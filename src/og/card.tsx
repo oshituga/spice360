@@ -83,7 +83,7 @@ export async function ogCard({
           />
         )}
         {glow && (
-          <div style={{ position: "absolute", top: 0, left: 0, width: 1200, height: 630, backgroundImage: glow }} />
+          <div style={{ position: "absolute", top: 0, left: 0, width: 1200, height: 630, backgroundImage: glow, opacity: bg ? 0.65 : 1 }} />
         )}
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

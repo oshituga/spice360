@@ -9,6 +9,8 @@ import { MediaCard } from "@/components/MediaCard";
 import { Footer } from "@/components/Footer";
 import { FadeIn } from "@/components/motion";
 import { CONTACT_HREF } from "@/lib/content";
+import { CASES } from "@/lib/cases";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Spice Digital",
@@ -32,11 +34,6 @@ const SERVICES = [
   ["Digital Maintenance", "Ongoing management across all digital touchpoints: website updates, social scheduling, ad optimisation, and monthly brand audit reports."],
 ];
 
-const CASES = [
-  { stage: "Series A", kind: "Brand Sprint", brand: "Kellogg’s", result: "50x increase in product purchase and brand recognition", image: "/spice-digital/kellogs.jpg" },
-  { stage: "Series B", kind: "Market Expansion", brand: "Heinz", result: "30% growth in market share through new product launches", image: "/spice-digital/heinz.jpg" },
-  { stage: "Series C", kind: "Consumer Engagement", brand: "Nestlé", result: "40% rise in customer loyalty via targeted campaigns", image: "/spice-digital/nestle.jpg" },
-];
 
 export default function SpiceDigital() {
   return (
@@ -188,23 +185,36 @@ export default function SpiceDigital() {
         />
         <div className="mx-auto mt-16 grid max-w-[1150px] gap-2 md:mt-[90px] md:grid-cols-2">
           {CASES.map((c, i) => (
-            <MediaCard
+            <Link
               key={c.brand}
-              src={c.image}
-              alt=""
-              className={`h-[460px] md:h-[597px] ${i === 0 ? "md:col-span-2" : ""}`}
-              sizes={i === 0 ? "(min-width: 768px) 1150px, 100vw" : "(min-width: 768px) 575px, 100vw"}
+              href={`/spice-digital/${c.slug}`}
+              aria-label={`${c.brand}, ${c.kind}: read the illustrative case study`}
+              className={`block ${i === 0 ? "md:col-span-2" : ""}`}
             >
-              <article className="flex flex-col gap-4 p-6 pr-5 md:p-10">
-                <p className="flex items-center gap-2 text-eyebrow font-semibold">
-                  {c.stage}
-                  <span aria-hidden className="size-1 rounded-full bg-white" />
-                  {c.kind}
-                </p>
-                <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em]">{c.brand}</h3>
-                <p className="max-w-[426px] text-[16px] leading-[18px] tracking-[-0.06em]">{c.result}</p>
-              </article>
-            </MediaCard>
+              <MediaCard
+                src={c.image}
+                alt=""
+                className="h-[460px] md:h-[597px]"
+                sizes={i === 0 ? "(min-width: 768px) 1150px, 100vw" : "(min-width: 768px) 575px, 100vw"}
+              >
+                <article className="flex flex-col gap-4 p-6 pr-5 md:p-10">
+                  <p className="flex items-center gap-2 text-eyebrow font-semibold">
+                    {c.stage}
+                    <span aria-hidden className="size-1 rounded-full bg-white" />
+                    {c.kind}
+                  </p>
+                  <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em]">{c.brand}</h3>
+                  <p className="max-w-[426px] text-[16px] leading-[18px] tracking-[-0.06em]">{c.result}</p>
+                  <p className="mt-2 flex items-center gap-2 text-ui font-semibold text-white/80">
+                    Read the case
+                    <span aria-hidden className="transition-transform duration-500 ease-[var(--ease-soft)] group-hover:translate-x-1">
+                      →
+                    </span>
+                    <span className="text-white/45">· Illustrative</span>
+                  </p>
+                </article>
+              </MediaCard>
+            </Link>
           ))}
         </div>
       </section>

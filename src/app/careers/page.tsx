@@ -4,6 +4,7 @@ import { Prose } from "@/components/Prose";
 import { Button } from "@/components/Button";
 import { StandardFooter } from "@/components/Footer";
 import { APPLY_HREF } from "@/lib/content";
+import { PALETTES } from "@/lib/glows";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -12,14 +13,15 @@ export const metadata: Metadata = {
   openGraph: { title: "Careers | Spice360", description: "Spice 360 hires people who are curious, specific, and allergic to lukewarm work." },
 };
 
-/* Careers, in the People page's red. All copy is the agency's own, from the
+/* Careers, in its own Lagoon teal over the team photo. All copy is the agency's own, from the
    People page and its hiring call; there is no open-roles feed, so the page
    invites applications year-round rather than listing invented roles. */
 export default function Careers() {
   return (
-    <main data-theme="people">
+    <main data-theme="careers">
       <PageHero
         image="/group/team-full-applause.jpg"
+        glow={PALETTES.careers.hero}
         title={"There is probably a spice name\nwith your character written into it."}
         titleWidth={900}
         body="Spice 360 hires people who are curious, specific, and allergic to lukewarm work. If that describes you, and if you have work that proves it, we want to hear from you."
@@ -49,7 +51,7 @@ export default function Careers() {
           </p>
         </Prose>
       </section>
-      <StandardFooter />
+      <StandardFooter palette="careers" />
     </main>
   );
 }

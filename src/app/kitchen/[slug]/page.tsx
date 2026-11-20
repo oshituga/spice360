@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Prose } from "@/components/Prose";
 import { StandardFooter } from "@/components/Footer";
+import { Glow } from "@/components/Glow";
+import { PALETTES } from "@/lib/glows";
 import { STORIES, storyBySlug } from "@/lib/kitchen";
 
 export function generateStaticParams() {
@@ -16,7 +18,7 @@ export async function generateMetadata({ params }: PageProps<"/kitchen/[slug]">)
   return {
     title: story.title,
     description: story.dek,
-    openGraph: { title: `${story.title} | Spice360`, description: story.dek, images: [story.image] },
+    openGraph: { title: `${story.title} | Spice360`, description: story.dek },
   };
 }
 
@@ -31,14 +33,15 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
   const next = STORIES[(STORIES.indexOf(story) + 1) % STORIES.length];
 
   return (
-    <main data-theme="home">
+    <main data-theme="story">
       <section className="relative isolate flex h-svh min-h-[640px] items-end overflow-clip bg-black px-[var(--gutter)] pb-20">
         <div className="fade absolute inset-0 -z-10">
           <Image src={story.image} alt="" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/90" />
+          <Glow ellipses={PALETTES.story.hero} anchor="top" className="opacity-60" />
         </div>
         <div className="mx-auto flex w-full max-w-[1150px] flex-col gap-5">
-          <p className="fade-up text-eyebrow font-semibold text-leaf-bright" style={{ ["--d" as string]: "150ms" }}>
+          <p className="fade-up text-eyebrow font-semibold text-[var(--eyebrow)]" style={{ ["--d" as string]: "150ms" }}>
             {story.kind} · {story.date}
           </p>
           <h1
@@ -71,13 +74,13 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
             className="group mx-auto mt-24 flex max-w-[640px] flex-col gap-3 border-t border-white/15 pt-10"
           >
             <span className="text-eyebrow font-semibold text-white/55">Next from the kitchen</span>
-            <span className="text-[28px] leading-[30px] font-semibold tracking-[-0.05em] transition-colors duration-300 group-hover:text-leaf-bright">
+            <span className="text-[28px] leading-[30px] font-semibold tracking-[-0.05em] transition-colors duration-300 group-hover:text-[var(--eyebrow)]">
               {next.title}
             </span>
           </Link>
         )}
       </section>
-      <StandardFooter />
+      <StandardFooter palette="story" />
     </main>
   );
 }

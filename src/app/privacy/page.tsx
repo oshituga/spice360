@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { Prose } from "@/components/Prose";
 import { StandardFooter } from "@/components/Footer";
-import { HOME_HERO } from "@/lib/glows";
+import { PALETTES } from "@/lib/glows";
 import { EMAIL } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -19,13 +19,13 @@ export const metadata: Metadata = {
  */
 export default function Privacy() {
   return (
-    <main data-theme="home">
+    <main data-theme="privacy">
       <PageHero
         title="Privacy Policy"
         titleWidth={800}
         body="What this website collects, why, and what you can ask us to do with it. Last updated 20 November 2026."
         bodyWidth={520}
-        glow={HOME_HERO}
+        glow={PALETTES.privacy.hero}
       />
       <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
         <Prose>
@@ -68,7 +68,7 @@ export default function Privacy() {
           <p>If this policy changes, we will update it on this page and change the date at the top.</p>
         </Prose>
       </section>
-      <StandardFooter />
+      <StandardFooter palette="privacy" />
     </main>
   );
 }

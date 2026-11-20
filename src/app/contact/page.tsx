@@ -3,7 +3,7 @@ import { PageHero } from "@/components/PageHero";
 import { BriefForm } from "@/components/BriefForm";
 import { StandardFooter } from "@/components/Footer";
 import { FadeIn } from "@/components/motion";
-import { HOME_HERO } from "@/lib/glows";
+import { PALETTES } from "@/lib/glows";
 import { EMAIL } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -15,13 +15,13 @@ export const metadata: Metadata = {
 export default async function Contact({ searchParams }: PageProps<"/contact">) {
   const { topic } = await searchParams;
   return (
-    <main data-theme="home">
+    <main data-theme="contact">
       <PageHero
         title="Start a conversation"
         titleWidth={700}
         body="Tell us what your brand is trying to do and leave the rest to us."
         bodyWidth={420}
-        glow={HOME_HERO}
+        glow={PALETTES.contact.hero}
       />
       <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
         <BriefForm initialTopic={topic === "digital" ? 1 : 0} />
@@ -38,7 +38,7 @@ export default async function Contact({ searchParams }: PageProps<"/contact">) {
           </div>
         </FadeIn>
       </section>
-      <StandardFooter />
+      <StandardFooter palette="contact" />
     </main>
   );
 }

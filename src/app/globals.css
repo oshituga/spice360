@@ -68,6 +68,44 @@
   --eyebrow: var(--color-sky);
 }
 
+/* Pages outside Figma, each in its own palette (src/lib/glows.ts) */
+[data-theme="contact"] {
+  --accent: #5b32d6;
+  --eyebrow: #b9a0ff;
+}
+[data-theme="careers"] {
+  --accent: #0b6f6a;
+  --eyebrow: #6fe6d6;
+}
+[data-theme="privacy"] {
+  --accent: #46527a;
+  --eyebrow: #b8c2da;
+}
+[data-theme="kitchen"] {
+  --accent: #8a4a26;
+  --eyebrow: #e6a879;
+}
+[data-theme="story"] {
+  --accent: #a3216a;
+  --eyebrow: #f48cc0;
+}
+[data-theme="lost"] {
+  --accent: #2f38c9;
+  --eyebrow: #9fa6ff;
+}
+[data-theme="kelloggs"] {
+  --accent: #b23d69;
+  --eyebrow: #f7a6c1;
+}
+[data-theme="heinz"] {
+  --accent: #7a5e0c;
+  --eyebrow: #e8c95a;
+}
+[data-theme="nestle"] {
+  --accent: #7a3aa3;
+  --eyebrow: #d7a6f2;
+}
+
 @media (min-width: 768px) {
   :root {
     --gutter: 40px;
@@ -160,47 +198,105 @@ figcaption {
 }
 
 /* Team grid. Everything here is opacity and transform, so hovering from
-   face to face only touches the compositor. Spotlight is gated to real
-   hover so a tap on a phone never leaves the grid dimmed. */
+   face to face only touches the compositor (the ring and the drop shadow
+   are pseudo-elements that fade, never an animated box-shadow).
+
+   - The hovered face lifts on a soft overshoot while its photo leans in a
+     little further inside the frame, so it reads as depth, not zoom.
+   - Everyone else steps back; the faces either side of it step back less,
+     so the light spills sideways like a spotlight.
+   - The spice name rises onto the face a beat after the lift.
+   - Un-dimming waits 160ms, so sliding across a gap between two faces
+     never flashes the whole grid back on.
+   Spotlight is gated to real hover so a tap on a phone never leaves the
+   grid dimmed. */
+.team-cell {
+  transition: scale 700ms cubic-bezier(0.34, 1.32, 0.64, 1);
+}
+.team-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 450ms var(--ease-soft);
+}
 .team-tile {
-  transition:
-    opacity 450ms var(--ease-soft),
-    scale 450ms var(--ease-soft),
-    box-shadow 300ms var(--ease-soft);
+  transition: opacity 500ms var(--ease-soft) 160ms;
+}
+.team-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 2px var(--color-pepper);
+  opacity: 0;
+  transition: opacity 350ms var(--ease-soft);
+}
+.team-img {
+  transition: scale 900ms var(--ease-soft);
 }
 .team-alt,
 .team-meta {
   opacity: 0;
   transition: opacity 450ms var(--ease-soft);
 }
+.team-tag {
+  opacity: 0;
+  translate: 0 10px;
+  transition:
+    opacity 300ms var(--ease-soft),
+    translate 300ms var(--ease-soft);
+}
 @media (hover: hover) and (pointer: fine) {
+  .team-grid:has(.team-tile:hover) .team-tile {
+    transition-delay: 0ms;
+  }
   .team-grid:has(.team-tile:hover) .team-tile:not(:hover) {
-    opacity: 0.35;
+    opacity: 0.3;
   }
-  .team-tile:hover {
+  .team-grid .team-cell:has(+ .team-cell > .team-tile:hover) > .team-tile,
+  .team-grid .team-cell:has(> .team-tile:hover) + .team-cell > .team-tile {
+    opacity: 0.6;
+  }
+  .team-cell:has(> .team-tile:hover) {
     z-index: 10;
-    scale: 1.06;
-    box-shadow: 0 0 0 2px var(--color-pepper), 0 16px 36px rgba(0, 0, 0, 0.55);
+    scale: 1.07;
   }
+  .team-cell:has(> .team-tile:hover)::before,
+  .team-tile:hover::after,
   .team-tile:hover .team-alt {
     opacity: 1;
   }
+  .team-tile:hover .team-img {
+    scale: 1.05;
+  }
+  .team-tile:hover .team-tag {
+    opacity: 1;
+    translate: 0 0;
+    transition-delay: 120ms;
+    transition-duration: 550ms;
+  }
 }
 .team-grid:has(.team-tile:focus-visible) .team-tile:not(:focus-visible) {
-  opacity: 0.35;
+  opacity: 0.3;
 }
-.team-tile:focus-visible {
+.team-cell:has(> .team-tile:focus-visible) {
   z-index: 10;
-  scale: 1.06;
-  box-shadow: 0 0 0 2px var(--color-pepper);
+  scale: 1.07;
 }
+.team-tile:focus-visible::after,
 .team-tile:focus-visible .team-alt,
+.team-tile:focus-visible .team-tag,
+.team-tile[data-on]::after,
 .team-tile[data-on] .team-alt,
 .team-tile[data-on] .team-meta {
   opacity: 1;
 }
-.team-tile[data-on] {
-  box-shadow: 0 0 0 2px var(--color-pepper);
+.team-tile:focus-visible .team-tag {
+  translate: 0 0;
 }
 @keyframes rise-in {
   from {

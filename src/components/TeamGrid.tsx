@@ -10,8 +10,10 @@ import type { Person } from "@/lib/content";
  *
  *  - Spotlight: hovering a face fades everyone else back (opacity, so the
  *    compositor does it; a brightness filter re-paints 34 photos per move).
- *  - The T-shirt photo cross-fades in over the suit photo; the tile lifts a
- *    touch with a pepper-red ring.
+ *  - The T-shirt photo cross-fades in over the suit photo; the tile lifts on
+ *    a soft overshoot with a pepper-red ring, its photo leans in, the
+ *    neighbours either side stay half lit, and the spice name rises onto
+ *    the face (all CSS, see "Team grid" in globals.css).
  *  - Figma's detail panel in the last row names the person. Hover state lives
  *    in a tiny store the panel subscribes to, so moving between faces
  *    re-renders the panel only, never the 35 tiles.
@@ -72,7 +74,7 @@ const Tile = memo(function Tile({
   onToggle: (i: number) => void;
 }) {
   return (
-    <li className="team-in relative" style={{ ["--d" as string]: `${(Math.floor(i / 10) + (i % 10)) * 30}ms` }}>
+    <li className="team-cell team-in relative" style={{ ["--d" as string]: `${(Math.floor(i / 10) + (i % 10)) * 30}ms` }}>
       <button
         type="button"
         aria-label={`${p.name}, ${p.role}${p.spice ? `. Spice name: ${p.spice}` : ""}`}
@@ -89,7 +91,7 @@ const Tile = memo(function Tile({
           alt=""
           fill
           sizes="(min-width: 1024px) 120px, (min-width: 640px) 20vw, 33vw"
-          className="object-cover object-top"
+          className="team-img object-cover object-top"
         />
         {p.alt && (
           <Image
@@ -97,8 +99,17 @@ const Tile = memo(function Tile({
             alt=""
             fill
             sizes="(min-width: 1024px) 120px, (min-width: 640px) 20vw, 33vw"
-            className="team-alt object-cover object-top"
+            className="team-img team-alt object-cover object-top"
           />
+        )}
+        {/* Desktop: the spice name rises onto the face after the lift */}
+        {p.spice && (
+          <span
+            aria-hidden
+            className="team-tag absolute inset-x-0 bottom-0 z-[1] hidden bg-gradient-to-b from-transparent to-black/75 px-2.5 pt-6 pb-2 text-left text-[11px] leading-[12px] font-semibold tracking-[-0.03em] text-white lg:block"
+          >
+            {p.spice}
+          </span>
         )}
         {/* Touch: details on the tile itself once tapped */}
         <span
