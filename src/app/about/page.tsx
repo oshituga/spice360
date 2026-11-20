@@ -110,7 +110,7 @@ export default function About() {
   return (
     <main data-theme="about">
       <PageHero
-        title={"About\n& Work"}
+        title="About & Work"
         titleWidth={1094}
         body="The agency grew out of the Tolaram Group, one of West Africa’s largest consumer goods conglomerates and the company behind Indomie, Power Oil, Dano Milk, Colgate Nigeria, and twelve other brands that are part of Nigerian daily life. Working that account, year after year, built something most agencies spend careers trying to acquire: a genuine, granular understanding of what moves Nigerian people."
         bodyWidth={584}

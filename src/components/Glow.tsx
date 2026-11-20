@@ -61,6 +61,7 @@ export function Glow({
   clip = true,
   seed = 0,
   feel = "calm",
+  blend = true,
   className = "",
   style,
 }: {
@@ -74,6 +75,8 @@ export function Glow({
   seed?: number;
   /** calm (default) or lively (footer) */
   feel?: keyof typeof FEEL;
+  /** Fade the anchor edge into black too (off for heroes, which start the page) */
+  blend?: boolean;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -135,6 +138,15 @@ export function Glow({
         className={`absolute inset-x-0 ${anchor === "top" ? "bottom-0 bg-gradient-to-t" : "top-0 bg-gradient-to-b"} from-black from-10% via-black/60 via-45% to-transparent`}
         style={{ height: feel === "lively" ? "42%" : "28%" }}
       />
+      {/* Mid-page glows also melt into the black at the edge they rise from,
+          so the next section never starts at a bright cut. Only the footer
+          (lively) keeps its light running to the page's bottom edge. */}
+      {blend && feel !== "lively" && (
+        <div
+          className={`absolute inset-x-0 ${anchor === "top" ? "top-0 bg-gradient-to-b" : "bottom-0 bg-gradient-to-t"} from-black via-black/55 via-40% to-transparent`}
+          style={{ height: "26%" }}
+        />
+      )}
     </div>
   );
 }

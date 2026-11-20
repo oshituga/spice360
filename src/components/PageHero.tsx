@@ -43,12 +43,15 @@ export function PageHero({
 }) {
   const lines = title.split("\n");
   const longest = Math.max(...lines.map((l) => l.length));
-  const size =
-    longest <= 18
-      ? "text-mega"
-      : longest <= 40
-        ? "text-[clamp(44px,4.6vw+12px,108px)] leading-[0.9] tracking-[-0.06em]"
-        : "text-[clamp(38px,3vw+14px,76px)] leading-[0.94] tracking-[-0.055em]";
+  /* Each line is set where the title breaks it, so the size is fitted to
+     the longest line: it fills the frame without wrapping on desktop and
+     only wraps on phones, where the floor takes over. Tier caps keep a
+     long sentence from becoming a wall. (~0.5em per character at this
+     tracking.) */
+  const tier = longest <= 24 ? { min: 48, max: 164 } : longest <= 40 ? { min: 40, max: 108 } : { min: 36, max: 76 };
+  const fit = `calc((min(100vw, 1440px + 2 * var(--gutter)) - 2 * var(--gutter)) / ${(longest * 0.52).toFixed(2)})`;
+  const fontSize = `clamp(${tier.min}px, ${fit}, ${tier.max}px)`;
+  const size = longest <= 24 ? "leading-[0.86] tracking-[-0.065em]" : longest <= 40 ? "leading-[0.9] tracking-[-0.06em]" : "leading-[0.94] tracking-[-0.055em]";
 
   return (
     <section className="grain relative isolate flex h-svh min-h-[680px] flex-col justify-end overflow-clip bg-black px-[var(--gutter)] pt-[140px] pb-[calc(40px+env(safe-area-inset-bottom))] md:pb-14">
@@ -60,7 +63,7 @@ export function PageHero({
         </div>
       ) : (
         <div className="fade-slow absolute inset-0 -z-10">
-          <Glow ellipses={glow ?? []} anchor="top" />
+          <Glow ellipses={glow ?? []} anchor="top" blend={false} />
         </div>
       )}
 
@@ -71,7 +74,7 @@ export function PageHero({
               {eyebrow}
             </div>
           )}
-          <h1 className={`max-w-[1300px] font-semibold ${size}`}>
+          <h1 className={`font-semibold ${size}`} style={{ fontSize }}>
             {lines.map((l, i) => (
               <span key={i} className="line-mask" style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}>
                 <span className="line-up block" style={{ ["--d" as string]: `${200 + i * 110}ms` }}>
@@ -85,8 +88,8 @@ export function PageHero({
           <div className="flex flex-col gap-6 border-t border-white/20 pt-6 md:flex-row md:items-end md:justify-between md:gap-16">
             {body && (
               <p
-                className="fade-up text-[18px] leading-[22px] tracking-[-0.04em] text-white/85"
-                style={{ maxWidth: `min(${bodyWidth}px, 100%)`, ["--d" as string]: "550ms" }}
+                className="fade-up text-[19px] leading-[25px] tracking-[-0.04em] text-white/85 md:text-[20px] md:leading-[26px]"
+                style={{ maxWidth: `min(${Math.min(Math.max(Math.round(bodyWidth * 1.4), 680), 880)}px, 100%)`, ["--d" as string]: "550ms" }}
               >
                 {body}
               </p>

@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <main data-theme="home">
       <PageHero
-        title={"We make brands\nimpossible\nto ignore."}
+        title={"We make brands\nimpossible to ignore."}
         titleWidth={1094}
         body="We build integrated 360 campaigns rooted in cultural truth. We find what moves consumers and build campaigns that go all the way from strategy to execution."
         bodyWidth={518}
