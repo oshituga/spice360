@@ -38,6 +38,15 @@ const FEEL = {
   lively: { rx: 340, ry: 230, bs: 1.18, tempo: 0.7 },
 };
 
+/* Black to clear on an ease-in-out curve (no perceptible start or end) */
+function eased(dir: string) {
+  const stops: [number, number][] = [
+    [0, 1], [8.1, 0.987], [15.5, 0.951], [22.5, 0.896], [29, 0.825], [35.3, 0.741], [41.2, 0.648], [47.1, 0.55],
+    [52.9, 0.45], [58.8, 0.352], [64.7, 0.259], [71, 0.175], [77.5, 0.104], [84.5, 0.049], [91.9, 0.013], [100, 0],
+  ];
+  return `linear-gradient(${dir}, ${stops.map(([at, a]) => `rgb(0 0 0 / ${a}) ${at}%`).join(", ")})`;
+}
+
 function falloff(hex: string) {
   const stops: [number, number][] = [
     [0, 1],
@@ -130,21 +139,26 @@ export function Glow({
           />
         );
       })}
-      {/* Now that the light travels, it can reach the section's far edge and
-          be cut off in a hard line. A static black fade on that edge melts it
-          into the black next door (plain alpha over the moving layers, so it
-          costs nothing per frame). Deeper on the lively footer. */}
+      {/* The light must never end in a line. Each edge that meets another
+          section gets a long fade to black on an eased curve (the classic
+          "easing gradient" stops), so the falloff has no visible start or
+          kink; a short linear ramp read as a muddy band. Static alpha over
+          the moving layers, so it costs nothing per frame. The far edge
+          always fades; mid-page glows also fade the edge they rise from, so
+          the light pools inside the section. Heroes (blend={false}) keep
+          their top, the lively footer keeps its bottom. */}
       <div
-        className={`absolute inset-x-0 ${anchor === "top" ? "bottom-0 bg-gradient-to-t" : "top-0 bg-gradient-to-b"} from-black from-10% via-black/60 via-45% to-transparent`}
-        style={{ height: feel === "lively" ? "42%" : "28%" }}
+        className="absolute inset-x-0"
+        style={{
+          [anchor === "top" ? "bottom" : "top"]: 0,
+          height: feel === "lively" ? "46%" : "34%",
+          backgroundImage: eased(anchor === "top" ? "to top" : "to bottom"),
+        }}
       />
-      {/* Mid-page glows also melt into the black at the edge they rise from,
-          so the next section never starts at a bright cut. Only the footer
-          (lively) keeps its light running to the page's bottom edge. */}
       {blend && feel !== "lively" && (
         <div
-          className={`absolute inset-x-0 ${anchor === "top" ? "top-0 bg-gradient-to-b" : "bottom-0 bg-gradient-to-t"} from-black via-black/55 via-40% to-transparent`}
-          style={{ height: "26%" }}
+          className="absolute inset-x-0"
+          style={{ [anchor === "top" ? "top" : "bottom"]: 0, height: "30%", backgroundImage: eased(anchor === "top" ? "to bottom" : "to top") }}
         />
       )}
     </div>
