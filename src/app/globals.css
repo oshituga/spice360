@@ -553,7 +553,7 @@ figcaption {
 }
 
 /* Home services: the photo eases in inside its frame (3%, like the photo
-   cards). The tile stays put, so the two bands never break. */
+   cards). The tile stays put, so the chequerboard never breaks. */
 .service-photo {
   transition: scale 1200ms var(--ease-soft);
 }

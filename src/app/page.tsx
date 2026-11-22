@@ -29,16 +29,16 @@ const SERVICES = [
     ink: "text-white",
     photo: "team-mixed-strategy",
     alt: "Two of the team working out an idea on a whiteboard",
-    position: "60% 50%",
+    position: "45% 50%",
     body: "The conviction before the campaign. We work out what a brand actually believes before we make anything.",
   },
   {
     title: "Digital\nContent",
     color: "#eea953",
     ink: "text-ink",
-    photo: "team-mixed-huddle-devices-2",
-    alt: "The team gathered over laptops and a tablet",
-    position: "50% 60%",
+    photo: "team-female-discourse",
+    alt: "Three of the team working together over a laptop",
+    position: "50% 45%",
     body: "Always-on creative for Africa’s most engaged online market. Built for Nigerian audiences from line one.",
   },
   {
@@ -116,7 +116,7 @@ export default function Home() {
 
       <Motto quote="“We exist to make brands impossible to ignore.”" label="Our Motto" src="/group/motto-mixed.jpg" />
 
-      {/* What we do: the work being done, over its colour; each opens the capabilities */}
+      {/* What we do: the work being done beside its colour; each opens the capabilities */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -127,17 +127,18 @@ export default function Home() {
               </Button>
             </FadeIn>
           </div>
-          {/* Phone: photo over colour. Tablet: side by side, a row each.
-              Desktop: one band of photos over one band of colour. */}
+          {/* Photo and colour interlock as one chequerboard, three across on
+              desktop and two across on tablet, with the middle service
+              turned over. Phone: photo over its colour. */}
           <div className="grid lg:grid-cols-3">
             {SERVICES.map((sv, i) => (
               <FadeIn key={sv.title} delay={i * 0.1}>
                 <Link
                   href="/about#capabilities"
-                  className={`service-tile relative grid h-full md:grid-cols-2 lg:grid-cols-1 lg:grid-rows-[auto_1fr] ${sv.ink}`}
+                  className={`service-tile relative grid md:h-[320px] md:grid-cols-2 lg:h-[clamp(560px,48vw,640px)] lg:grid-cols-1 lg:grid-rows-2 ${sv.ink}`}
                   style={{ background: sv.color }}
                 >
-                  <span className="relative block aspect-[3/2] overflow-hidden">
+                  <span className={`relative block overflow-hidden max-md:aspect-[4/3] ${i === 1 ? "md:order-last" : ""}`}>
                     <Image
                       src={`/group/${sv.photo}.jpg`}
                       alt={sv.alt}
@@ -147,9 +148,9 @@ export default function Home() {
                       style={{ objectPosition: sv.position }}
                     />
                   </span>
-                  <div className="flex flex-col justify-center gap-5 p-6 pb-8 lg:justify-start lg:p-8 lg:pb-10">
-                    <h3 className="text-[clamp(30px,1.2vw+20px,38px)] leading-[0.92] font-semibold tracking-[-0.055em] whitespace-pre-line">{sv.title}</h3>
-                    <p className="text-[17px] leading-[21px] tracking-[-0.04em] [text-wrap:pretty]">{sv.body}</p>
+                  <div className="flex flex-col justify-between gap-6 p-6 pb-8 md:p-7 xl:p-9">
+                    <h3 className="text-[clamp(34px,1.4vw+22px,44px)] leading-[0.88] font-semibold tracking-[-0.055em] whitespace-pre-line">{sv.title}</h3>
+                    <p className="text-[17px] leading-[21px] xl:text-[18px] xl:leading-[22px] tracking-[-0.04em] [text-wrap:pretty]">{sv.body}</p>
                   </div>
                 </Link>
               </FadeIn>
