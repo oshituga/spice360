@@ -356,10 +356,9 @@ function MobileMenu({
   );
 }
 
-/* True while what shows at the bar's middle is light. A section that is
-   being covered (slow-cover in globals.css) still reaches under the one
-   covering it, so of those on that line the last in the page wins: it is
-   the one painted on top. Re-wired on each route and resize. */
+/* True while what shows at the bar's middle is light. Where two bands meet
+   on that line, or one sits inside another (the values on People), the last
+   in the page wins. Re-wired on each route and resize. */
 function useLightUnderBar(pathname: string, bar: RefObject<HTMLElement | null>) {
   const [light, setLight] = useState(false);
   useEffect(() => {
