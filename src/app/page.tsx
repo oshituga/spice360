@@ -12,6 +12,7 @@ import { FadeIn } from "@/components/motion";
 import { BRANDS_LINE, CONTACT_HREF, TEAM } from "@/lib/content";
 import { BlogGrid } from "@/components/BlogGrid";
 import { OutPillars } from "@/components/OutPillars";
+import Image from "next/image";
 import Link from "next/link";
 
 /* Home glow palette (Figma ellipses 2571:290-292) */
@@ -19,12 +20,37 @@ const G = "#2B5833";
 const L = "#E3FC6A";
 const O = "#EEA953";
 
+/* Each service with a photo of the team doing that work. The titles break
+   by hand so the three lines of copy always start level. */
 const SERVICES = [
-  { title: "Brand Strategy", color: "#2b5833", ink: "text-white", body: "The conviction before the campaign. We work out what a brand actually believes before we make anything." },
-  { title: "Digital Content", color: "#eea953", ink: "text-ink", body: "Always-on creative for Africa’s most engaged online market. Built for Nigerian audiences from line one." },
-  { title: "Integrated Campaigns", color: "#bc3431", ink: "text-white", body: "Every channel, one idea behind all of it. The 360 in our name is a commitment, not a category claim." },
+  {
+    title: "Brand\nStrategy",
+    color: "#2b5833",
+    ink: "text-white",
+    photo: "team-mixed-strategy",
+    alt: "Two of the team working out an idea on a whiteboard",
+    position: "60% 50%",
+    body: "The conviction before the campaign. We work out what a brand actually believes before we make anything.",
+  },
+  {
+    title: "Digital\nContent",
+    color: "#eea953",
+    ink: "text-ink",
+    photo: "team-mixed-huddle-devices-2",
+    alt: "The team gathered over laptops and a tablet",
+    position: "50% 60%",
+    body: "Always-on creative for Africa’s most engaged online market. Built for Nigerian audiences from line one.",
+  },
+  {
+    title: "Integrated\nCampaigns",
+    color: "#bc3431",
+    ink: "text-white",
+    photo: "team-hifive",
+    alt: "Two of the team high-five in front of a board of campaign notes",
+    position: "50% 35%",
+    body: "Every channel, one idea behind all of it. The 360 in our name is a commitment, not a category claim.",
+  },
 ];
-
 
 const STRIP = [
   "team-mixed-huddle-devices-2",
@@ -90,7 +116,7 @@ export default function Home() {
 
       <Motto quote="“We exist to make brands impossible to ignore.”" label="Our Motto" src="/group/motto-mixed.jpg" />
 
-      {/* What we do: three tiles that each open the capabilities */}
+      {/* What we do: the work being done, over its colour; each opens the capabilities */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -101,16 +127,30 @@ export default function Home() {
               </Button>
             </FadeIn>
           </div>
-          <div className="grid md:grid-cols-3">
+          {/* Phone: photo over colour. Tablet: side by side, a row each.
+              Desktop: one band of photos over one band of colour. */}
+          <div className="grid lg:grid-cols-3">
             {SERVICES.map((sv, i) => (
               <FadeIn key={sv.title} delay={i * 0.1}>
                 <Link
                   href="/about#capabilities"
-                  className={`service-tile flex h-[340px] flex-col justify-between p-7 md:h-[420px] md:p-9 ${sv.ink}`}
+                  className={`service-tile relative grid h-full md:grid-cols-2 lg:grid-cols-1 lg:grid-rows-[auto_1fr] ${sv.ink}`}
                   style={{ background: sv.color }}
                 >
-                  <h3 className="text-[30px] leading-[30px] font-semibold tracking-[-0.055em]">{sv.title}</h3>
-                  <p className="text-[17px] leading-[21px] tracking-[-0.04em] opacity-90">{sv.body}</p>
+                  <span className="relative block aspect-[3/2] overflow-hidden">
+                    <Image
+                      src={`/group/${sv.photo}.jpg`}
+                      alt={sv.alt}
+                      fill
+                      sizes="(min-width: 1320px) 414px, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="service-photo object-cover"
+                      style={{ objectPosition: sv.position }}
+                    />
+                  </span>
+                  <div className="flex flex-col justify-center gap-5 p-6 pb-8 lg:justify-start lg:p-8 lg:pb-10">
+                    <h3 className="text-[clamp(30px,1.2vw+20px,38px)] leading-[0.92] font-semibold tracking-[-0.055em] whitespace-pre-line">{sv.title}</h3>
+                    <p className="text-[17px] leading-[21px] tracking-[-0.04em] [text-wrap:pretty]">{sv.body}</p>
+                  </div>
                 </Link>
               </FadeIn>
             ))}
