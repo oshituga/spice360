@@ -16,7 +16,8 @@ import { useEffect, useRef, type CSSProperties } from "react";
  *
  * `y` is the ellipse centre in Figma px from the anchor edge: from the top
  * for anchor="top" (negative = above the section), from the bottom for
- * anchor="bottom" (positive = below the section).
+ * anchor="bottom" (positive = below the section). A section can set --pour
+ * to move the light further in (negative: further out) at a breakpoint.
  */
 
 export type GlowEllipse = { color: string; y: number };
@@ -77,6 +78,23 @@ function eased(dir: string, tint?: string) {
       return `rgb(${rgb.map((v) => Math.round(v * k)).join(" ")} / ${a}) ${at}%`;
     })
     .join(", ")})`;
+}
+
+/* Push a colour away from its own grey, then take back any luminance that
+   gained: the light gets richer, never paler, so the white type over it
+   reads as well as it did. */
+const VIVID = 1.4;
+function vivid(hex: string) {
+  const rgb = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  const grey = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  const rich = rgb.map((v) => Math.min(255, Math.max(0, grey + (v - grey) * VIVID)));
+  const back = Math.min(1, luminance(rgb) / (luminance(rich) || 1)) ** (1 / GAMMA);
+  return `#${rich.map((v) => Math.round(v * back).toString(16).padStart(2, "0")).join("")}`;
+}
+
+const GAMMA = 2.2;
+function luminance([r, g, b]: number[]) {
+  return 0.2126 * r ** GAMMA + 0.7152 * g ** GAMMA + 0.0722 * b ** GAMMA;
 }
 
 function falloff(hex: string) {
@@ -169,13 +187,16 @@ export function Glow({
               height: h,
               marginLeft: -w / 2,
               scale: K,
-              background: falloff(e.color),
+              background: falloff(vivid(e.color)),
               ["--k" as string]: K,
               ["--rx" as string]: `${f.rx}px`,
               ["--ry" as string]: `${f.ry}px`,
               ["--bs" as string]: f.bs,
               animation: `${m.orbit} ${dur}s linear ${-((seed * 7.3 + i * 5.1) % dur)}s infinite, breathe ${br}s cubic-bezier(0.45, 0, 0.55, 1) ${-((seed * 3.1 + i * 2.7) % br)}s infinite alternate`,
-              ...(anchor === "top" ? { top: e.y, marginTop: -h / 2 } : { bottom: -e.y, marginBottom: -h / 2 }),
+              // --pour (set by the section, per breakpoint) moves the light further in
+              ...(anchor === "top"
+                ? { top: `calc(${e.y}px + var(--pour, 0px))`, marginTop: -h / 2 }
+                : { bottom: `calc(${-e.y}px + var(--pour, 0px))`, marginBottom: -h / 2 }),
             }}
           />
         );

@@ -3,7 +3,6 @@ import Link from "next/link";
 import "./about.css";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/Button";
-import { Glow } from "@/components/Glow";
 import { SectionHead } from "@/components/SectionHead";
 import { ProcessList } from "@/components/ProcessList";
 import { Footer } from "@/components/Footer";
@@ -216,9 +215,8 @@ export default function About() {
       </section>
 
       {/* LAIF: the proof moment, said once and loudly */}
-      <section id="laif" className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
-        <Glow anchor="bottom" ellipses={[{ color: A, y: 356 }, { color: P, y: 665 }, { color: R, y: 914 }]} />
-        <div className="relative mx-auto flex max-w-content flex-col gap-12 md:gap-16">
+      <section id="laif" className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-content flex-col gap-12 md:gap-16">
           <SectionHead align="left" eyebrow="Awards & Accolades" title="LAIF 2024, the full record" width={560} />
           <div className="flex flex-col gap-6 border-t border-white/25 pt-10 md:pt-14">
             <SplitReveal as="p" text={"4th in Nigeria.\nOn debut."} className="text-mega font-semibold" />

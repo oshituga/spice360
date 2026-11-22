@@ -474,7 +474,7 @@ figcaption {
 @keyframes breathe {
   from {
     scale: var(--k);
-    opacity: 0.82;
+    opacity: 0.94;
   }
   to {
     scale: calc(var(--k) * var(--bs));
@@ -550,29 +550,6 @@ figcaption {
   .pillar-row {
     animation: none;
   }
-}
-
-/* Home services: the photo eases in inside its frame (3%, like the photo
-   cards). The tile stays put, so the chequerboard never breaks. */
-.service-photo {
-  transition: scale 1200ms var(--ease-soft);
-}
-@media (hover: hover) and (pointer: fine) {
-  .service-tile:hover .service-photo {
-    scale: 1.03;
-  }
-}
-/* Tiles touch, so the focus ring sits inside */
-.service-tile:focus-visible {
-  outline: none;
-}
-.service-tile:focus-visible::after {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  z-index: 1;
-  pointer-events: none;
-  outline: 3px solid currentColor;
 }
 
 /* Each route fades in as it mounts (template.tsx) */

@@ -13,7 +13,6 @@ import { BRANDS_LINE, CONTACT_HREF, TEAM } from "@/lib/content";
 import { BlogGrid } from "@/components/BlogGrid";
 import { OutPillars } from "@/components/OutPillars";
 import Image from "next/image";
-import Link from "next/link";
 
 /* Home glow palette (Figma ellipses 2571:290-292) */
 const G = "#2B5833";
@@ -77,7 +76,7 @@ export default function Home() {
         glow={[
           { color: G, y: -313 },
           { color: L, y: -561 },
-          { color: O, y: -620 },
+          { color: O, y: -720 },
         ]}
         actions={
           <>
@@ -92,9 +91,8 @@ export default function Home() {
       />
 
       {/* Proof first: the scoreboard, left-aligned, figures as the headline */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
-        <Glow tint={G} anchor="bottom" ellipses={[{ color: G, y: 377 }, { color: L, y: 626 }, { color: O, y: 685 }]} />
-        <div className="relative mx-auto flex max-w-content flex-col gap-16 md:gap-24">
+      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-content flex-col gap-16 md:gap-24">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="Awards & Accolades" title={"The scoreboard"} width={520} />
             <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
@@ -106,8 +104,8 @@ export default function Home() {
       </section>
 
       {/* How we work: Out + think / create / pace */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[120px] md:pt-[150px] md:pb-[170px]">
-        <Glow tint={G} anchor="bottom" seed={1} ellipses={[{ color: G, y: 520 }, { color: L, y: 780 }, { color: O, y: 840 }]} />
+      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[200px] max-md:[--pour:-70px] md:pt-[150px] md:pb-[260px]">
+        <Glow tint={G} anchor="bottom" seed={1} ellipses={[{ color: G, y: 377 }, { color: L, y: 580 }, { color: O, y: 750 }]} />
         <div className="relative mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <SectionHead align="left" eyebrow="Our three pillars" title="How we work" width={420} />
           <OutPillars />
@@ -116,7 +114,7 @@ export default function Home() {
 
       <Motto quote="“We exist to make brands impossible to ignore.”" label="Our Motto" src="/group/motto-mixed.jpg" />
 
-      {/* What we do: the work being done beside its colour; each opens the capabilities */}
+      {/* What we do: the work being done beside its colour */}
       <section data-nav="light" className="bg-white text-ink px-[var(--gutter)] py-[110px] md:py-[150px]">
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -133,9 +131,8 @@ export default function Home() {
           <div className="grid lg:grid-cols-3">
             {SERVICES.map((sv, i) => (
               <FadeIn key={sv.title} delay={i * 0.1}>
-                <Link
-                  href="/about#capabilities"
-                  className={`service-tile relative grid md:h-[320px] md:grid-cols-2 lg:h-[clamp(560px,48vw,640px)] lg:grid-cols-1 lg:grid-rows-2 ${sv.ink}`}
+                <div
+                  className={`grid md:h-[320px] md:grid-cols-2 lg:h-[clamp(560px,48vw,640px)] lg:grid-cols-1 lg:grid-rows-2 ${sv.ink}`}
                   style={{ background: sv.color }}
                 >
                   <span className={`relative block overflow-hidden max-md:aspect-[4/3] ${i === 1 ? "md:order-last" : ""}`}>
@@ -144,7 +141,7 @@ export default function Home() {
                       alt={sv.alt}
                       fill
                       sizes="(min-width: 1320px) 414px, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="service-photo object-cover"
+                      className="object-cover"
                       style={{ objectPosition: sv.position }}
                     />
                   </span>
@@ -152,7 +149,7 @@ export default function Home() {
                     <h3 className="text-[clamp(34px,1.4vw+22px,44px)] leading-[0.88] font-semibold tracking-[-0.055em] whitespace-pre-line">{sv.title}</h3>
                     <p className="text-[17px] leading-[21px] xl:text-[18px] xl:leading-[22px] tracking-[-0.04em] [text-wrap:pretty]">{sv.body}</p>
                   </div>
-                </Link>
+                </div>
               </FadeIn>
             ))}
           </div>
@@ -161,7 +158,7 @@ export default function Home() {
 
       {/* Leadership: a teaser, the bios live on People */}
       <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <Glow tint={G} anchor="bottom" ellipses={[{ color: G, y: 404 }, { color: L, y: 653 }, { color: O, y: 712 }]} />
+        <Glow tint={G} anchor="bottom" ellipses={[{ color: G, y: 377 }, { color: L, y: 640 }, { color: O, y: 780 }]} />
         <div className="relative mx-auto grid max-w-content items-end gap-12 md:grid-cols-[1fr_1.15fr] md:gap-16">
           <div className="flex flex-col gap-8">
             <SectionHead align="left" eyebrow="Leadership" title={"Two hires.\nOne direction"} width={460} />
@@ -218,8 +215,8 @@ export default function Home() {
       </section>
 
       {/* Blog */}
-      <section id="blog" className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[120px] pb-[100px] md:pt-[182px] md:pb-[130px]">
-        <Glow tint={G} anchor="top" ellipses={[{ color: G, y: -541 }, { color: L, y: -790 }, { color: O, y: -849 }]} />
+      <section id="blog" className="max-md:[--pour:-70px] grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[120px] pb-[100px] md:pt-[182px] md:pb-[130px]">
+        <Glow tint={G} anchor="top" ellipses={[{ color: G, y: -530 }, { color: L, y: -790 }, { color: O, y: -870 }]} />
         <div className="relative">
           <SectionHead
             eyebrow="Our Blog"

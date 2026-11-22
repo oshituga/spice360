@@ -134,9 +134,8 @@ export default function SpiceDigital() {
       </section>
 
       {/* Services: six plain entries on hairlines */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[140px] md:pt-[150px] md:pb-[180px]">
-        <Glow anchor="bottom" ellipses={[{ color: N, y: 452 }, { color: S, y: 761 }, { color: M, y: 910 }]} />
-        <div className="relative mx-auto flex max-w-content flex-col gap-14 md:gap-20">
+      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+        <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <SectionHead align="left" eyebrow="What we do" title="Six services, all of them connected" width={520} />
           <ul className="grid gap-x-12 md:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map(([title, body], i) => (
@@ -149,9 +148,10 @@ export default function SpiceDigital() {
         </div>
       </section>
 
-      {/* Who it serves */}
-      <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
-        <div className="mx-auto grid max-w-content gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
+      {/* Who it serves: last of the black run, so it carries the light */}
+      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[200px] md:pt-[150px] md:pb-[260px]">
+        <Glow anchor="bottom" ellipses={[{ color: N, y: 300 }, { color: S, y: 620 }, { color: M, y: 820 }]} />
+        <div className="relative mx-auto grid max-w-content gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
           <SectionHead align="left" eyebrow="Who Spice Digital serves" title="We know what funded looks like, and what growing looks like" width={560} />
           <div className="flex max-w-[480px] flex-col gap-6 text-[18px] leading-[22px] tracking-[-0.04em] text-white/80 md:pt-11">
             <FadeIn delay={0.1}>

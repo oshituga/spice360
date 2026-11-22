@@ -10,7 +10,7 @@ import Image from "next/image";
 export function PlayCard({ src, label }: { src: string; label: string }) {
   return (
     <div
-      className="group relative isolate flex min-h-[340px] flex-1 items-end overflow-hidden md:min-h-[432px]"
+      className="group relative isolate flex min-h-[340px] flex-1 items-end overflow-hidden text-white md:min-h-[432px]"
     >
       <Image
         src={src}
