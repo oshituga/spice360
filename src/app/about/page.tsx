@@ -124,7 +124,9 @@ export default function About() {
       {/* Our story: the head holds still on the left while the chapters scroll past it */}
       <section className="bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
         <div className="mx-auto grid max-w-content gap-14 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16">
-          <div className="md:sticky md:top-32 md:self-start">
+          {/* As tall as the screen below its pin, less the section's bottom
+              padding, so it lets go just as the slow cover starts to move it */}
+          <div className="md:sticky md:top-32 md:min-h-[calc(100lvh-8rem-150px)] md:self-start">
             <SectionHead align="left" eyebrow="Our Story" title={"From one account\nto the awards table"} width={480} />
           </div>
           <ol>

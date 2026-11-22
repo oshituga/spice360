@@ -585,3 +585,36 @@ figcaption {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Slow cover: where the page changes between dark and light, the section
+   being left travels 28% slower, so the next one slides over it with a
+   straight edge instead of both moving as one painted strip.
+   - The structure decides: any top-level section next to a data-nav="light"
+     one gets it, nothing to mark up.
+   - exit 0% is when the section's bottom meets the bottom of the screen or,
+     if it is shorter than the screen, when its top meets the top. min() keeps
+     the rate at 28% in both cases, so no gap can open above it.
+   - The arriving section is positioned, so DOM order paints it on top.
+   - A plain cut with reduced motion, without scroll-driven animations, and
+     while keyboard focus is inside (so the cover can't hide what's focused).
+   - It transforms whole sections: position: fixed inside one would be
+     trapped, so render overlays outside them. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    main > [data-nav="light"],
+    main > [data-nav="light"] + * {
+      position: relative;
+    }
+    main > :not([data-nav="light"]):has(+ [data-nav="light"]):not(:has(:focus-visible)),
+    main > [data-nav="light"]:has(+ :not([data-nav="light"])):not(:has(:focus-visible)) {
+      animation: slow-cover linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+  }
+}
+@keyframes slow-cover {
+  to {
+    transform: translateY(min(28vh, 28%));
+  }
+}

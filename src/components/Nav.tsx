@@ -12,7 +12,7 @@ import {
   useScroll,
 } from "motion/react";
 import { useLenis } from "lenis/react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type RefObject } from "react";
 import { CONTACT_HREF, EMAIL, themeFor } from "@/lib/content";
 import { STORIES } from "@/lib/kitchen";
 import { MENU, MOBILE_PAGES, groupFor, isCurrent, type MenuItem } from "@/lib/menu";
@@ -32,8 +32,9 @@ import { EASE } from "./motion";
  *    glass once it leaves the hero. Over a light section (data-nav="light")
  *    it switches to light frosted glass with ink type, so it never smears
  *    a dark blob over white; over glows the dark glass is dense enough that
- *    colour can't bleed through. One IntersectionObserver watches a thin
- *    band where the bar sits; colours cross-fade, nothing re-blurs.
+ *    colour can't bleed through. One IntersectionObserver watches the line
+ *    through the bar's middle, so it switches as an edge crosses that line;
+ *    colours cross-fade, nothing re-blurs.
  */
 
 export function Nav() {
@@ -45,7 +46,8 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const last = useRef(0);
-  const light = useLightUnderBar(pathname);
+  const bar = useRef<HTMLDivElement>(null);
+  const light = useLightUnderBar(pathname, bar);
 
   // A followed link closes the desktop panel
   const [lastPath, setLastPath] = useState(pathname);
@@ -72,6 +74,7 @@ export function Nav() {
       {/* Full-screen menu lives outside the moving bar: a transformed parent would trap position:fixed */}
       <AnimatePresence>{open && <MobileSheet key="sheet" pathname={pathname} close={() => setOpen(false)} />}</AnimatePresence>
       <motion.div
+        ref={bar}
         className="mx-auto mt-[30px] w-[calc(100%-66px)] max-w-[632px] lg:mt-10 lg:max-w-[760px]"
         animate={{ y: hidden ? -140 : 0 }}
         transition={{ duration: 0.6, ease: EASE }}
@@ -353,30 +356,49 @@ function MobileMenu({
   );
 }
 
-/* True while a light section sits under the bar. Watches only a thin band
-   (from 40px to ~110px down the viewport), re-wired on each route. */
-function useLightUnderBar(pathname: string) {
+/* True while what shows at the bar's middle is light. A section that is
+   being covered (slow-cover in globals.css) still reaches under the one
+   covering it, so of those on that line the last in the page wins: it is
+   the one painted on top. Re-wired on each route and resize. */
+function useLightUnderBar(pathname: string, bar: RefObject<HTMLElement | null>) {
   const [light, setLight] = useState(false);
   useEffect(() => {
-    const on = new Set<Element>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) on.add(e.target);
-          else on.delete(e.target);
-        }
-        setLight(on.size > 0);
-      },
-      { rootMargin: "-40px 0px -88% 0px" },
-    );
+    let io: IntersectionObserver | undefined;
+    let id = 0;
+    const watch = () => {
+      io?.disconnect();
+      const el = bar.current;
+      if (!el) return;
+      // Layout position, so a bar that is hidden mid-scroll measures the same
+      const y = Math.round(el.offsetTop + el.offsetHeight / 2);
+      const bands = [...document.querySelectorAll<HTMLElement>('main > section, main > footer, main [data-nav="light"]')];
+      const on = new Set<Element>();
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) on.add(e.target);
+            else on.delete(e.target);
+          }
+          setLight(bands.findLast((b) => on.has(b))?.dataset.nav === "light");
+        },
+        { rootMargin: `${-y}px 0px ${y + 1 - window.innerHeight}px 0px` },
+      );
+      bands.forEach((b) => io?.observe(b));
+    };
     // After the route's sections mount
-    const id = requestAnimationFrame(() => document.querySelectorAll('[data-nav="light"]').forEach((el) => io.observe(el)));
+    const schedule = () => {
+      cancelAnimationFrame(id);
+      id = requestAnimationFrame(watch);
+    };
+    schedule();
+    window.addEventListener("resize", schedule);
     return () => {
       cancelAnimationFrame(id);
-      io.disconnect();
+      window.removeEventListener("resize", schedule);
+      io?.disconnect();
       setLight(false);
     };
-  }, [pathname]);
+  }, [pathname, bar]);
   return light;
 }
 
