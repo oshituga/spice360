@@ -80,7 +80,7 @@ export function Footer({
   metaColor?: string;
 }) {
   return (
-    <footer className="grain relative isolate flex min-h-svh flex-col justify-between gap-24 overflow-clip bg-black pt-[120px] pb-[calc(48px+env(safe-area-inset-bottom))] md:pt-[160px] md:pb-[108px]">
+    <footer className="relative isolate flex min-h-svh flex-col justify-between gap-24 overflow-clip bg-black pt-[120px] pb-[calc(48px+env(safe-area-inset-bottom))] md:pt-[160px] md:pb-[108px]">
       <Glow ellipses={glow} anchor="bottom" seed={2} feel="lively" />
 
       <div className="relative flex flex-col items-center gap-6 px-[var(--gutter)] text-center">

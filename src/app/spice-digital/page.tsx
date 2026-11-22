@@ -149,7 +149,7 @@ export default function SpiceDigital() {
       </section>
 
       {/* Who it serves: last of the black run, so it carries the light */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[200px] md:pt-[150px] md:pb-[260px]">
+      <section className="relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[200px] md:pt-[150px] md:pb-[260px]">
         <Glow anchor="bottom" ellipses={[{ color: N, y: 300 }, { color: S, y: 620 }, { color: M, y: 820 }]} />
         <div className="relative mx-auto grid max-w-content gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
           <SectionHead align="left" eyebrow="Who Spice Digital serves" title="We know what funded looks like, and what growing looks like" width={560} />

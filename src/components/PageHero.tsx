@@ -54,7 +54,7 @@ export function PageHero({
   const size = longest <= 24 ? "leading-[0.86] tracking-[-0.065em]" : longest <= 40 ? "leading-[0.9] tracking-[-0.06em]" : "leading-[0.94] tracking-[-0.055em]";
 
   return (
-    <section className="grain relative isolate flex h-svh md:[--pour:90px] min-h-[680px] flex-col justify-end overflow-clip bg-black px-[var(--gutter)] pt-[140px] pb-[calc(40px+env(safe-area-inset-bottom))] md:pb-14">
+    <section className="relative isolate flex h-svh md:[--pour:90px] min-h-[680px] flex-col justify-end overflow-clip bg-black px-[var(--gutter)] pt-[140px] pb-[calc(40px+env(safe-area-inset-bottom))] md:pb-14">
       {image ? (
         <div className="fade absolute inset-0 -z-10" style={{ ["--d" as string]: "0ms" }}>
           <Image src={image} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: imagePosition }} />

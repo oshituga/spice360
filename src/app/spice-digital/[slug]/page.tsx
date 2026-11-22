@@ -40,7 +40,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
 
   return (
     <main data-theme={c.palette}>
-      <section className="grain relative isolate flex h-svh min-h-[640px] items-end overflow-clip bg-black px-[var(--gutter)] pb-20">
+      <section className="relative isolate flex h-svh min-h-[640px] items-end overflow-clip bg-black px-[var(--gutter)] pb-20">
         <div className="fade absolute inset-0 -z-10">
           <Image src={c.image} alt="" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/45 to-black/90" />

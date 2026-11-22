@@ -104,7 +104,7 @@ export default function Home() {
       </section>
 
       {/* How we work: Out + think / create / pace */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[200px] max-md:[--pour:-70px] md:pt-[150px] md:pb-[260px]">
+      <section className="relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[110px] pb-[200px] max-md:[--pour:-70px] md:pt-[150px] md:pb-[260px]">
         <Glow tint={G} anchor="bottom" seed={1} ellipses={[{ color: G, y: 377 }, { color: L, y: 580 }, { color: O, y: 750 }]} />
         <div className="relative mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <SectionHead align="left" eyebrow="Our three pillars" title="How we work" width={420} />
@@ -157,7 +157,7 @@ export default function Home() {
       </section>
 
       {/* Leadership: a teaser, the bios live on People */}
-      <section className="grain relative isolate overflow-clip bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
+      <section className="relative isolate overflow-clip bg-black px-[var(--gutter)] py-[110px] md:py-[150px]">
         <Glow tint={G} anchor="bottom" ellipses={[{ color: G, y: 377 }, { color: L, y: 640 }, { color: O, y: 780 }]} />
         <div className="relative mx-auto grid max-w-content items-end gap-12 md:grid-cols-[1fr_1.15fr] md:gap-16">
           <div className="flex flex-col gap-8">
@@ -215,7 +215,7 @@ export default function Home() {
       </section>
 
       {/* Blog */}
-      <section id="blog" className="max-md:[--pour:-70px] grain relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[120px] pb-[100px] md:pt-[182px] md:pb-[130px]">
+      <section id="blog" className="max-md:[--pour:-70px] relative isolate overflow-clip bg-black px-[var(--gutter)] pt-[120px] pb-[100px] md:pt-[182px] md:pb-[130px]">
         <Glow tint={G} anchor="top" ellipses={[{ color: G, y: -530 }, { color: L, y: -790 }, { color: O, y: -870 }]} />
         <div className="relative">
           <SectionHead

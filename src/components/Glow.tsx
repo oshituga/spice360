@@ -201,6 +201,8 @@ export function Glow({
           />
         );
       })}
+      {/* Grain (see globals.css), under the edge fades so it fades out with the light */}
+      <div className="grain" />
       {/* The light must never end in a line where it meets a black section,
           so each edge can fade to black on an eased curve (the classic
           "easing gradient" stops: no visible start or kink). Static alpha
