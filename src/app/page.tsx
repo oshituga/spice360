@@ -95,7 +95,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-content flex-col gap-16 md:gap-24">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="Awards & Accolades" title={"The scoreboard"} width={520} />
-            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+            <FadeIn className="max-w-[380px] text-body text-white/80">
               LAIF 2024, our first time at the table: the most creative agency in Nigeria.
             </FadeIn>
           </div>
@@ -146,8 +146,8 @@ export default function Home() {
                     />
                   </span>
                   <div className="flex flex-col justify-between gap-6 p-6 pb-8 md:p-7 xl:p-9">
-                    <h3 className="text-[clamp(34px,1.4vw+22px,44px)] leading-[0.88] font-semibold tracking-[-0.055em] whitespace-pre-line">{sv.title}</h3>
-                    <p className="text-[17px] leading-[21px] xl:text-[18px] xl:leading-[22px] tracking-[-0.04em] [text-wrap:pretty]">{sv.body}</p>
+                    <h3 className="text-card font-semibold whitespace-pre-line">{sv.title}</h3>
+                    <p className="text-body-sm xl:text-body [text-wrap:pretty]">{sv.body}</p>
                   </div>
                 </div>
               </FadeIn>
@@ -162,7 +162,7 @@ export default function Home() {
         <div className="relative mx-auto grid max-w-content items-end gap-12 md:grid-cols-[1fr_1.15fr] md:gap-16">
           <div className="flex flex-col gap-8">
             <SectionHead align="left" eyebrow="Leadership" title={"Two hires.\nOne direction"} width={460} />
-            <FadeIn className="max-w-[420px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/85">
+            <FadeIn className="max-w-[420px] text-body text-white/85">
               {md.name} leads the agency’s strategy and its expansion across Sub-Saharan Africa. {cd.name} is the creative direction behind five
               gold medals on our first time at the table.
             </FadeIn>
@@ -183,7 +183,7 @@ export default function Home() {
               >
                 <div className="flex flex-col gap-1.5 p-4 md:p-6">
                   <p className="text-[13px] leading-[15px] font-semibold tracking-[-0.03em] text-[var(--eyebrow)]">{p.spice}</p>
-                  <h3 className="text-[20px] leading-[21px] font-semibold tracking-[-0.055em] md:text-[24px] md:leading-[25px]">{p.name}</h3>
+                  <h3 className="text-name font-semibold max-md:text-[20px] max-md:leading-[21px]">{p.name}</h3>
                   <p className="text-[14px] leading-[16px] tracking-[-0.03em] text-white/80">{p.role}</p>
                 </div>
               </MediaCard>

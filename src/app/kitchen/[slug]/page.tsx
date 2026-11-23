@@ -99,7 +99,7 @@ export default async function StoryPage({ params }: PageProps<"/kitchen/[slug]">
                   <p className="text-eyebrow font-semibold text-white/75">
                     {next.kind} · {next.date}
                   </p>
-                  <p className="text-[clamp(28px,2vw+18px,44px)] leading-[0.98] font-semibold tracking-[-0.05em]">{next.title}</p>
+                  <p className="text-card font-semibold">{next.title}</p>
                   <p className="max-w-[520px] text-body text-white/85">{next.dek}</p>
                   <span className="mt-2 text-[14px] font-semibold tracking-[-0.04em] underline decoration-white/40 underline-offset-[6px] transition-[text-decoration-color] duration-300 group-hover:decoration-white">
                     Read next

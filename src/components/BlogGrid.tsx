@@ -17,7 +17,7 @@ export function BlogGrid() {
           >
             <article className="flex flex-col gap-4 p-6 pr-5 md:p-10">
               <p className="text-eyebrow font-semibold">{b.date}</p>
-              <h3 className="max-w-[420px] text-[24px] leading-[25px] font-semibold tracking-[-0.06em]">{b.title}</h3>
+              <h3 className="max-w-[420px] text-name font-semibold">{b.title}</h3>
               <p className="text-eyebrow font-semibold">{b.href ? b.kind : `${b.kind} · Coming soon`}</p>
             </article>
           </MediaCard>

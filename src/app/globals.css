@@ -21,7 +21,7 @@
   --color-navy: #212a68;
   --color-sky: #7bdcfb;
 
-  /* Figma: Display 48/42 -5%, Hero 48/45, Body "Med 18" 18/20 -4% */
+  /* Figma: Display 48/42 -5%, Hero 48/45, Body "Med 18" 18/22 -4% */
   /* Mega: the flagship statement size (Home, About heroes). Scale contrast
      is the point: one huge line against small, quiet labels. */
   --text-mega: clamp(52px, 7.6vw + 14px, 164px);
@@ -31,14 +31,33 @@
   --text-display--line-height: 42px;
   --text-display--letter-spacing: -0.05em;
   --text-body: 18px;
-  --text-body--line-height: 20px;
+  --text-body--line-height: 22px;
   --text-body--letter-spacing: -0.04em;
+  /* Card copy and small print */
+  --text-body-sm: 17px;
+  --text-body-sm--line-height: 21px;
+  --text-body-sm--letter-spacing: -0.04em;
+  --text-small: 15px;
+  --text-small--line-height: 19px;
+  --text-small--letter-spacing: -0.04em;
   --text-eyebrow: 16px;
   --text-eyebrow--line-height: 18px;
   --text-eyebrow--letter-spacing: -0.05em;
-  --text-card: 24px;
-  --text-card--line-height: 28px;
-  --text-card--letter-spacing: -0.05em;
+  /* Titles below the section head: step (numbered process rows), card
+     (tiles, chapters, services) and row (list items, next links). */
+  --text-step: clamp(34px, 2.6vw + 18px, 64px);
+  --text-step--line-height: 0.95;
+  --text-step--letter-spacing: -0.06em;
+  --text-card: clamp(28px, 1.2vw + 22px, 40px);
+  --text-card--line-height: 0.95;
+  --text-card--letter-spacing: -0.055em;
+  --text-row: clamp(24px, 1vw + 20px, 32px);
+  --text-row--line-height: 1;
+  --text-row--letter-spacing: -0.055em;
+  /* Names and titles laid over photos */
+  --text-name: 24px;
+  --text-name--line-height: 25px;
+  --text-name--letter-spacing: -0.055em;
   --text-ui: 12px;
   --text-ui--line-height: 22px;
   --text-ui--letter-spacing: -0.06em;

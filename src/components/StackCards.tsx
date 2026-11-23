@@ -57,7 +57,7 @@ function StackCard({ bio, index, last }: { bio: Bio; index: number; last: boolea
             <span aria-hidden className="size-1 rounded-full bg-white" />
             {bio.spice}
           </p>
-          <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em]">{bio.name}</h3>
+          <h3 className="text-name font-semibold">{bio.name}</h3>
           <p className="text-body italic opacity-90">{bio.line}</p>
           {bio.paragraphs.map((t, i) => (
             <Para key={i}>{t}</Para>

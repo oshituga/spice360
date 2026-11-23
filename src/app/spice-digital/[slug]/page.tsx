@@ -68,7 +68,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
 
       <section className="bg-black px-[var(--gutter)] py-[100px] md:py-[120px]">
         <FadeIn
-          className="measure mb-16 max-w-[640px] rounded-[12px] border border-white/15 p-5 text-[15px] leading-[20px] tracking-[-0.03em] text-white/70"
+          className="measure mb-16 max-w-[640px] rounded-[12px] border border-white/15 p-5 text-small text-white/70"
         >
           <strong className="font-semibold text-white">About this page.</strong> This is an illustrative case study: it shows how Spice Digital
           would approach a {c.kind.toLowerCase()} brief of this kind. It is not a record of a real engagement, and {c.brand} has not reviewed or
@@ -100,7 +100,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
             >
               <span className="text-eyebrow font-semibold text-[var(--eyebrow)]">0{i + 1}</span>
               <div className="flex flex-col gap-3">
-                <h3 className="text-[24px] leading-[28px] font-semibold tracking-[-0.05em]">{s.title}</h3>
+                <h3 className="text-name font-semibold">{s.title}</h3>
                 <p className="text-body text-white/75">{s.body}</p>
               </div>
             </FadeIn>
@@ -112,7 +112,7 @@ export default async function CasePage({ params }: PageProps<"/spice-digital/[sl
           className="group measure mt-24 flex max-w-[640px] flex-col gap-3 border-t border-white/15 pt-10"
         >
           <span className="text-eyebrow font-semibold text-white/55">Next case</span>
-          <span className="flex items-baseline gap-3 text-[28px] leading-[30px] font-semibold tracking-[-0.05em] transition-colors duration-300 group-hover:text-[var(--eyebrow)]">
+          <span className="flex items-baseline gap-3 text-row font-semibold transition-colors duration-300 group-hover:text-[var(--eyebrow)]">
             {next.brand}: {next.headline}
             <span aria-hidden className="transition-transform duration-500 ease-[var(--ease-soft)] group-hover:translate-x-1">
               →

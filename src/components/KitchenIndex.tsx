@@ -64,7 +64,7 @@ export function KitchenIndex() {
                   {r.kind} · {r.href ? r.date : <span className="text-[var(--eyebrow)]">Coming soon</span>}
                 </p>
                 <h3
-                  className={`text-[clamp(24px,1.2vw+18px,32px)] leading-[1.02] font-semibold tracking-[-0.05em] transition-colors duration-300 ${r.href ? "group-hover:text-[var(--eyebrow)]" : "text-white/70"}`}
+                  className={`text-row font-semibold transition-colors duration-300 ${r.href ? "group-hover:text-[var(--eyebrow)]" : "text-white/70"}`}
                 >
                   {r.title}
                 </h3>

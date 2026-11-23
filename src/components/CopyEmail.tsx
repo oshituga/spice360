@@ -26,7 +26,7 @@ export function CopyEmail() {
   }
 
   return (
-    <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-[15px] leading-[18px] tracking-[-0.04em] text-white/80 [text-shadow:0_1px_12px_rgba(0,0,0,0.3)]">
+    <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-small text-white/80 [text-shadow:0_1px_12px_rgba(0,0,0,0.3)]">
       <span>or write to</span>
       <a href={`mailto:${EMAIL}`} className="text-white underline decoration-white/40 underline-offset-4 transition-[text-decoration-color] duration-200 hover:decoration-white">
         {EMAIL}

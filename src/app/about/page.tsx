@@ -130,8 +130,8 @@ export default function About() {
             {STORY.map((c) => (
               <li key={c.title} className={`about-lift flex flex-col gap-4 border-t border-white/20 pt-7 pb-14 md:pt-9 md:pb-20`}>
                 <p className="text-eyebrow font-semibold text-[var(--eyebrow)]">{c.when}</p>
-                <h3 className="text-[clamp(30px,1.6vw+22px,44px)] leading-[0.95] font-semibold tracking-[-0.06em]">{c.title}</h3>
-                <p className="max-w-[560px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">{c.body}</p>
+                <h3 className="text-card font-semibold">{c.title}</h3>
+                <p className="max-w-[560px] text-body text-white/80">{c.body}</p>
               </li>
             ))}
           </ol>
@@ -143,7 +143,7 @@ export default function About() {
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead light align="left" eyebrow="Selected work" title="Ideas that earn attention and awards" width={560} />
-            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
+            <FadeIn className="max-w-[380px] text-body text-mute">
               Film, activation and promotion for brands that are part of Nigerian daily life.
             </FadeIn>
           </div>
@@ -156,10 +156,10 @@ export default function About() {
               <div className="flex flex-col justify-between gap-10 bg-amber p-7 text-white md:p-9">
                 <div className="flex flex-col gap-5">
                   <p className="text-eyebrow font-semibold text-white/85">Film &amp; digital</p>
-                  <h3 className="text-[clamp(28px,1.2vw+22px,38px)] leading-[0.95] font-semibold tracking-[-0.06em]">
+                  <h3 className="text-card font-semibold">
                     Nigerian mothers don’t just buy Indomie, they trust it
                   </h3>
-                  <p className="text-[17px] leading-[21px] tracking-[-0.04em] text-white/90">
+                  <p className="text-body-sm text-white/90">
                     The brief was never to sell noodles. It was to tell the truth about the emotional contract between a Nigerian mother and her
                     family’s kitchen. ‘Mother’s Love’ became a film and digital campaign directed by Jay Bhansali of KKDD Films, and earned global
                     recognition on Ads of the World.
@@ -178,8 +178,8 @@ export default function About() {
                 <FadeIn key={w.title} delay={i * 0.1} className={`flex min-h-[300px] flex-col justify-between gap-10 p-7 md:min-h-[360px] md:p-9 ${w.ink}`} style={{ background: w.bg }}>
                   <p className="text-eyebrow font-semibold opacity-80">{w.kind}</p>
                   <div className="flex flex-col gap-4">
-                    <h3 className="text-[30px] leading-[30px] font-semibold tracking-[-0.055em]">{w.title}</h3>
-                    <p className="text-[17px] leading-[21px] tracking-[-0.04em] opacity-90">{w.body}</p>
+                    <h3 className="text-card font-semibold">{w.title}</h3>
+                    <p className="text-body-sm opacity-90">{w.body}</p>
                   </div>
                 </FadeIn>
               ))}
@@ -204,10 +204,10 @@ export default function About() {
                 className={`about-lift grid gap-5 border-t border-white/20 py-9 md:grid-cols-[minmax(0,1fr)_minmax(300px,520px)] md:gap-16 md:py-12`}
               >
                 <div className="flex flex-col gap-3">
-                  <h3 className="text-[clamp(34px,2.4vw+20px,64px)] leading-[0.95] font-semibold tracking-[-0.06em]">{c.title}</h3>
+                  <h3 className="text-step font-semibold">{c.title}</h3>
                   <p className="text-eyebrow font-semibold text-[var(--eyebrow)]">{c.kicker}</p>
                 </div>
-                <p className="max-w-[520px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">{c.body}</p>
+                <p className="max-w-[520px] text-body text-white/80">{c.body}</p>
               </li>
             ))}
           </ol>
@@ -224,7 +224,7 @@ export default function About() {
               Five golds, seven silvers, four bronzes. Ninety points, against more than 50 agencies.
             </FadeIn>
           </div>
-          <div className="grid gap-6 text-[18px] leading-[22px] tracking-[-0.04em] text-white/80 md:grid-cols-2 md:gap-16">
+          <div className="grid gap-6 text-body text-white/80 md:grid-cols-2 md:gap-16">
             <FadeIn>
               Nigeria’s Lagos Advertising and Ideas Festival ran its 19th edition in 2024, across categories including Print, Film, Digital
               Craft, and Integrated Campaigns. On its maiden entry, Spice 360 accumulated 90 points and the final ranking placed the agency 4th
@@ -246,7 +246,7 @@ export default function About() {
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-24">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead align="left" eyebrow="How we work" title={"From first brief\nto final result"} width={560} />
-            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+            <FadeIn className="max-w-[380px] text-body text-white/80">
               Five stages. Every client engagement runs through all of them.
             </FadeIn>
           </div>

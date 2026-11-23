@@ -47,7 +47,7 @@ export function Scoreboard() {
               <Count to={s.n} run={inView} delay={0.15 + i * 0.08} />
               {s.suffix && <span className="mt-[0.08em] ml-[0.04em] text-[0.36em] leading-none tracking-[-0.04em] text-white/70">{s.suffix}</span>}
             </p>
-            <p className="flex max-w-[260px] items-center gap-2 text-[16px] leading-[19px] tracking-[-0.04em] text-white/80 [text-wrap:balance]">
+            <p className="flex max-w-[260px] items-center gap-2 text-small text-white/80 [text-wrap:balance]">
               {s.medal && <span aria-hidden className="size-3.5 shrink-0 rounded-full shadow-[inset_0_-1px_2px_rgba(0,0,0,0.35)]" style={{ background: s.medal }} />}
               <span>{s.label.replace("\n", " ")}</span>
             </p>

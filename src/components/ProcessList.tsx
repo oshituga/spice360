@@ -26,8 +26,8 @@ export function ProcessList() {
             <span className={`process-dot absolute inset-0 rounded-full bg-[var(--accent)]`} />
           </span>
           <div className={`process-step grid gap-3 md:grid-cols-[1fr_minmax(280px,440px)] md:items-baseline md:gap-16`}>
-            <h3 className="text-[clamp(34px,2.6vw+18px,64px)] leading-[0.95] font-semibold tracking-[-0.06em]">{title}</h3>
-            <p className="max-w-[440px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">{body}</p>
+            <h3 className="text-step font-semibold">{title}</h3>
+            <p className="max-w-[440px] text-body text-white/80">{body}</p>
           </div>
         </li>
       ))}

@@ -77,7 +77,7 @@ export default function SpiceDigital() {
               className="text-[clamp(44px,4.4vw+16px,96px)] leading-[0.9] font-semibold tracking-[-0.06em]"
             />
           </div>
-          <div className="flex max-w-[480px] flex-col gap-6 text-[18px] leading-[22px] tracking-[-0.04em]">
+          <div className="flex max-w-[480px] flex-col gap-6 text-body">
             <FadeIn delay={0.1} className="text-white/80">
               A seed-stage fintech in Lagos and an established FMCG brand have almost nothing in common: different budgets, timelines and
               definitions of a result. Spice Digital brings Spice 360’s creative standards and cultural intelligence about Nigerian and West
@@ -96,7 +96,7 @@ export default function SpiceDigital() {
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 border-t border-white/20 pt-[110px] md:flex-row md:items-end md:justify-between md:pt-[150px]">
             <SectionHead align="left" eyebrow="What we’ve built" title="Case studies and performance data" width={520} />
-            <FadeIn className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/80">
+            <FadeIn className="max-w-[380px] text-body text-white/80">
               Campaign outcomes, brand launches, acquisition results, and client proof points. The stories below are illustrative.
             </FadeIn>
           </div>
@@ -120,8 +120,8 @@ export default function SpiceDigital() {
                       <span aria-hidden className="size-1 rounded-full bg-white" />
                       {c.kind}
                     </p>
-                    <h3 className="text-[24px] leading-[25px] font-semibold tracking-[-0.06em] md:text-[32px] md:leading-[32px]">{c.brand}</h3>
-                    <p className="max-w-[426px] text-[16px] leading-[18px] tracking-[-0.06em]">{c.result}</p>
+                    <h3 className="text-row font-semibold">{c.brand}</h3>
+                    <p className="max-w-[426px] text-small">{c.result}</p>
                     <p className="mt-2 text-ui font-semibold text-white/80">
                       Read the case <span className="text-white/45">· Illustrative</span>
                     </p>
@@ -140,8 +140,8 @@ export default function SpiceDigital() {
           <ul className="grid gap-x-12 md:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map(([title, body], i) => (
               <FadeIn as="li" key={title} delay={(i % 3) * 0.08} className="flex flex-col gap-4 border-t border-white/20 pt-6 pb-12 md:pb-16">
-                <h3 className="text-[28px] leading-[28px] font-semibold tracking-[-0.055em] md:text-[32px] md:leading-[32px]">{title}</h3>
-                <p className="max-w-[400px] text-[17px] leading-[21px] tracking-[-0.04em] text-white/75">{body}</p>
+                <h3 className="text-card font-semibold">{title}</h3>
+                <p className="max-w-[400px] text-body-sm text-white/75">{body}</p>
               </FadeIn>
             ))}
           </ul>
@@ -153,7 +153,7 @@ export default function SpiceDigital() {
         <Glow anchor="bottom" ellipses={[{ color: N, y: 300 }, { color: S, y: 620 }, { color: M, y: 820 }]} />
         <div className="relative mx-auto grid max-w-content gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
           <SectionHead align="left" eyebrow="Who Spice Digital serves" title="We know what funded looks like, and what growing looks like" width={560} />
-          <div className="flex max-w-[480px] flex-col gap-6 text-[18px] leading-[22px] tracking-[-0.04em] text-white/80 md:pt-11">
+          <div className="flex max-w-[480px] flex-col gap-6 text-body text-white/80 md:pt-11">
             <FadeIn delay={0.1}>
               Seed to Series A technology companies across fintech, edtech, healthtech, logistics, and e-commerce, operating in Nigeria or
               building for Nigerian and West African consumers.
@@ -174,7 +174,7 @@ export default function SpiceDigital() {
         <div className="mx-auto flex max-w-content flex-col gap-14 md:gap-20">
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <SectionHead light align="left" eyebrow="Spice 360 vs Spice Digital" title="Two doors into the same building" width={520} />
-            <FadeIn className="max-w-[420px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
+            <FadeIn className="max-w-[420px] text-body text-mute">
               Spice 360 serves established brands with integrated, multi-channel campaigns. Large FMCG accounts, corporate clients, long engagement cycles.
             </FadeIn>
           </div>
@@ -192,7 +192,7 @@ export default function SpiceDigital() {
                   {DOORS.map((d) => (
                     <th key={d.name} scope="col" className="pr-4 pb-6 align-bottom md:pr-10">
                       <span aria-hidden className="mb-5 block h-2 w-full" style={{ background: d.color }} />
-                      <span className="block text-[26px] leading-[26px] font-semibold tracking-[-0.055em] md:text-[40px] md:leading-[38px]">{d.name}</span>
+                      <span className="block text-card font-semibold">{d.name}</span>
                     </th>
                   ))}
                 </tr>
@@ -210,7 +210,7 @@ export default function SpiceDigital() {
               </tbody>
             </table>
           </FadeIn>
-          <FadeIn className="max-w-[640px] text-[18px] leading-[22px] tracking-[-0.04em] text-mute">
+          <FadeIn className="max-w-[640px] text-body text-mute">
             Both brands share infrastructure, creative values, and the Flavour Board. They do not compete for the same clients. When a Spice Digital
             client grows to the point of needing above-the-line campaign work, the transition to a Spice 360 engagement is natural, not a pitch.
           </FadeIn>

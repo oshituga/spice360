@@ -20,7 +20,7 @@ export function OutPillars() {
           className="pillar-row grid gap-4 border-t border-white/20 py-8 md:grid-cols-[1fr_minmax(260px,380px)] md:items-baseline md:gap-16 md:py-12"
         >
           <h3 className="text-[clamp(44px,4.4vw+16px,96px)] leading-[0.9] font-semibold tracking-[-0.06em]">{p.word}</h3>
-          <p className="max-w-[380px] text-[18px] leading-[22px] tracking-[-0.04em] text-white/90">{p.body}</p>
+          <p className="max-w-[380px] text-body text-white/90">{p.body}</p>
         </li>
       ))}
     </ol>

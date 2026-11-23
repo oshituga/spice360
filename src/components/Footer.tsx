@@ -114,7 +114,7 @@ export function Footer({
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-[1.3fr_repeat(4,1fr)]">
           <FadeIn className="flex flex-col gap-4">
             <Logo className="h-[29px] self-start text-white" />
-            <p className="max-w-[240px] text-[16px] leading-[19px] tracking-[-0.05em] text-white/85">
+            <p className="max-w-[240px] text-small text-white/85">
               We make brands impossible to ignore.
             </p>
           </FadeIn>
@@ -142,7 +142,7 @@ export function Footer({
           className={`mt-16 flex flex-col gap-4 border-t border-white/20 pt-6 md:mt-[110px] md:flex-row md:items-center md:justify-between ${metaClass}`}
           style={metaColor ? { color: metaColor } : undefined}
         >
-          <p className="flex flex-wrap gap-x-2 gap-y-1 text-[15px] leading-[18px] tracking-[-0.05em] [text-shadow:none]">
+          <p className="flex flex-wrap gap-x-2 gap-y-1 text-small [text-shadow:none]">
             <span>© 2026 Spice 360</span>
             <span className="opacity-50">·</span>
             <span>AAAN Member</span>
@@ -159,7 +159,7 @@ export function Footer({
 /* Underline draws in from the left on hover, retracts to the right on leave. */
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   const cls =
-    "group relative inline-block text-[16px] leading-[19px] tracking-[-0.05em] text-white transition-opacity duration-200 hover:opacity-100";
+    "group relative inline-block text-small text-white transition-opacity duration-200 hover:opacity-100";
   const line = (
     <span
       aria-hidden
