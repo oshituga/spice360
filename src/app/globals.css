@@ -516,10 +516,12 @@ figcaption {
   }
 }
 
-/* Glows hold their pose while off screen (Glow toggles data-paused) */
+/* Glows hold their pose while off screen (Glow and GlowCard toggle
+   data-paused). !important because each blob sets its animation inline, and
+   that shorthand resets the play state to running. */
 .glow[data-paused] > div,
 .card-light[data-paused] {
-  animation-play-state: paused;
+  animation-play-state: paused !important;
 }
 
 /* On-load fades (hero). Plain and short, Terra & Tent style: a beat apart

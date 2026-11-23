@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { type GlowEllipse } from "./Glow";
 import { EASE, stagger } from "./motion";
 
@@ -89,8 +89,17 @@ function CardLight({ glow, seed }: { glow: GlowEllipse[]; seed: number }) {
     `radial-gradient(90% 70% at 50% 100%, ${b}cc 0%, ${b}00 100%)`,
     `radial-gradient(120% 95% at 50% 100%, ${a} 0%, ${a}00 100%)`,
   ];
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => el.toggleAttribute("data-paused", !e.isIntersecting), { rootMargin: "200px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return (
     <div
+      ref={ref}
       className="card-light absolute -inset-x-[15%] -bottom-[10%] top-0 origin-bottom"
       style={{
         backgroundImage: pools.join(", "),

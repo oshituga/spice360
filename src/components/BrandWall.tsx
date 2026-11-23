@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useAnimationFrame, useInView, useMotionValue, useReducedMotion, useSpring } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { BRAND_TILES } from "@/lib/content";
 
 /*
@@ -42,35 +41,62 @@ function Row({
   speed: number;
   dir: number;
 }) {
-  const reduce = useReducedMotion();
-  const x = useMotionValue(0);
-  const width = useRef(0);
   const track = useRef<HTMLDivElement>(null);
-  const factor = useSpring(1, { stiffness: 80, damping: 20 });
-  const visible = useInView(track, { margin: "100px 0px" });
+  const ease = useRef<(to: number) => void>(() => {});
 
-  useAnimationFrame((_, delta) => {
-    if (reduce || !visible) return;
-    if (!width.current && track.current) width.current = track.current.scrollWidth / 2;
-    const w = width.current || 1;
-    const px = (speed * factor.get() * delta) / 1000;
-    let next = x.get() + dir * px;
-    if (next <= -w) next += w;
-    if (next > 0) next -= w;
-    x.set(next);
-  });
+  /* The belt is one composited animation (no frame-by-frame JS), paused
+     while off screen. Hover eases its rate down, like a hand on the belt. */
+  useEffect(() => {
+    const el = track.current;
+    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const w = el.scrollWidth / 2;
+    const ends = ["translate3d(0, 0, 0)", `translate3d(${-w}px, 0, 0)`];
+    const a = el.animate({ transform: dir < 0 ? ends : [...ends].reverse() }, {
+      duration: (w / speed) * 1000,
+      iterations: Infinity,
+      easing: "linear",
+      // Both directions start where the static row sits
+      iterationStart: dir < 0 ? 0 : 1 - 1e-9,
+    });
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? a.play() : a.pause()), { rootMargin: "100px 0px" });
+    io.observe(el);
+
+    let id = 0;
+    let rate = 1;
+    let target = 1;
+    let last = 0;
+    const step = (t: number) => {
+      rate += (target - rate) * (1 - Math.exp(-(t - last) / 160));
+      last = t;
+      if (Math.abs(target - rate) < 0.005) rate = target;
+      a.playbackRate = rate;
+      id = rate === target ? 0 : requestAnimationFrame(step);
+    };
+    ease.current = (to) => {
+      target = to;
+      if (!id) {
+        last = performance.now();
+        id = requestAnimationFrame(step);
+      }
+    };
+    return () => {
+      cancelAnimationFrame(id);
+      io.disconnect();
+      a.cancel();
+    };
+  }, [dir, speed]);
 
   const tiles = [...order, ...order, ...order, ...order];
 
   return (
-    <div onPointerEnter={() => factor.set(0.15)} onPointerLeave={() => factor.set(1)} className="overflow-hidden">
-      <motion.div ref={track} className="flex w-max gap-2 will-change-transform" style={{ x }}>
+    <div onPointerEnter={() => ease.current(0.15)} onPointerLeave={() => ease.current(1)} className="overflow-hidden">
+      <div ref={track} className="flex w-max gap-2 will-change-transform">
         {tiles.map((t, i) => (
           <div key={i} className="relative h-[46px] w-[129px] shrink-0 overflow-hidden">
             <Image src={BRAND_TILES[t]} alt="" fill sizes="129px" className="object-cover" />
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
