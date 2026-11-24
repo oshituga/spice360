@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { MARK_SVG } from "@/lib/mark";
 
-/* iOS home-screen icon: the ring mark, full bleed (iOS rounds the corners). */
+/* iOS home-screen icon: the brush "0" from the wordmark, full bleed (iOS rounds the corners). */
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 

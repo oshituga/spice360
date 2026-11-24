@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-/* Home-screen install: black like the site, the ring mark as the icon. */
+/* Home-screen install: black like the site, the brush "0" from the wordmark as the icon. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Spice360",
